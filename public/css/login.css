@@ -1,0 +1,103 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+#Page_Login{
+    width: 100%;
+    display: inline-flex;
+}
+#sign_up{
+    width: 60%;
+    padding: 5% 0 0 5%;
+}
+#Background_Login{
+    width: 40%;
+
+}
+.checkbox{
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+}
+.submit{
+    background-color: #bbb1b1;
+    border-radius: 50px;
+    padding: 9px 15px;
+    border-width: 0px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+.link{
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.textBox{
+    border: 1px solid gray;
+    width: 90%;
+    padding: 8px;
+    border-radius: 10px;
+}
+.textInline{
+    transform: translateY(-3px);
+    display: inline-block;
+}
+/* .form {
+    position: relative;
+    width: 300px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 1s ease;
+    transform: translateX(-100%);
+    opacity: 0;
+} */
+.hide {
+    display: none;
+}
+.show{
+    display: block;
+}
+.moving-background{
+    animation: moveLeftBackground 1.5s linear forwards;
+}
+.moving-form{
+    animation: moveLeftForm 1.5s linear forwards;
+}
+@keyframes moveLeftBackground {
+    from{
+        transform: translateX(0%);
+    }
+    to{
+        transform: translateX(-160%);
+    } 
+}
+@keyframes moveRightBackground {
+    from{
+        transform: translateX(-160%);
+    }
+    to{
+        transform: translateX(0);
+    } 
+}
+@keyframes moveLeftForm {
+    from{
+        transform: translateX(0%);
+    }
+    to{
+        transform: translateX(60%);
+    } 
+}
+@keyframes moveRightForm {
+    from{
+        transform: translateX(60%);
+    }
+    to{
+        transform: translateX(0%);
+    } 
+}
