@@ -7,7 +7,7 @@ use App\Database\DbConnection;
 $db=DbConnection::getInstance()->getConnection();
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('products.welcome');
 });
 
 Route::get('/account',[accountController::class,
