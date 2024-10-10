@@ -1,0 +1,25 @@
+footer {
+    background-color: #000;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer a {
+    color: white;
+    margin: 0 10px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.policies-list, .menu-list, .contactUs-list {
+    list-style-type: none; /* Xóa dấu chấm cho danh sách */
+    padding: 0; /* Xóa khoảng cách padding */
+    margin: 0; /* Xóa khoảng cách margin */
+}
+
+.policies-list li, .menu-list li, .contactUs-list li {
+    margin-bottom: 0px; /* Thêm khoảng cách giữa các mục (tùy chọn) */
+}

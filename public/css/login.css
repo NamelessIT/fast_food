@@ -4,18 +4,32 @@ body, html {
     height: 100%;
     font-family: Arial, sans-serif;
 }
-#Page_Login{
+/* #Page_Login{
     width: 100%;
     display: inline-flex;
+} */
+
+#Page_Login {
+    width: 100%;
+    display: flex; /* Dùng flexbox để dễ dàng kiểm soát bố cục */
+    height: 90vh; /* Chiều cao toàn màn hình */
 }
+
 #sign_up{
-    width: 60%;
+    width: 70%;
     padding: 5% 0 0 5%;
 }
-#Background_Login{
+/* #Background_Login{
     width: 40%;
 
+} */
+
+#Background_Login {
+    width: 30%; /* Đặt độ rộng cho ảnh */
+    height: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều cao */
+    object-fit: cover; /* Đảm bảo ảnh không bị biến dạng */
 }
+
 .checkbox{
     cursor: pointer;
     width: 15px;
@@ -74,30 +88,30 @@ body, html {
         transform: translateX(0%);
     }
     to{
-        transform: translateX(-160%);
-    } 
+        transform: translateX(-234%);
+    }
 }
 @keyframes moveRightBackground {
     from{
-        transform: translateX(-160%);
+        transform: translateX(-234%);
     }
     to{
         transform: translateX(0);
-    } 
+    }
 }
 @keyframes moveLeftForm {
     from{
         transform: translateX(0%);
     }
     to{
-        transform: translateX(60%);
-    } 
+        transform: translateX(40%);
+    }
 }
 @keyframes moveRightForm {
     from{
-        transform: translateX(60%);
+        transform: translateX(40%);
     }
     to{
         transform: translateX(0%);
-    } 
+    }
 }

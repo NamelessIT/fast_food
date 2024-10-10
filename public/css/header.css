@@ -1,0 +1,53 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex-grow: 1; /* Giúp phần nội dung chính mở rộng và đẩy footer xuống */
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.navbar {
+    background-color: #fff;
+    border-bottom: 3px solid #000;
+    z-index: 1030; /* Đảm bảo thanh navbar luôn hiển thị trên các phần tử khác */
+}
+
+.navbar-brand img {
+    width: 50px;
+}
+
+.navbar-nav .nav-item {
+    margin-right: 20px; /* Khoảng cách giữa các mục menu */
+}
+
+.btn-order-now {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+/* Điều chỉnh offcanvas cho thiết bị di động */
+.offcanvas-start {
+    width: 50%; /* Chiều rộng của menu offcanvas */
+}
+
+/* Đẩy các nút sang bên phải */
+.navbar .d-inline.d-lg-flex {
+    margin-left: auto;
+}

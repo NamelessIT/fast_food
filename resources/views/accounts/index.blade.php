@@ -1,27 +1,13 @@
+@extends('Layouts.main')
 
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
-        <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+@section('title','Document')
 
-        <!-- Custom CSS (Trang chủ (chinh xac hơn là cho header va footer)) -->
-        <link href="{{ asset('css/homepage.css') }}" rel="stylesheet">
+<!-- Thêm CSS riêng cho trang đăng nhập -->
+@section('custom-css')
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+@endsection
 
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-        <!-- Bootstrap JS + Popper -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    </head>
-<body>
-@include('Layouts.Header')
-
+@section('content')
 <div id="Page_Login">
     <div id="sign_up">
         <form action="{{ route('signup') }}" method="POST" id="SignUpForm">
@@ -67,11 +53,12 @@
             </div>
         </form>
     </div>
-    <img src="{{ asset('images/background.png') }}" alt="Background" id="Background_Login" class="img-responsive">
+
+    <img src="{{ asset('images/background.png') }}" alt="Background" id="Background_Login" class="">
 </div>
-<script src="{{ asset('js/login.js') }}"></script>
+@endsection
 
-@include('Layouts.Footer')
-</body>
-</html>
-
+<!-- Thêm JS riêng cho trang đăng nhập -->
+@section('custom-js')
+    <script src="{{ asset('js/login.js') }}"></script>
+@endsection
