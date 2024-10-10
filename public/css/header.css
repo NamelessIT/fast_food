@@ -11,30 +11,28 @@ main {
     flex-grow: 1; /* Giúp phần nội dung chính mở rộng và đẩy footer xuống */
 }
 
-a {
-    text-decoration: none;
-    color: white;
-}
 
-a:hover {
+
+header a:hover {
     text-decoration: underline;
 }
 
-.navbar {
+header .navbar {
     background-color: #fff;
     border-bottom: 3px solid #000;
     z-index: 1030; /* Đảm bảo thanh navbar luôn hiển thị trên các phần tử khác */
 }
 
-.navbar-brand img {
+header .navbar-brand img {
     width: 50px;
 }
 
-.navbar-nav .nav-item {
+header .navbar-nav .nav-item {
     margin-right: 20px; /* Khoảng cách giữa các mục menu */
+    /* font-family: 'Cherry Bomb'; */
 }
 
-.btn-order-now {
+header .btn-order-now {
     background-color: red;
     color: white;
     font-weight: bold;
@@ -48,6 +46,7 @@ a:hover {
 }
 
 /* Đẩy các nút sang bên phải */
-.navbar .d-inline.d-lg-flex {
+/* header .navbar .d-inline.d-lg-flex {
     margin-left: auto;
 }
+ */

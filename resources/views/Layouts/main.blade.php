@@ -21,11 +21,13 @@
 </head>
 
 <body>
-    @include('Layouts.Header')
+    <header class="sticky-top">
+        @include('Layouts.Header')
+    </header>
 
-    <div class="content">
+    <main>
         @yield('content')
-    </div>
+    </main>
 
     @include('Layouts.Footer')
 
