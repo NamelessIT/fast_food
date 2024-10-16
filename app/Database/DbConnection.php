@@ -20,7 +20,7 @@ class DbConnection{
     public function getConnection() {
         $this->conn = null;
         try {
-            $this->conn=mysqli_connect('localhost','root','','fastfood');
+            $this->conn=mysqli_connect('localhost','root','','fast_food');
             if ($this->conn) {
             } else {
                 throw new Exception('Kết nối database thất bại: ' . mysqli_connect_error());
