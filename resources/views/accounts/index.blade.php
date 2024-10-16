@@ -1,4 +1,4 @@
-@extends('Layouts.main')
+@extends('../components/layouts.main')
 
 @section('title','Document')
 
