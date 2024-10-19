@@ -5,10 +5,13 @@
 <!-- Thêm CSS riêng cho trang đăng nhập -->
 @section('custom-css')
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/toast.css') }}">
 @endsection
 
 @section('content')
 <div id="Page_Login">
+    <div id="toast">
+    </div>
     <div id="sign_up">
         <form action="{{ route('signup') }}" method="POST" id="SignUpForm">
             @csrf
@@ -18,22 +21,27 @@
             </header>
             <body>
                 <h3>Email</h3>
-                <input class="textBox" name="email_Sign" placeholder="example@abc.com" ></input>
+                <input class="textBox" name="email_Sign" id="email_Sign" placeholder="example@abc.com" required>
+                <span id="emailError" style="color: red; display: none;">Email không hợp lệ</span>
+                </input>
                 <h3>Username</h3>
-                <input class="textBox" name="username_Sign" placeholder="tên đăng nhập" ></input>
+                <input class="textBox" name="username_Sign" id="username_Sign" placeholder="tên đăng nhập" required></input>
+                <span id="usernameError" style="color: red; display: none;">Username không hợp lệ</span>
                 <h3>Password</h3>
-                <input class="textBox" name="password_Sign" placeholder="mật khẩu" ></input>
+                <input class="textBox" name="password_Sign" id="password_Sign" placeholder="mật khẩu" required>
+                <span id="passwordError" style="color: red; display: none;">Password không hợp lệ</span>
+                </input>
                 <div>
                     <h5>chính sách của chúng tui</h5>
                     <div class="detail"></div>
                 </div>
                 <div>
-                    <input type="checkbox" class="checkbox">
+                    <input type="checkbox" class="checkbox" id="agreeDocumentCB">
                     <h5 class="textInline">Tôi đã đọc và chấp nhận với điều khoản và chính sách</h5>
                 </div>
                 <div>
 
-                    <button class="submit">Tạo tài khoản</button>
+                    <button class="submit" id="CreateAccountBtn">Tạo tài khoản</button>
                 </div>
             </body>
 
@@ -46,10 +54,10 @@
             </header>
             <div>
                 <h3>Email</h3>
-                <input class="textBox" type="email" name="email_Login" placeholder="example@abc.com" />
+                <input class="textBox" type="email" name="email_Login" id="email_Login" placeholder="example@abc.com" />
                 <h3>Password</h3>
-                <input class="textBox" type="password_Login" placeholder="mật khẩu"/>
-                <button class="submit">Đăng nhập</button>
+                <input class="textBox" type="password_Login" name="password_Login" id="password_Login" placeholder="mật khẩu"/>
+                <button class="submit" id="LoginAccount">Đăng nhập</button>
             </div>
         </form>
     </div>
