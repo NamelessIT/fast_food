@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\HasName;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Notifications\Notifiable;
 
-class Account extends Authenticatable
+class Account extends Authenticatable implements HasName
 {
     use HasFactory, Notifiable;
 
@@ -19,7 +20,7 @@ class Account extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'full_name',
+        'username',
         'email',
         'password',
     ];
@@ -50,4 +51,9 @@ class Account extends Authenticatable
     public function user () {
         return $this->morphTo();
     }
+
+    public function getFilamentName(): string{
+        return $this->username;
+    }
+
 }
