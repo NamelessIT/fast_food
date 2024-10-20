@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'id',
+         'role_name',
+         'created_at',
+         'updated_at',
+     ];
 }

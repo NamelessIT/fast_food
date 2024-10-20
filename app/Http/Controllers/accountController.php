@@ -54,17 +54,4 @@ class accountController extends Controller
         return view('products.welcome', ['name' => $name]);
     }
 
-    public function checkEmail(Request $request)
-    {
-        // Kiểm tra email có tồn tại hay không
-        $exists = account::where('email', $request->email)->exists();
-
-        // Trả về kết quả dưới dạng JSON
-        if ($exists) {
-            return response()->json(['exists' => true, 'message' => 'Email đã tồn tại']);
-        } else {
-            return response()->json(['exists' => false, 'message' => 'Email hợp lệ']);
-        }
-    }
-
 }
