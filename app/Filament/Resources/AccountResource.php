@@ -23,7 +23,6 @@ class AccountResource extends Resource
 {
     protected static ?string $model = Account::class;
 
-<<<<<<< HEAD
     protected static ?string $navigationIcon = 'heroicon-s-queue-list';
 
     public static function form(Form $form): Form
