@@ -24,7 +24,7 @@ class AccountResource extends Resource
     protected static ?string $model = Account::class;
 
     protected static ?string $navigationIcon = 'heroicon-s-queue-list';
-    //them comment tren vscode
+    //them comment tren vscode duoi phan icon
     public static function form(Form $form): Form
     {
         return $form
