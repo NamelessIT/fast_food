@@ -22,9 +22,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class AccountResource extends Resource
 {
     protected static ?string $model = Account::class;
-    //
+    //chinh icon o day
     protected static ?string $navigationIcon = 'heroicon-s-queue-list';
-    
+
     public static function form(Form $form): Form
     {
         return $form
