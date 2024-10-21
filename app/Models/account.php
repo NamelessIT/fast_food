@@ -23,6 +23,10 @@ class Account extends Authenticatable implements HasName
         'username',
         'email',
         'password',
+        'id_user',
+        'user_type',
+        'avatar',
+        'status',
     ];
 
     /**
