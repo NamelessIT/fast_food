@@ -34,16 +34,17 @@ class AccountResource extends Resource
                     ->required(),
                 TextInput::make('username')->required(),
                 TextInput::make('password')
+                    ->required()
                     ->visibleOn('create')
                     ->password()
-                    ->revealable()
-                    ->required(),
+                    ->revealable(),
+
                 FileUpload::make('avatar')
                     ->disk('public')
                     ->directory('images/avatar'),
                 TextInput::make('email')
-                    ->email()
-                    ->required(),
+                    ->required()
+                    ->email(),
 
 
                 Checkbox::make('status'),
