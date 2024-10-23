@@ -8,6 +8,7 @@ use App\Models\Account;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,10 +30,14 @@ class AccountResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('user_type')->required(),
+                Hidden::make('user_type')
+                    ->default('user_type_mac_dinh'),
+
                 TextInput::make('id_user')
                     ->required(),
-                TextInput::make('username')->required(),
+                TextInput::make('username')
+                    ->unique(ignoreRecord: true) // Bỏ qua usernam hiện tại của bản ghi khi cập nhật
+                    ->required(),
                 TextInput::make('password')
                     ->required()
                     ->visibleOn('create')
@@ -43,11 +48,13 @@ class AccountResource extends Resource
                     ->disk('public')
                     ->directory('images/avatar'),
                 TextInput::make('email')
+                    ->unique(ignoreRecord: true) // Bỏ qua email hiện tại của bản ghi khi cập nhật
                     ->required()
                     ->email(),
 
 
-                Checkbox::make('status'),
+                Checkbox::make('status')
+                    ->default(true),
             ]);
     }
 
@@ -55,7 +62,7 @@ class AccountResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user_type'),
+                // TextColumn::make('user_type'),
                 TextColumn::make('username'),
                 ImageColumn::make('avatar')
                     ->height(150)
@@ -63,6 +70,8 @@ class AccountResource extends Resource
                 TextColumn::make('email'),
 
                 CheckboxColumn::make('status'),
+                TextColumn::make('created_at'),
+                TextColumn::make('updated_at'),
             ])
             ->filters([
                 //
