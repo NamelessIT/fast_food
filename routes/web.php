@@ -14,6 +14,7 @@ Route::get('/account',[accountController::class,'index']);
 Route::get('/username',[accountController::class,'getUsername'])->name('getUsername');
 Route::post('/signup', [accountController::class, 'signup'])->name('signup');
 Route::post('/login', [accountController::class, 'login'])->name('login');
+Route::post('/check-account', [accountController::class, 'checkAccount'])->name('check.account');
 Route::post('/check-email', [accountController::class, 'checkEmail'])->name('check.email');
 
 

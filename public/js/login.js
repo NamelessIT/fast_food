@@ -3,11 +3,20 @@ const background=document.getElementById('Background_Login');
 const divFormSignUp=document.getElementById('sign_up');
 const SignUpForm=document.getElementById('SignUpForm');
 const loginForm=document.getElementById('loginForm');
+// Checkbox
 const agreeDocumentCB=document.getElementById('agreeDocumentCB');
+//Btn
 const CreateAccountBtn=document.getElementById('CreateAccountBtn');
+const LoginAccount=document.getElementById('LoginAccount');
+// Field Sign Up
 const email_Sign=document.getElementById('email_Sign');
 const username_Sign=document.getElementById('username_Sign');
 const password_Sign=document.getElementById('password_Sign');
+// Field Log In
+const email_Login=document.getElementById('email_Login');
+const password_Login=document.getElementById('password_Login');
+
+// boolean
 let isMoveBackgroundRight=false;
 let isMoveFormRight=false;
 let validEmail=false;
@@ -45,17 +54,8 @@ btTransforms.forEach(btn => {
         }
     })
 });
-//check already email
-// Lắng nghe sự kiện 'change' khi người dùng thay đổi nội dung email
-document.getElementById('email_Sign').addEventListener('change', function() {
-    const emailValue = this.value;
-
-    // Gọi hàm checkEmail qua fetch API
-    checkEmail(emailValue);
-});
-
-// Hàm gửi yêu cầu AJAX để kiểm tra email tồn tại
-function checkEmail(email) {
+// check exist email?
+function checkEmailSignUp(email) {
     // Gửi yêu cầu fetch tới route kiểm tra email
     fetch('/check-email', {
         method: 'POST',
@@ -76,18 +76,51 @@ function checkEmail(email) {
             document.getElementById('emailError').style.display = 'block';
             validEmail = false;
         } else {
+            isdisabledBtnCreate(false);
             // Nếu email hợp lệ, ẩn thông báo lỗi
             document.getElementById('emailError').style.display = 'none';
             validEmail = true;
         }
     })
     .catch(error => {
-        console.error('Lỗi khi kiểm tra email:', error); // Log lỗi nếu có
+        isdisabledBtnCreate(false);
+        console.log('Lỗi khi kiểm tra email:', error); // Log lỗi nếu có
     });
+}
+//login 
+function checkEmailLogin (email,password) {
+        return fetch("/check-account", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF token từ thẻ meta
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+        .then(response => response.json()) // Parse kết quả trả về dưới dạng JSON
+        .then(data => {
+            if (data.valid) {
+                return true; // Tài khoản hợp lệ
+            } else {
+                isdisabledBtnLogin(false);
+                return false; // Tài khoản không hợp lệ
+            }
+        })
+        .catch(error => {
+            isdisabledBtnLogin(false);
+            console.log("Error:", error.message); // Log lỗi nếu có
+            return false;
+        });
+    
 }
 
 //check input right
 email_Sign.addEventListener('input',function(){
+    isdisabledBtnCreate(false);
+
     // Lấy giá trị của input
     const emailValue = this.value;
 
@@ -105,6 +138,7 @@ email_Sign.addEventListener('input',function(){
     }
 })
 username_Sign.addEventListener('input',function(){
+    isdisabledBtnCreate(false);
     const usernameValue=this.value;
     if(usernameValue.length>=2){
         validUsername=true;
@@ -116,6 +150,7 @@ username_Sign.addEventListener('input',function(){
     }
 })
 password_Sign.addEventListener('input',function(){
+        isdisabledBtnCreate(false);
         // Lấy giá trị của input
         const passwordValue = this.value;
     
@@ -128,14 +163,36 @@ password_Sign.addEventListener('input',function(){
             document.getElementById('passwordError').style.display = 'block'; // Hiển thị thông báo lỗi
         }
 })
+function isdisabledBtnCreate(status){
+    CreateAccountBtn.disabled=status;
+
+}
+function isdisabledBtnLogin(status){
+    LoginAccount.disabled=status;
+
+}
 // show Message
 CreateAccountBtn.addEventListener('click',function(event){
+    
     if(!agreeDocumentCB.checked){
         showErrorToast();
         event.preventDefault();
     }
     else if(agreeDocumentCB.checked && validEmail && validPassword && validUsername){
-        showSuccessToast();
+        isdisabledBtnCreate(true);
+        checkEmailSignUp(email_Sign.value);
+        if(validEmail){
+            showSuccessToast();
+        }
+        else{
+            event.preventDefault();
+            toast({
+                title: "Information",
+                message: "Email này đã tồn tại , vui lòng kiểm tra lại",
+                type: "error",
+                duration: 5000
+              });
+        }
     }
     else{
         event.preventDefault();
@@ -147,7 +204,32 @@ CreateAccountBtn.addEventListener('click',function(event){
           });
     }
 });
-
+//Login Account
+LoginAccount.addEventListener('click',function(event){
+    console.log("có click");
+    const email = email_Login.value;
+    const password = password_Login.value;
+    if(checkEmailLogin(email,password)){
+        isdisabledBtnLogin(true);
+        toast({
+            title: "Information",
+            message: "Đang đăng nhập",
+            type: "success",
+            duration: 5000
+          });
+    }
+    else{
+        isdisabledBtnLogin(false);
+        event.preventDefault();
+        toast({
+            title: "Information",
+            message: "Nhập sai Email hoặc password",
+            type: "error",
+            duration: 5000
+          });
+    }
+})
+//toast
 function showSuccessToast() {
     toast({
       title: "Thành công!",
@@ -166,7 +248,6 @@ function showSuccessToast() {
     });
   }
   function toast({ title = "", message = "", type = "info", duration = 3000 }) {
-    console.log("đã chạy toast");
     const main = document.getElementById("toast");
     
     if (main) {
