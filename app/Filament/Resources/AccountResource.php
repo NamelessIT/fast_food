@@ -16,8 +16,11 @@ use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\Role;
+
 
 class AccountResource extends Resource
 {
@@ -27,11 +30,21 @@ class AccountResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $nhanVienOptions = NhanVien::pluck('ten_nhanvien', 'id')->toArray();
+
+        // Lấy dữ liệu từ bảng khachhang
+        $khachHangOptions = KhachHang::pluck('ten_khachhang', 'id')->toArray();
+    
+        // Kết hợp dữ liệu từ hai bảng
+        $options = array_merge($nhanVienOptions, $khachHangOptions);
         return $form
-            ->schema([
-                TextInput::make('user_type')->required(),
-                TextInput::make('id_user')
-                    ->required(),
+        ->schema([
+            Select::make('id_user')
+            ->options(Role::pluck('role_name', 'id')->toArray())
+                ->placeholder('Chọn chủ tài khoản')
+                ->label('Chủ tài khoản')
+                ->required(),
+
                 TextInput::make('username')->required(),
                 TextInput::make('password')
                     ->required()
