@@ -11,8 +11,3 @@
 @section('content')
     @livewire('account-user')
 @endsection
-
-{{-- <!-- Thêm JS riêng cho trang đăng nhập -->
-@section('custom-js')
-    <script src="{{ asset('js/login.js') }}"></script>
-@endsection --}}
