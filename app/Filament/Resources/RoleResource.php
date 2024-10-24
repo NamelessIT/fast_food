@@ -27,22 +27,15 @@ class RoleResource extends Resource
         return $form
             ->schema([
                 TextInput::make('id')
-                ->label('Mã quyền')
+                ->unique(ignoreRecord: true)
+                ->label('Mã loại nhân viên')
                 ->required(),
 
                 TextInput::make('role_name')
-                ->label('Tên quyền')
+                ->unique(ignoreRecord: true)
+                ->label('Loại nhân viên')
                 ->required(),
 
-                TextInput::make('created_at')
-                ->label('Ngày tạo phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
-
-                TextInput::make('updated_at')
-                ->label('Ngày cập nhật phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
             ]);
     }
 
@@ -50,8 +43,8 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('Mã quyền'),
-                TextColumn::make('role_name')->label('Tên quyền'),
+                TextColumn::make('id')->label('Mã loại nhân viên'),
+                TextColumn::make('role_name')->label('Loại nhân viên'),
                 TextColumn::make('created_at')->label('Ngày tạo'),
                 TextColumn::make('updated_at')->label('Ngày cập nhật'),
             ])

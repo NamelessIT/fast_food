@@ -33,41 +33,32 @@ class EmployeeResource extends Resource
                 ->required(),
 
                 TextInput::make('phone')
-                ->label('Số liên lạc')
+                ->unique(ignoreRecord:true)
+                ->label('Số điện thoại')
                 ->required()
                 ->placeholder('Vui lòng nhập số điện thoại')
-                ->rules('required|regex:/^0[0-9]{9}$/')
+                //->rules('required|regex:/^0[0-9]{9}$/')
                 ->numeric()
-                ->maxLength(10)
-                ->minLength(10)
+                ->maxLength(11)
+                ->minLength(1)
                 ->reactive()
-                ->afterStateUpdated(function ($state, $set) {
+                /* ->afterStateUpdated(function ($state, $set) {
                     if (strlen($state) === 10 && !preg_match('/^0[0-9]{9}$/', $state)) {
                         $set('phone', ''); // Chỉ reset nếu nhập đủ 10 ký tự mà không đúng định dạng
                     }
-                }),
+                }) */,
 
                 Select::make('id_role')
-                ->label('Mã quyền')
+                ->label('Loại nhân viên')
                 ->required()
-                ->options(Role::pluck('role_name', 'id')->toArray())
-                ->placeholder('Chọn quyền'),
+                ->options(Role::pluck('role_name', 'id'))
+                ->placeholder('Chọn loại nhân viên'),
 
                 TextInput::make('salary')
                 ->label('Lương (vnd)')
                 ->required()
                 ->numeric()
                 ->default(0),
-
-                TextInput::make('created_at')
-                ->label('Ngày tạo phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
-
-                TextInput::make('updated_at')
-                ->label('Ngày cập nhật phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
             ]);
     }
 
@@ -75,10 +66,10 @@ class EmployeeResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('Mã nhân viên'),
                 TextColumn::make('full_name')->label('Họ và tên nhân viên'),
                 TextColumn::make('phone')->label('Số liên lạc'),
-                TextColumn::make('id_role')->label('Mã quyền'),
+                TextColumn::make('role.role_name')
+                    ->label('Loại nhân viên'),
                 TextColumn::make('salary')->label('Lương (vnd)'),
                 TextColumn::make('created_at')->label('Ngày tạo'),
                 TextColumn::make('updated_at')->label('Ngày cập nhật'),

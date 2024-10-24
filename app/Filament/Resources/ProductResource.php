@@ -32,6 +32,7 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 TextInput::make('product_name')
+                    ->unique(ignoreRecord: true)
                     ->required(),
                 Select::make('id_category')
                     ->required()

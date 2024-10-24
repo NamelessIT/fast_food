@@ -33,8 +33,9 @@ class AccountResource extends Resource
                 Hidden::make('user_type')
                     ->default('user_type_mac_dinh'),
 
-                TextInput::make('id_user')
-                    ->required(),
+                Hidden::make('id_user')
+                    ->default(request()->query('id_user')),
+
                 TextInput::make('username')
                     ->unique(ignoreRecord: true) // Bỏ qua usernam hiện tại của bản ghi khi cập nhật
                     ->required(),
