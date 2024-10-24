@@ -31,7 +31,7 @@ class AccountResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $nhanVienOptions = NhanVien::pluck('ten_nhanvien', 'id')->toArray();
+        $nhanVienOptions = Employee::pluck('ten_nhanvien', 'id')->toArray();
 
         // Lấy dữ liệu từ bảng khachhang
         $khachHangOptions = KhachHang::pluck('ten_khachhang', 'id')->toArray();

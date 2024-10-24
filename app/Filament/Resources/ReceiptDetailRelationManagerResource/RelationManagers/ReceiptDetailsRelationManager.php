@@ -1,39 +1,30 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\ReceiptDetailRelationManagerResource\RelationManagers;
 
-use App\Filament\Resources\ReceiptDetailResource\Pages;
-use App\Filament\Resources\ReceiptDetailResource\RelationManagers;
-use App\Models\ReceiptDetail;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Carbon\Carbon;
-use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Receipt;
 use App\Models\Ingredient;
-class ReceiptDetailResource extends Resource
+use Filament\Tables\Columns\TextColumn;
+class ReceiptDetailsRelationManager extends RelationManager
 {
-    protected static ?string $model = ReceiptDetail::class;
+    protected static string $relationship = 'receiptDetails';// Tên quan hệ trong model Receipt
 
-    protected static ?string $navigationIcon = 'heroicon-s-document-currency-dollar';
+    protected static ?string $recordTitleAttribute = 'id_receipt';  // Hiển thị cột 'id_receipt' làm tiêu đề nếu cần
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-               
-                Select::make('id_receipt')
-                ->label('Mã phiếu nhập')
-                ->required()
-                ->options(Receipt::pluck('id', 'id')->toArray())
-                ->placeholder('Chọn phiếu nhập'),
 
                 Select::make('id_ingredient')
                 ->label('Tên nguyên liệu')
@@ -42,7 +33,6 @@ class ReceiptDetailResource extends Resource
                 ->placeholder('Chọn nguyên liệu'),
 
                 
-
                 TextInput::make('quantity')
                 ->required()
                 ->label('Số lượng (Kg)')
@@ -76,48 +66,36 @@ class ReceiptDetailResource extends Resource
                 ->label('Ngày cập nhật phiếu nhập')
                 ->default(Carbon::now()->format('Y-m-d H:i:s'))
                 ->readOnlyOn('create'), // Set current date and time
-    
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('id_ingredient')
             ->columns([
                 TextColumn::make('id_receipt')->label('Mã phiếu nhập'),
-                TextColumn::make('id_ingredient')->label('Tên nguyên liệu'),
+                TextColumn::make('ingredient.ingredient_name')->label('Tên nguyên liệu'),
                 TextColumn::make('quantity')->label('Số lượng (Kg)'),
                 TextColumn::make('total_price')->label('Tổng tiền (vnd)'),
                 TextColumn::make('created_at')->label('Ngày tạo phiếu nhập'),
                 TextColumn::make('updated_at')->label('Ngày cập nhật phiếu nhập'),
             ])
-            ->defaultSort('id_receipt')
+            ->defaultSort('id_ingredient', 'desc') // Sắp xếp theo 'created_at' thay vì 'id'
             ->filters([
                 //
             ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListReceiptDetails::route('/'),
-            'create' => Pages\CreateReceiptDetail::route('/create'),
-            'edit' => Pages\EditReceiptDetail::route('/{record}/edit'),
-        ];
     }
 }

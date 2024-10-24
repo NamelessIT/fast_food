@@ -48,7 +48,7 @@ class EmployeeResource extends Resource
                 }),
 
                 Select::make('id_role')
-                ->label('Mã quyền')
+                ->label('Phân loại nhân viên')
                 ->required()
                 ->options(Role::pluck('role_name', 'id')->toArray())
                 ->placeholder('Chọn quyền'),
@@ -78,7 +78,7 @@ class EmployeeResource extends Resource
                 TextColumn::make('id')->label('Mã nhân viên'),
                 TextColumn::make('full_name')->label('Họ và tên nhân viên'),
                 TextColumn::make('phone')->label('Số liên lạc'),
-                TextColumn::make('id_role')->label('Mã quyền'),
+                TextColumn::make(Role::pluck('id', 'role_name')->toArray())->label('Mã quyền'),
                 TextColumn::make('salary')->label('Lương (vnd)'),
                 TextColumn::make('created_at')->label('Ngày tạo'),
                 TextColumn::make('updated_at')->label('Ngày cập nhật'),
