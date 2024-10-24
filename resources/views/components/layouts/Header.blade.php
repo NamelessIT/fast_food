@@ -29,16 +29,16 @@
             <!-- Biểu tượng giỏ hàng và nút Đăng nhập cho màn hình nhỏ -->
             <div class="d-flex justify-content-end d-lg-none">
                 <a href="#" class="btn btn-outline-secondary"><i class="fas fa-shopping-cart"></i></a>
-                <a href="{{ url('/account') }}" class="btn btn-order-now ms-2">        
+                <a href="{{ route ("account.index") }}" class="btn btn-order-now ms-2">        
                     @if (!empty($name))
                     <h5>{{ $name }}</h5>  
                     @else
-                     Đăng nhập ! 
+                     Đăng nhập !
                     @endif</a>
             </div>
 
             <!-- Nút Đăng nhập cho màn hình lớn -->
-            <a href="{{ url('/account') }}" class="btn btn-order-now d-none d-lg-inline ms-2">Đăng nhập</a>
+            <a href="{{ route ("account.index") }}" class="btn btn-order-now d-none d-lg-inline ms-2">Đăng nhập</a>
 
             <!-- Biểu tượng giỏ hàng cho màn hình lớn -->
             <a href="#" class="btn btn-outline-secondary d-none d-lg-inline ms-2"><i class="fas fa-shopping-cart"></i></a>

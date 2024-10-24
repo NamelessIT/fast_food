@@ -9,6 +9,11 @@ class Customer extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'full_name',
+        'phone',
+    ];
+
     public function account () {
         return $this->morphOne(Account::class, 'user');
     }
