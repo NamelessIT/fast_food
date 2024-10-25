@@ -1,13 +1,21 @@
 @extends('../components/layouts.main')
 
-@section('title','Document')
+@section('title')
+    Tài khoản
+@endsection
 
-<!-- Thêm CSS riêng cho trang đăng nhập -->
 @section('custom-css')
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/toast.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/account/form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/loading.css') }}">
+    @livewireStyles
 @endsection
 
 @section('content')
-    @livewire('account-user')
+    @livewire("account.form", [
+        'form' => "login",
+    ])
 @endsection
+
+@section('custom-js')
+    {{-- @livewireScriptConfig --}}
+@endSection
