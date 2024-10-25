@@ -49,7 +49,7 @@ class EmployeeResource extends Resource
                 }) */,
 
                 Select::make('id_role')
-                ->label('Loại nhân viên')
+                ->label('Phân loại nhân viên')
                 ->required()
                 ->options(Role::pluck('role_name', 'id'))
                 ->placeholder('Chọn loại nhân viên'),

@@ -17,6 +17,11 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Employee;
+use Illuminate\Database\Eloquent\Factories\Relationship;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use App\Filament\Resources\ReceiptDetailRelationManagerResource\RelationManagers\ReceiptDetailsRelationManager;
+use function Laravel\Prompts\search;
+
 class ReceiptResource extends Resource
 {
     protected static ?string $model = Receipt::class;
@@ -27,11 +32,14 @@ class ReceiptResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('id_employee')
+               Select::make('id_employee')
                 ->label('Mã nhân viên')
                 ->required()
                 ->options(Employee::pluck('full_name', 'id')->toArray())
                 ->placeholder('Chọn nhân viên thực hiện'),
+
+                Select::make('id_employee')
+                ->relationship('employee','full_name'),
 
                 TextInput::make('total')
                 ->label('Tổng tiền (vnd)')
@@ -55,11 +63,36 @@ class ReceiptResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('Mã phiếu nhập'),
-                TextColumn::make('id_employee')->label('Mã nhân viên'),
-                TextColumn::make('total')->label('Tổng tiền (vnd)'),
-                TextColumn::make('created_at')->label('Ngày tạo phiếu nhập'),
-                TextColumn::make('updated_at')->label('Ngày cập nhật phiếu nhập'),
+                TextColumn::make('id')
+                    ->label('Mã phiếu nhập')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('id_employee')
+                    ->label('Mã nhân viên')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('employee.full_name' )
+                    ->label('Tên nhân viên')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('total')
+                    ->label('Tổng tiền (vnd)')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('created_at')
+                    ->label('Ngày tạo phiếu nhập')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('updated_at')
+                    ->label('Ngày cập nhật phiếu nhập')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
             ])
             ->filters([
                 //
@@ -77,7 +110,7 @@ class ReceiptResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ReceiptDetailsRelationManager::class,
         ];
     }
 
