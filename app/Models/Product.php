@@ -19,5 +19,7 @@ class Product extends Model
         'status',
     ];
 
-
+    public function category(){
+        return $this->belongsTo(Category::class,'id_category','id');
+    }
 }

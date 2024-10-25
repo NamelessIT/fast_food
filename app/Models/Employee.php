@@ -20,4 +20,7 @@ class Employee extends Model
     public function account() {
         return $this->morphOne(Account::class, 'user');
     }
+    public function role(){
+        return $this->belongsTo(Role::class,'id_role','id');
+    }
 }

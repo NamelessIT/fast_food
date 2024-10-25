@@ -15,6 +15,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\CheckboxColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -55,7 +58,14 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('product_name'),
+                TextColumn::make('category.category_name'),
+                TextColumn::make('cod_price'),
+                TextColumn::make('price'),
+                TextColumn::make('id_promotion'),
+                TextColumn::make('description'),
+                ImageColumn::make('image_show'),
+                CheckboxColumn::make('status'),
             ])
             ->filters([
                 //
