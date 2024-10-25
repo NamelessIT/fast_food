@@ -31,13 +31,6 @@ class AccountResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $nhanVienOptions = Employee::pluck('ten_nhanvien', 'id')->toArray();
-
-        // Lấy dữ liệu từ bảng khachhang
-        $khachHangOptions = KhachHang::pluck('ten_khachhang', 'id')->toArray();
-    
-        // Kết hợp dữ liệu từ hai bảng
-        $options = array_merge($nhanVienOptions, $khachHangOptions);
         return $form
             ->schema([
                 Hidden::make('user_type')
