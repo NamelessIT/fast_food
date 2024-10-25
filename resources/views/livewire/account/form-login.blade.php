@@ -1,5 +1,4 @@
 <form action="" class="mx-auto mt-5 d-flex flex-column justify-content-center align-items-center">
-
     <h2 class="text-center text-uppercase fw-bold">Đăng nhập</h2>
 
     <div class="form-group my-3">
