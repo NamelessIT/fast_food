@@ -30,17 +30,30 @@
 
            <div class="d-flex headerEventBlock">
                <div class="eventBlock d-flex">
-                   <button id="cart" class=" border rounded-circle p-3 me-lg-5 me-2 bg-white  position-relative  ">
+
+
+                {{-- button login  --}}
+                   <div class="accountLogin">
+                       <button id="login" class=" border rounded-circle p-2 me-lg-2 me-2 bg-white " wire:click.prevent="render">
+                           <i class="fa-solid fa-user" style="font-size: 20px"></i>
+                       </button>
+                   </div>
+
+                   {{-- button cart --}}
+                   <button id="cart" class=" border rounded-circle p-2 me-lg-5 me-3 bg-white  position-relative  ">
                        <i class="fa-solid fa-cart-shopping"></i>
                        <span class="notify_quantity ">0</span>
                    </button>
                    <button id="btnOrder" class="border rounded-pill px-4 px-lg-5"> Order now</button>
+
                </div>
                <!-- Nút toggle cho thiết bị di động -->
                <button class="navbar-toggler me-auto" type="button" data-bs-toggle="offcanvas"
                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                    <span class="navbar-toggler-icon"></span>
                </button>
+
+
            </div>
 
            <!-- Offcanvas cho thiết bị di động -->
@@ -69,5 +82,3 @@
                </div>
            </div>
    </nav>
-
-   
