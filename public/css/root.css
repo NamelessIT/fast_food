@@ -1,11 +1,13 @@
 :root {
     /* Khai báo biến lưu màu */
-    --sandyBrown: #F29C52;
-    --darkOliveGreen:#493d13;
+    --sandyBrown: #f29c52;
+    --darkOliveGreen: #493d13;
     --saddleBrown: #492d13;
-    --seashell:  #fff5ed;
-    --grey:#fff5ed;
-    --white:#fff;
-    
-  }
-  
+    --seashell: #fff5ed;
+    --grey: #fff5ed;
+    --white: #fff;
+
+    /* form */
+    --btnSendOTP: #74b9ff;
+    --btnSendOTPHover: #0984e3;
+}

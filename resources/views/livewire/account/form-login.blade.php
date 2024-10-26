@@ -1,4 +1,6 @@
 <form action="" class="mx-auto mt-5 d-flex flex-column justify-content-center align-items-center">
+
+    {{-- {{dd (env ('APP_URL'))}} --}}
     <h2 class="text-center text-uppercase fw-bold">Đăng nhập</h2>
 
     <div class="form-group my-3">
@@ -31,11 +33,11 @@
     <p class="separator mt-3"><span>hoặc</span></p>
 
     <div class="socials d-flex justify-content-center align-items-center">
-        <button
-            class="btn-social btn-social-facebook btn my-3 rounded-pill fw-bold d-flex justify-content-center align-items-center">
+        <a href="{{ route('account.redirect', 'facebook') }}"
+            class="social-facebook text-decoration-none d-flex justify-content-center rounded-pill mb-3 align-items-center">
             <i class="fa-brands fa-facebook"></i>
             Đăng nhập bằng Facebook
-        </button>
+        </a>
     </div>
     <div class="loader" wire:loading>
         <div class="loading"></div>

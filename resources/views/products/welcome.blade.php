@@ -25,6 +25,7 @@
         </script>
     @endif
 
+    {{-- {{dd (auth()->user())}} --}}
 
     @if (auth()->check())
         @foreach ($all_products as $item)

@@ -71,6 +71,42 @@
             }
         }
 
+        .send-otp {
+            width: 70%;
+
+            input {
+                width: 80%;
+
+                &:focus ~ .underline {
+                    width: 80%;
+                    height: 2px;
+                }
+            }
+
+            .underline {
+                left: 0;
+                transform: translateX(0);
+            }
+
+            button {
+                width: 20%;
+                border: none;
+                outline: none;
+                background-color: #007bff;
+                color: white;
+                overflow: hidden;
+                box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+                    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+                padding: 10px 0;
+                background-color: var(--btnSendOTP);
+
+                &:hover {
+                    background-color: var(--btnSendOTPHover);
+                }
+            }
+        }
+
         .image-show {
             width: 30%;
         }
@@ -79,8 +115,7 @@
             width: 70%;
         }
 
-        .btn-submit,
-        .btn-social {
+        .btn-submit {
             width: 70%;
             background-color: #28a745;
             color: white;
@@ -125,7 +160,18 @@
 
         .socials {
             width: 100%;
-            .btn-social-facebook {
+
+            a {
+                width: 70%;
+                color: white;
+                overflow: hidden;
+                box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+                    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+                padding: 10px 0;
+            }
+
+            .social-facebook {
                 background-color: #4267b2;
                 gap: 10px;
 
@@ -158,6 +204,16 @@
         form {
             margin-top: 100px !important;
             width: 100%;
+
+            .send-otp {
+                input {
+                    width: 60%;
+                }
+
+                button {
+                    width: 40%;
+                }
+            }
         }
     }
 }

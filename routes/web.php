@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Account\AccountController;
+use App\Http\Middleware\Auth\CheckUserLogin;
 use App\Models\account;
 use App\Models\Product;
 use App\Http\Controllers\Home\HomeController;
@@ -18,9 +19,18 @@ use App\Livewire\ResetPassword;
 
 Route::group(['prefix' => '/'], function () {
     Route::get('/',[HomeController::class,"index"])->name("home.index");
-    
+
+});
+
+Route::group(['prefix' => '/auth'], function () {
+
+    // social login
+    Route::get('/redirection/{provider}', [AccountController::class, 'authProviderRedirect'])->name('account.redirect');
+    Route::get('/{provider}/callback', [AccountController::class, 'socialAuthentication'])->name('account.callback');
+
     // account
-    Route::get('/account', [AccountController::class, 'index'])->name('account.index');
+    Route::get('/account/login', [AccountController::class, 'index'])->name('account.index')->middleware(CheckUserLogin::class);
+    Route::get('/account/register', [AccountController::class, 'index'])->name('account.register')->middleware(CheckUserLogin::class);
     Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
 });
 

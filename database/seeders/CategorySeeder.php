@@ -30,25 +30,29 @@ class CategorySeeder extends Seeder
         $imageBlob4 = base64_encode($imageContents);
         DB::table('categories')->insert([
             [
-                'category_name' => 'Burger',
+                'valueVi' => 'Burger',
+                'valueEn' => 'Burger',
                 'image' => $imageBlob1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'category_name' => 'Gà rán',
+                'valueVi' => 'Gà rán',
+                'valueEn' => 'Chicken',
                 'image' => $imageBlob2,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'category_name' => 'Thức uống',
+                'valueVi' => 'Thức uống',
+                'valueEn' => 'Drinks',
                 'image' => $imageBlob3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'category_name' => 'Combo',
+                'valueVi' => 'Combo',
+                'valueEn' => 'Combo',
                 'image' => $imageBlob4,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
