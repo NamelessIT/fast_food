@@ -15,14 +15,25 @@ class Receipt extends Model
         'created_at',
         'updated_at',
      ];
-     protected $casts = [
-        'id_employee'=> 'array',
-    ];
+
     public function employee(){
-        return $this->belongsTo(Employee::class,'id_employee', 'id');
+        return $this->hasMany(Employee::class,'id', 'id_employee');
     }
+   
     public function receiptDetails() {
         return $this->hasMany(ReceiptDetail::class, 'id_receipt', 'id');
     }
+
+
+
+
+
+    protected static function booted(){
+        static::saved(function ($receipt) {
+            $receipt->total = $receipt->receiptDetails()->sum('total_price');
+            $receipt->saveQuietly(); // Sử dụng saveQuietly để tránh vòng lặp vô hạn
+        });
+    }
+
     
 }
