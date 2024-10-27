@@ -18,7 +18,7 @@ use App\Livewire\ResetPassword;
 
 Route::group(['prefix' => '/'], function () {
     Route::get('/',[HomeController::class,"index"])->name("home.index");
-
+    
     // account
     Route::get('/account', [AccountController::class, 'index'])->name('account.index');
     Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
@@ -50,4 +50,7 @@ Route::group(['prefix'=>'/user'],function(){
         // Route::get('/my-account/reset-password', ResetPassword::class)->name('user.my-account.reset-password');
         // Route::get('/my-account/delete', DeleteAccount::class)->name('user.my-account.delete');
 
+});
+Route::fallback(function () {
+    abort(404);
 });
