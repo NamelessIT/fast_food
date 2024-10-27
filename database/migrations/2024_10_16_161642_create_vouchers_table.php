@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vouchers', function (Blueprint $table) {
-            $table->id()->primary()->autoIncrement();
+            $table->id();
             $table->string('voucher_name', 100)->unique();
             $table->text('description')->nullable();
             $table->integer('discount_percent')->default(0);
