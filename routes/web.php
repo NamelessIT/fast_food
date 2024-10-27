@@ -1,21 +1,21 @@
 <?php
 
-use App\Http\Controllers\accountController;
+use App\Http\Controllers\Account\AccountController;
+use App\Models\account;
+use App\Models\Product;
+use App\Http\Controllers\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 // use App\Database\DbConnection;
 
 // $db=DbConnection::getInstance()->getConnection();
 
-Route::get('/', function () {
-    return view('products.welcome');
+Route::group(['prefix' => '/'], function () {
+    Route::get('/',[HomeController::class,"index"])->name("home.index");
+
+    // account
+    Route::get('/account', [AccountController::class, 'index'])->name('account.index');
+    Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
 });
-
-Route::get('/account',[accountController::class,'index']);
-Route::get('/username',[accountController::class,'getUsername'])->name('getUsername');
-Route::post('/signup', [accountController::class, 'signup'])->name('signup');
-Route::post('/login', [accountController::class, 'login'])->name('login');
-Route::post('/check-email', [accountController::class, 'checkEmail'])->name('check.email');
-
 
 Route::group(['prefix' => '/product'], function () {
     Route::get('/', function () {
@@ -25,4 +25,8 @@ Route::group(['prefix' => '/product'], function () {
     Route::get ('/detail-product/{id}', function () {
         return view('products.detail-product');
     });
+});
+
+Route::fallback(function () {
+    abort(404);
 });
