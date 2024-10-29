@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AccountResource\Pages;
 use App\Filament\Resources\AccountResource\RelationManagers;
 use App\Models\Account;
+use App\Models\Employee;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
@@ -21,7 +22,8 @@ use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Role;
-
+use Filament\Forms\Components\MorphToSelect;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class AccountResource extends Resource
 {
@@ -33,15 +35,25 @@ class AccountResource extends Resource
     {
         return $form
             ->schema([
+                //TextInput::make('user_type'),
+
                 Hidden::make('user_type')
-                    ->default('user_type_mac_dinh'),
+                    ->default(Employee::class),
 
                 Hidden::make('id_user')
                     ->default(request()->query('id_user')),
 
                 TextInput::make('username')
                     ->unique(ignoreRecord: true) // Bỏ qua usernam hiện tại của bản ghi khi cập nhật
-                    ->required(),
+                    ->validationMessages([
+                        'required' => 'username k dc bo trong',
+                        'unique' => 'username da ton tai',
+                    ])
+                    ->rules(['required'])
+                    ->markAsRequired(),
+
+
+
                 TextInput::make('password')
                     ->required()
                     ->visibleOn('create')
@@ -57,6 +69,7 @@ class AccountResource extends Resource
                     ->email(),
 
 
+
                 Checkbox::make('status')
                     ->default(true),
             ]);
@@ -67,15 +80,48 @@ class AccountResource extends Resource
         return $table
             ->columns([
                 // TextColumn::make('user_type'),
-                TextColumn::make('username'),
+                TextColumn::make('id_user')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:true),
+                TextColumn::make('user_type')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:true),
+                TextColumn::make('username')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:true)
+                    ->searchable(),
+                TextColumn::make('user.full_name')
+                    ->searchable()
+                    ->sortable()
+                    ->label("Ho va ten nhan vien"),
+                TextColumn::make('user.phone')
+                    ->searchable()
+                    ->label("So dien thoai"),
                 ImageColumn::make('avatar')
-                    ->height(150)
-                    ->width(150),
+                    ->toggleable(isToggledHiddenByDefault:false)
+                    ->circular()
+                    ->height(100)
+                    ->width(100),
+                TextColumn::make('user.role.role_name')
+                    ->toggleable(isToggledHiddenByDefault:false)
+                    ->sortable()
+                    ->searchable()
+                    ->label("Loai nhan vien"),
+                TextColumn::make('user.salary')
+                    ->toggleable(isToggledHiddenByDefault:false)
+                    ->sortable()
+                    ->searchable()
+                    ->label("Luong"),
                 TextColumn::make('email'),
-
-                CheckboxColumn::make('status'),
-                TextColumn::make('created_at'),
-                TextColumn::make('updated_at'),
+                CheckboxColumn::make('status')
+                    ->sortable()
+                    ->disabled(),
+                TextColumn::make('created_at')
+                    ->toggleable()
+                    ->sortable(),
+                TextColumn::make('updated_at')
+                    ->toggleable()
+                    ->sortable(),
             ])
             ->filters([
                 //

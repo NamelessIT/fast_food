@@ -17,8 +17,10 @@ class Employee extends Model
          'created_at',
          'updated_at',
      ];
+
+
     public function account() {
-        return $this->morphOne(Account::class, 'user');
+        return $this->morphOne(Account::class, 'user', 'user_type', 'id_user');
     }
     public function role(){
         return $this->belongsTo(Role::class,'id_role','id');
