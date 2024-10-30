@@ -32,17 +32,16 @@ class ReceiptDetailsRelationManager extends RelationManager
                 ->options(Ingredient::pluck('ingredient_name', 'id')->toArray())
                 ->placeholder('Chọn nguyên liệu'),
 
-                
                 TextInput::make('quantity')
                 ->required()
-                ->label('Số lượng (Kg)')
-                ->placeholder('Vui lòng nhập số lượng nhập')
+                ->label('Lượng  nhập')
+                ->placeholder('Vui lòng nhập lượng nguyên liệu')
                 ->numeric()
                 ->rules('required|numeric|min:1')
                 ->reactive()
                 ->afterStateUpdated(function ($state, $set) { // Sửa đổi đây
                     if ($state === '') {
-                        $set('Số lượng (Kg)', ''); // Xóa giá trị nếu trường trống
+                        $set('Lượng nhập', ''); // Xóa giá trị nếu trường trống
                     }
                 }),
 
@@ -53,19 +52,19 @@ class ReceiptDetailsRelationManager extends RelationManager
                 ->reactive()
                 ->afterStateUpdated(function ($state, $set) { // Sửa đổi đây
                     if ($state === '') {
-                        $set('Số lượng (Kg)', ''); // Xóa giá trị nếu trường trống
+                        $set('Tổng tiền (vnd)', ''); // Xóa giá trị nếu trường trống
                     }
                 }),
 
                 TextInput::make('created_at')
-                ->label('Ngày tạo phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
+                    ->label('Ngày tạo phiếu nhập')
+                    ->default(Carbon::now()->format('Y-m-d'))
+                    ->disabled(),
 
                 TextInput::make('updated_at')
-                ->label('Ngày cập nhật phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
+                    ->label('Ngày cập nhật phiếu nhập')
+                    ->default(Carbon::now()->format('Y-m-d'))
+                    ->disabled(),
             ]);
     }
 
@@ -74,12 +73,36 @@ class ReceiptDetailsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id_ingredient')
             ->columns([
-                TextColumn::make('id_receipt')->label('Mã phiếu nhập'),
-                TextColumn::make('ingredient.ingredient_name')->label('Tên nguyên liệu'),
-                TextColumn::make('quantity')->label('Số lượng (Kg)'),
-                TextColumn::make('total_price')->label('Tổng tiền (vnd)'),
-                TextColumn::make('created_at')->label('Ngày tạo phiếu nhập'),
-                TextColumn::make('updated_at')->label('Ngày cập nhật phiếu nhập'),
+                TextColumn::make('ingredient.ingredient_name')
+                    ->label('Nguyên liệu')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('quantity')
+                    ->label('Lượng nhập')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('ingredient.unit')
+                    ->label('Đơn vị')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('total_price')
+                    ->label('Tổng tiền')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('created_at')
+                    ->label('Ngày tạo phiếu')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('updated_at')
+                    ->label('Ngày cập nhật phiếu')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
             ])
             ->defaultSort('id_ingredient', 'desc') // Sắp xếp theo 'created_at' thay vì 'id'
             ->filters([

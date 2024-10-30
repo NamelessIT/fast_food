@@ -37,15 +37,7 @@ class ReceiptResource extends Resource
                 ->required()
                 ->options(Employee::pluck('full_name', 'id')->toArray())
                 ->placeholder('Chọn nhân viên thực hiện'),
-
-                Select::make('id_employee')
-                ->relationship('employee','full_name'),
-
-                TextInput::make('total')
-                ->label('Tổng tiền (vnd)')
-                ->numeric()
-                ->rules('required|numeric|min:0')
-                ->default(0),
+                
                 TextInput::make('created_at')
                 ->label('Ngày tạo phiếu nhập')
                 ->default(Carbon::now()->format('Y-m-d H:i:s'))
@@ -79,20 +71,18 @@ class ReceiptResource extends Resource
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('total')
-                    ->label('Tổng tiền (vnd)')
+                    ->label('Tổng tiền')
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('created_at')
-                    ->label('Ngày tạo phiếu nhập')
+                    ->label('Ngày tạo phiếu')
                     ->sortable()
-                    ->searchable()
-                    ->toggleable(),
+                    ->searchable(),
                 TextColumn::make('updated_at')
-                    ->label('Ngày cập nhật phiếu nhập')
+                    ->label('Ngày cập nhật phiếu')
                     ->sortable()
-                    ->searchable()
-                    ->toggleable(),
+                    ->searchable(),
             ])
             ->filters([
                 //

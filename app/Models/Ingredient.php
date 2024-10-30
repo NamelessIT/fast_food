@@ -10,10 +10,11 @@ class Ingredient extends Model
     use HasFactory;
     protected $fillable = [
         'id',
-         'ingredient_name',
-         'remain_quantity',
-         'unit',
-         'created_at',
-         'updated_at',
+        'ingredient_name',
+        'remain_quantity',
+        'unit',
+        'created_at',
+        'updated_at',
      ];
+     
 }

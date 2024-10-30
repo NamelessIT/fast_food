@@ -29,14 +29,6 @@ class IngredientResource extends Resource
                 TextInput::make('ingredient_name')
                 ->label('Tên nguyên liệu')
                 ->required(),
-
-                TextInput::make('remain_quantity')
-                ->label('Lượng nguyên liệu còn lại')
-                ->required()
-                ->placeholder('Vui lòng nhập lượng nguyên liệu')
-                ->numeric()
-                ->rules('required|numeric|min:0') // Chỉ cho phép số không âm
-                ->reactive(),
                 
                 TextInput::make('unit')
                 ->label('Đơn vị')
