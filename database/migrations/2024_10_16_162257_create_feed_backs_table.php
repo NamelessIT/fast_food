@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('feed_backs', function (Blueprint $table) {
-            $table->id()->primary()->autoIncrement();
+            $table->id();
             $table->unsignedBigInteger('id_customer');
             $table->unsignedBigInteger('id_product');
             $table->integer('evaluation');

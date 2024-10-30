@@ -22,6 +22,7 @@ class Account extends Authenticatable implements HasName
     protected $fillable = [
         'username',
         'email',
+        'username',
         'password',
         'id_user',
         'user_type',

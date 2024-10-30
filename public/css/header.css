@@ -1,52 +1,173 @@
-html, body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-main {
-    flex-grow: 1; /* Giúp phần nội dung chính mở rộng và đẩy footer xuống */
-}
-
-
-
-header a:hover {
-    text-decoration: underline;
-}
-
+/* css chung  */
 header .navbar {
     background-color: #fff;
-    border-bottom: 3px solid #000;
-    z-index: 1030; /* Đảm bảo thanh navbar luôn hiển thị trên các phần tử khác */
-}
-
-header .navbar-brand img {
-    width: 50px;
+    z-index: 1030;
+    /* Đảm bảo thanh navbar luôn hiển thị trên các phần tử khác */
 }
 
 header .navbar-nav .nav-item {
-    margin-right: 20px; /* Khoảng cách giữa các mục menu */
+    margin-right: 20px;
+    /* Khoảng cách giữa các mục menu */
     /* font-family: 'Cherry Bomb'; */
 }
 
-header .btn-order-now {
-    background-color: red;
-    color: white;
-    font-weight: bold;
-    padding: 5px 15px;
-    border-radius: 5px;
+html,
+body {
+    height: 200vh;
 }
 
-/* Điều chỉnh offcanvas cho thiết bị di động */
-.offcanvas-start {
-    width: 50%; /* Chiều rộng của menu offcanvas */
+main {
+    flex-grow: 1;
+    /* Giúp phần nội dung chính mở rộng và đẩy footer xuống */
 }
+
+header a {
+    font-size: 18px;
+}
+
+/* ----------------------------------------------------------------------------- */
+
+
+
+/* navLogo css */
+header .navLogo .navbar-brand img {
+    width: 50px;
+}
+
+header .navLogo h1 {
+    color: #333;
+}
+
+/* --------------------------------- */
+
+/* navContainer css  */
+
+header .navContainer .navbar-nav .nav-link {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+
+}
+
+header .navContainer .navbar-nav .nav-link:hover,
+.offcanvas .offcanvas-body .navbar-nav .nav-item .nav-link.active {
+    color: var(--sandyBrown);
+    transition: 0.5s ease-in-out;
+}
+
+header .navContainer .navbar-nav .nav-link.active,
+.offcanvas .offcanvas-body .navbar-nav .nav-item .nav-link:hover {
+    color: var(--sandyBrown);
+}
+
+/* ---------------------------------------------------------------------------- */
+
+
+/* eventBlock css   */
+
+
+header .headerEventBlock .eventBlock button {
+    border-color: #f4ece6;
+
+}
+
+header .headerEventBlock .eventBlock button i {
+    font-size: 20px;
+}
+
+header .headerEventBlock .eventBlock #btnOrder {
+    color: white;
+    background-color: var(--sandyBrown);
+    font-weight: 700;
+    font-size: 20px;
+}
+
+header .headerEventBlock .eventBlock #btnOrder:hover {
+    background: var(--darkOliveGreen);
+    transition: all 0.5s;
+}
+
+header .headerEventBlock .eventBlock .notify_quantity {
+    position: absolute;
+    top: 0;
+    background: var(--sandyBrown);
+    border-radius: 50%;
+    padding: 0 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+
+
+/* Điều chỉnh offcanvas cho thiết bị di động */
+.offcanvas {
+    width: 80%;
+    background: #FFEBD9;
+    /* Chiều rộng của menu  offcanvas */
+}
+
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.offcanvas .offcanvas-body .navbar-nav .nav-item {
+    color: #333;
+    font-size: 20px;
+    line-height: 60px;
+
+}
+.offcanvas .offcanvas-header .offcanvas-title  {
+    color: #333;
+    font-size: 25px;
+}
+
+.navbar-toggler {
+    background: var(--darkOliveGreen);
+    color: white;
+}
+
+.offcanvas .navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-toggler-icon {
+    color: #fff !important;
+}
+
 
 /* Đẩy các nút sang bên phải */
 /* header .navbar .d-inline.d-lg-flex {
     margin-left: auto;
 }
  */
+
+/* reponsive  */
+@media only screen and (max-width:1100px) {
+
+    header .navLogo h1 {
+        font-size: 25px;
+
+    }
+
+    header .navLogo .navbar-brand img {
+        width: 40px;
+    }
+
+    header .navContainer .navbar-nav .nav-link {
+        font-size: 15px;
+    }
+    header .headerEventBlock .eventBlock #btnOrder {
+        font-size: 20px;
+    }
+
+}
+
+@media only screen and (max-width:991px) {
+    .headerEventBlock .eventBlock #btnOrder {
+        display: none;
+
+    }
+
+}
