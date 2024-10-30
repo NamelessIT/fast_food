@@ -19,7 +19,7 @@
   /* ======= Buttons ======== */
   
   /* Block */
-  .btn {
+  .toast .btn {
     display: inline-block;
     text-decoration: none;
     background-color: transparent;
@@ -42,7 +42,7 @@
     padding: 8px 32px;
   }
   
-  .btn:hover {
+  .toast .btn:hover {
     opacity: 0.8;
   }
   
