@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ingredients', function (Blueprint $table) {
-            $table->id()->primary()->autoIncrement();
+            $table->id();
             $table->string('ingredient_name', 255)->unique();
             $table->decimal('remain_quantity', 10, 2)->default(0);
             $table->string('unit', 50)->nullable();
