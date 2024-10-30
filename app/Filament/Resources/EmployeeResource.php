@@ -40,18 +40,27 @@ class EmployeeResource extends Resource
             ->schema([
                 TextInput::make('full_name')
                     ->label('Họ và tên nhân viên')
-                    ->required(),
+                    ->validationMessages([
+                        'required' => 'Hãy nhập họ và tên',
+                    ])
+                    ->rules(['required'])
+                    ->markAsRequired(),
 
                 TextInput::make('phone')
                     ->unique(ignoreRecord:true)
                     ->label('Số điện thoại')
-                    ->required()
+                    ->markAsRequired()
+                    ->rules(['required'])
+                    ->validationMessages([
+                        'required' => 'Hãy nhập số điện thoại',
+                        'unique' => 'Số điện thoại đã tồn tại',
+                    ])
                     ->placeholder('Vui lòng nhập số điện thoại')
                     //->rules('required|regex:/^0[0-9]{9}$/')
                     ->numeric()
                     //->maxLength(11)
                     //->minLength(1)
-                    ->reactive()
+                    //->reactive()
                     /* ->afterStateUpdated(function ($state, $set) {
                         if (strlen($state) === 10 && !preg_match('/^0[0-9]{9}$/', $state)) {
                             $set('phone', ''); // Chỉ reset nếu nhập đủ 10 ký tự mà không đúng định dạng
@@ -60,9 +69,13 @@ class EmployeeResource extends Resource
 
                 Select::make('id_role')
                     ->label('Phân loại nhân viên')
-                    ->required()
                     ->options(Role::pluck('role_name', 'id'))
-                    ->placeholder('Chọn loại nhân viên'),
+                    ->placeholder('Chọn loại nhân viên')
+                    ->rules(['required'])
+                    ->validationMessages([
+                        'required' => 'Hãy chọn loại nhân viên',
+                    ])
+                    ->markAsRequired(),
 
                 TextInput::make('salary')
                     ->label('Lương (vnd)')
@@ -71,20 +84,24 @@ class EmployeeResource extends Resource
                     ->default(0),
 
                 //Các trường của Account
-                Fieldset::make('Điền thông tin tài khoản:')
+                Fieldset::make('Thông tin account:')
                     ->relationship('account')
                     ->schema([
                         TextInput::make('username')
                             ->unique(ignoreRecord: true) // Bỏ qua usernam hiện tại của bản ghi khi cập nhật
                             ->validationMessages([
-                                'required' => 'username k dc bo trong',
-                                'unique' => 'username da ton tai',
+                                'required' => 'Hãy nhập username',
+                                'unique' => 'username đã tồn tại',
                             ])
                             ->rules(['required'])
                             ->markAsRequired(),
 
                         TextInput::make('password')
-                            ->required()
+                            ->validationMessages([
+                                'required' => 'Hãy nhập mật khẩu',
+                            ])
+                            ->rules(['required'])
+                            ->markAsRequired()
                             ->visibleOn('create')
                             ->password()
                             ->revealable(),
@@ -94,8 +111,13 @@ class EmployeeResource extends Resource
                             ->directory('images/avatar'),
                         TextInput::make('email')
                             ->unique(ignoreRecord: true) // Bỏ qua email hiện tại của bản ghi khi cập nhật
-                            ->required()
-                            ->email()->validationMessages(['required' => 'Email không được bỏ trống']),
+                            ->markAsRequired()
+                            ->rules(['required'])
+                            ->email()
+                            ->validationMessages([
+                                'required' => 'Hãy nhập email',
+                                'unique' => 'email đã tồn tại',
+                            ]),
 
                         Checkbox::make('status')
                             ->default(true),
@@ -128,7 +150,9 @@ class EmployeeResource extends Resource
                 TextColumn::make('role.role_name')
                     ->label('Loại nhân viên')
                     ->sortable(),
-                TextColumn::make('salary')->label('Lương (vnd)'),
+                TextColumn::make('salary')
+                    ->sortable()
+                    ->label('Lương (vnd)'),
                 TextColumn::make('account.email')
                     ->label("Email"),
                 CheckboxColumn::make('account.status')
