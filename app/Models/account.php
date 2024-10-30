@@ -53,7 +53,7 @@ class Account extends Authenticatable implements HasName
     }
 
     public function user () {
-        return $this->morphTo(null,'user_type','id_user');
+        return $this->morphTo('user','user_type','id_user');
     }
 
     public function getFilamentName(): string{

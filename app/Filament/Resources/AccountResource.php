@@ -68,8 +68,6 @@ class AccountResource extends Resource
                     ->required()
                     ->email(),
 
-
-
                 Checkbox::make('status')
                     ->default(true),
             ]);
