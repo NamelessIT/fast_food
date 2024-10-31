@@ -11,4 +11,8 @@ class Product extends Model
         'image_show'  
     ];
     use HasFactory;
+
+    public function category () {
+        return $this->belongsTo(Category::class);
+    }
 }

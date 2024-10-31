@@ -10,7 +10,7 @@ class HomeController
     public function index()
     {
         $categoryItems = DB::table('categories')->get();
-        $slideshowImages = DB::table('categories')->pluck('image');
+        $slideshowImages = DB::table('slides')->pluck('image_show');
         return view("home.index", [
             "slideshowImages" => $slideshowImages,
             "categoryItems" =>   $categoryItems
