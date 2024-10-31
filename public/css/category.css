@@ -1,0 +1,28 @@
+.categoryItem {
+
+    a {
+        text-decoration: none;
+    }
+
+    img {
+        width: 200px;
+        height: auto;
+        object-fit: contain;
+        object-position: center;
+    }
+    img:hover {
+        border-style: dashed;
+        border-color: var(--sandyBrown);
+        transition: all 0.1s;
+    }
+
+    .categoryName {
+        p {
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 20px;
+        }
+    }
+
+}

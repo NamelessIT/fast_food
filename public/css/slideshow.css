@@ -1,0 +1,6 @@
+    .slideShowWrapper .carousel-item  img {
+        object-position: center;
+        overflow: hidden;
+        height: 700px;
+        max-height: 700px; 
+    }
