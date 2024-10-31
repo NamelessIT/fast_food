@@ -32,6 +32,8 @@
     @yield('custom-css')
     {{-- livewire --}}
     @livewireStyles
+
+    @yield('custom-header-js')
 </head>
 
 <body>
