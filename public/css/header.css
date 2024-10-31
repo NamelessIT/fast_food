@@ -11,11 +11,6 @@ header .navbar-nav .nav-item {
     /* font-family: 'Cherry Bomb'; */
 }
 
-html,
-body {
-    height: 200vh;
-}
-
 main {
     flex-grow: 1;
     /* Giúp phần nội dung chính mở rộng và đẩy footer xuống */
@@ -26,8 +21,6 @@ header a {
 }
 
 /* ----------------------------------------------------------------------------- */
-
-
 
 /* navLogo css */
 header .navLogo .navbar-brand img {
@@ -46,7 +39,6 @@ header .navContainer .navbar-nav .nav-link {
     font-size: 18px;
     font-weight: 600;
     color: #333;
-
 }
 
 header .navContainer .navbar-nav .nav-link:hover,
@@ -62,13 +54,10 @@ header .navContainer .navbar-nav .nav-link.active,
 
 /* ---------------------------------------------------------------------------- */
 
-
 /* eventBlock css   */
-
 
 header .headerEventBlock .eventBlock button {
     border-color: #f4ece6;
-
 }
 
 header .headerEventBlock .eventBlock button i {
@@ -98,15 +87,12 @@ header .headerEventBlock .eventBlock .notify_quantity {
     font-size: 13px;
 }
 
-
-
 /* Điều chỉnh offcanvas cho thiết bị di động */
 .offcanvas {
     width: 80%;
-    background: #FFEBD9;
+    background: #ffebd9;
     /* Chiều rộng của menu  offcanvas */
 }
-
 
 .navbar-toggler:focus {
     box-shadow: none;
@@ -116,9 +102,8 @@ header .headerEventBlock .eventBlock .notify_quantity {
     color: #333;
     font-size: 20px;
     line-height: 60px;
-
 }
-.offcanvas .offcanvas-header .offcanvas-title  {
+.offcanvas .offcanvas-header .offcanvas-title {
     color: #333;
     font-size: 25px;
 }
@@ -136,7 +121,6 @@ header .headerEventBlock .eventBlock .notify_quantity {
     color: #fff !important;
 }
 
-
 /* Đẩy các nút sang bên phải */
 /* header .navbar .d-inline.d-lg-flex {
     margin-left: auto;
@@ -144,11 +128,9 @@ header .headerEventBlock .eventBlock .notify_quantity {
  */
 
 /* reponsive  */
-@media only screen and (max-width:1100px) {
-
+@media only screen and (max-width: 1100px) {
     header .navLogo h1 {
         font-size: 25px;
-
     }
 
     header .navLogo .navbar-brand img {
@@ -161,15 +143,10 @@ header .headerEventBlock .eventBlock .notify_quantity {
     header .headerEventBlock .eventBlock #btnOrder {
         font-size: 20px;
     }
-
 }
 
-@media only screen and (max-width:991px) {
+@media only screen and (max-width: 991px) {
     .headerEventBlock .eventBlock #btnOrder {
         display: none;
-
     }
-
 }
-
-
