@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('categories', function($table) {
-            $table->string ('valueEn')->unique ();
-            $table->renameColumn('category_name', 'valueVi');
+        Schema::create('slides', function (Blueprint $table) {
+            $table->id();
+            $table->mediumText('image_show')->charset('binary')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -22,9 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('categories', function($table) {
-            $table->dropColumn('valueEn');
-            $table->renameColumn('valueVi', 'category_name');
-        });
+        Schema::dropIfExists('slides');
     }
 };
