@@ -8,15 +8,7 @@ use App\Models\Product;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Product\ProductController;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Address;
-use App\Livewire\DeleteAccount;
-use App\Livewire\FavouriteOrders;
-use App\Livewire\MyAccountDetail;
-use App\Livewire\PreviousOrders;
-use App\Livewire\ResetPassword;
-// use App\Database\DbConnection;
 
-// $db=DbConnection::getInstance()->getConnection();
 
 Route::group(['prefix' => '/'], function () {
     Route::get('/',[HomeController::class,"index"])->name("home.index");
@@ -43,20 +35,14 @@ Route::group(['prefix' => '/category'], function () {
     });
 });
 
-Route::group(['prefix'=>'/user'],function(){
+Route::group(['prefix'=>'/users'],function(){
     Route::get('/',function(){
-        return redirect('/user/index');
+        return redirect('/users/index');
     });
     Route::get('/index',function(){
-        return view('customers.index');
+        return view('users.index');
     });
-        // Sử dụng Livewire cho các trang khác nhau
-        // Route::get('/previous-orders', PreviousOrders::class)->name('user.previous-orders');
-        // Route::get('/favourite-orders', FavouriteOrders::class)->name('user.favourite-orders');
-        // Route::get('/address', Address::class)->name('user.address');
-        // Route::get('/my-account/detail', MyAccountDetail::class)->name('user.my-account.detail');
-        // Route::get('/my-account/reset-password', ResetPassword::class)->name('user.my-account.reset-password');
-        // Route::get('/my-account/delete', DeleteAccount::class)->name('user.my-account.delete');
+
 
 });
 Route::fallback(function () {
