@@ -7,12 +7,12 @@ use App\Models\Product;
 
 class ProductController
 {
-    public function index()
+    public function detail($name, $id)
     {
-        // Fetch all products from the database
-        $all_products = Product::all();
-        
-        // Return the view with all products
-        return view('products.welcome', compact('all_products'));
+        // dd ($name, $id);
+        return view('products.detail-product', [
+            'id' => $id,
+            'name' => $name
+        ]);
     }
 }

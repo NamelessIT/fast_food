@@ -10,12 +10,12 @@
 
                 #searchBarProduct {
                     height: 50px;
-                    border: 1px solid rgba(242, 156, 82, .16);
+                    border: 1px solid rgba(242, 156, 82, 0.16);
                     border-radius: 8px;
                     margin-bottom: 0;
                     padding-left: 25px;
                     padding-right: 50px;
-                    transition: ease-in .3s;
+                    transition: ease-in 0.3s;
                     outline: none;
                 }
 
@@ -37,13 +37,10 @@
                         color: var(--sandyBrown);
                     }
                 }
-
-
             }
 
             .containerCategory {
                 /* width: 100%; */
-
             }
         }
 
@@ -57,8 +54,9 @@
                     border: none;
                     background: #fff;
                     max-width: 250px;
-                
-                    box-shadow: 0 10px 15px rgba(73, 45, 19, .04);
+                    margin: 10px 0;
+
+                    box-shadow: 0 10px 15px rgba(73, 45, 19, 0.04);
                     transition-behavior: normal;
                     transition-duration: 0.3s;
                     transition-timing-function: ease;
@@ -66,7 +64,6 @@
 
                     a {
                         text-decoration: none;
-
                     }
 
                     img {
@@ -92,7 +89,6 @@
                             transform: translateX(-50%);
                             opacity: 0;
 
-
                             .btnAddToCart {
                                 background: var(--sandyBrown);
                                 color: #fff;
@@ -113,57 +109,45 @@
                                 padding: 10px;
                             }
                         }
-
                     }
                 }
 
                 .cardItem:hover {
-                    box-shadow: 0 10px 15px rgba(73, 45, 19, .2);
+                    box-shadow: 0 10px 15px rgba(73, 45, 19, 0.2);
 
                     .addToCart {
                         transform: translate3d(-50%, -90%, 0);
                         transform-style: preserve-3d;
                         opacity: 1;
-                        transition: ease 0.5s
+                        transition: ease 0.5s;
                     }
 
                     .product-name {
                         transform: translate3d(0, -200%, 0);
                         transform-style: preserve-3d;
                         opacity: 0;
-                        transition: ease 0.3s
+                        transition: ease 0.3s;
                     }
 
                     .product-price {
                         transform: translate3d(0, -200%, 0);
                         transform-style: preserve-3d;
                         opacity: 0;
-                        transition: ease 0.3s
+                        transition: ease 0.3s;
                     }
-
-
                 }
             }
-
         }
     }
-
-
 }
 
-
-.details-container-block {}
-
-
-
-
+.details-container-block {
+}
 
 /* responsive  */
 
-
 @media screen and (max-width: 768px) {
     body {
-
         overflow-x: hidden;
     }
 
@@ -174,12 +158,9 @@
         transform: translateX(0) !important;
     }
 
-
     .product-content .content .product-name {
-
         /* display: block; */
         height: 50px;
-
     }
 
     .shopSection {
@@ -200,13 +181,10 @@
                     #searchBarProduct {
                         width: 100%;
                     }
-
-
                 }
 
                 .containerCategory {
                     width: 100%;
-
                 }
             }
 
@@ -238,8 +216,6 @@
                             opacity: 1;
                         }
                     }
-
-
                 }
             }
         }
@@ -249,8 +225,6 @@
 @media screen and (max-width: 1024px) {
     .details-container-block {
         .listProductContainer {
-
-
             .cardItem {
                 .product-content {
                     .addToCart {
@@ -281,14 +255,12 @@
                     transform: translate3d(0, 0, 0) !important;
                     opacity: 1 !important;
                 }
-
             }
         }
-
     }
 }
-@media screen and (min-width :1500px) {
+@media screen and (min-width: 1500px) {
     .cardItem {
-        max-width: 20%  !important;
+        max-width: 20% !important;
     }
 }

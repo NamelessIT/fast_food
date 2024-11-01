@@ -1,0 +1,114 @@
+.product-detail {
+    .product-thumbnail {
+        img {
+            width: 70%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        span {
+            color: #ff5b6a;
+        }
+    }
+
+    .product-description {
+        .title-description {
+            margin: 10px 0;
+            background: #f2f2f2;
+        }
+
+        .extra-food {
+            .food {
+                border-bottom: 1px solid #eb4d4b;
+                padding: 10px 0;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .quantity {
+                    color: #eb4d4b;
+                }
+
+                .name {
+                    img {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+
+        .add-to-cart {
+            .quantity {
+                gap: 10px;
+                button {
+                    font-size: 15px;
+                    width: 50px;
+                    height: 50px;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    background-color: #ff969a;
+                    color: white;
+                }
+
+                input {
+                    width: 50px;
+                    height: 50px;
+                    border: none;
+                    outline: none;
+                    background: #f2f2f2;
+                    text-align: center;
+                    border-radius: 5px;
+                    background-color: #ffeae3;
+                }
+
+                input[type="number"]::-webkit-outer-spin-button,
+                input[type="number"]::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+            }
+
+            .add {
+                background-color: #ff5b6a;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
+}
+
+/* mobile */
+@media only screen and (max-width: 740px) {
+    .product-detail {
+        .product-description {
+            .title-description,
+            .extra-food,
+            .add-to-cart {
+                width: 100% !important;
+            }
+        }
+
+        .add-to-cart {
+            flex-direction: column !important;
+
+            .quantity {
+                margin: 10px 0;
+                justify-content: center;
+            }
+        }
+    }
+}

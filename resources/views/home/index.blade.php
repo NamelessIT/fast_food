@@ -1,4 +1,9 @@
 @extends('components.layouts.main')
+
+@section('title')
+    Trang chủ
+@endsection
+
 @section('content')
     @include('home.slideshow')
     @include('home.category')

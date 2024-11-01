@@ -26,8 +26,7 @@
             <div class="listProductContainer row row-cols-4">
                 @foreach ($listProduct as $item)
                     {{-- @livewire('product.card-product') --}}
-
-                    @livewire('product.cardproduct', ['product_name' => $item->product_name, 'imageShow' => $item->image_show, 'price' => $item->price])
+                    @livewire('product.cardproduct', ['id' => $item->id,'product_name' => $item->product_name, 'imageShow' => $item->image_show, 'price' => $item->price])
                 @endforeach
             </div>
         </div>

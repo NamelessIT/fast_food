@@ -19,8 +19,8 @@ class ListProduct extends Component
         $this->itemQuantity = $itemQuantity;
         $this->categoryName = $categoryName;
         $categoryEN = Category::where('valueEn', $categoryName)->firstOrFail();
-        // $this->listProductItem =$category->products;
-        $this->listProductItem  = Product::all();
+        $this->listProductItem =$categoryEN->products;
+        // $this->listProductItem  = Product::all();
     }
     public function render()
     {

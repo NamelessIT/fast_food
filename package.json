@@ -14,6 +14,7 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@splidejs/splide": "^4.1.4",
         "alpinejs": "^3.14.3",
         "bootstrap": "^5.3.3"
     }
