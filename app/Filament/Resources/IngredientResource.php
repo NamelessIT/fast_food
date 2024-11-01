@@ -27,14 +27,19 @@ class IngredientResource extends Resource
         return $form
             ->schema([
                 TextInput::make('ingredient_name')
-                ->label('Tên nguyên liệu')
-                ->required(),
-                
+                    ->unique(ignoreRecord:true)
+                    ->label('Tên nguyên liệu')
+                    ->required(),
+
                 TextInput::make('unit')
-                ->label('Đơn vị')
-                ->required(),
-                
-                TextInput::make('created_at')
+                    ->label('Đơn vị')
+                    ->required(),
+
+                TextInput::make('remain_quantity')
+                    ->numeric()
+                    ->label('Còn lại')
+
+               /*  TextInput::make('created_at')
                 ->label('Ngày tạo phiếu nhập')
                 ->default(Carbon::now()->format('Y-m-d H:i:s'))
                 ->readOnlyOn('create'), // Set current date and time
@@ -42,7 +47,7 @@ class IngredientResource extends Resource
                 TextInput::make('updated_at')
                 ->label('Ngày cập nhật phiếu nhập')
                 ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
+                ->readOnlyOn('create'), // Set current date and time */
             ]);
     }
 
@@ -50,12 +55,30 @@ class IngredientResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('Mã nguyên liệu') ,
-                TextColumn::make('ingredient_name')->label('Tên nguyên liệu') ,
-                TextColumn::make('remain_quantity')->label('Lượng nguyên liệu còn lại') ,
-                TextColumn::make('unit')->label('Đơn vị đo') ,
-                TextColumn::make('created_at')->label('Ngày tạo') ,
-                TextColumn::make('created_at')->label('Ngày cập nhật') ,
+                TextColumn::make('id')
+                    ->toggleable(isToggledHiddenByDefault:true)
+                    ->label('Mã nguyên liệu'),
+                TextColumn::make('ingredient_name')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable()
+                    ->label('Tên nguyên liệu'),
+                TextColumn::make('remain_quantity')
+                    ->sortable()
+                    ->toggleable()
+                    ->label('Lượng nguyên liệu còn lại'),
+                TextColumn::make('unit')
+                    ->sortable()
+                    ->toggleable()
+                    ->label('Đơn vị đo'),
+                TextColumn::make('created_at')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:true)
+                    ->label('Ngày tạo'),
+                TextColumn::make('created_at')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:true)
+                    ->label('Ngày cập nhật'),
             ])
             ->filters([
                 //

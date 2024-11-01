@@ -16,5 +16,9 @@ class Ingredient extends Model
         'created_at',
         'updated_at',
      ];
-     
+
+    public function recipes()
+    {
+        return $this->hasMany(Recipe::class,'id','id_ingredient');
+    }
 }

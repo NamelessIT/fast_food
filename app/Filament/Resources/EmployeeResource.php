@@ -157,6 +157,7 @@ class EmployeeResource extends Resource
                     ->label("Email"),
                 CheckboxColumn::make('account.status')
                     ->label("Status")
+                    ->toggleable(isToggledHiddenByDefault:true)
                     ->disabled(),
                 TextColumn::make('created_at')
                     ->toggleable(isToggledHiddenByDefault:true)
@@ -170,14 +171,27 @@ class EmployeeResource extends Resource
             ])
             ->filters([
                 //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
+            ]);
+    }
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
             ]);
     }
 
