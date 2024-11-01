@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\User;
 
 use Livewire\Component;
 
@@ -20,7 +20,7 @@ class DynamicContent extends Component
 
     public function render()
     {
-        return view('livewire.dynamic-content', [
+        return view('livewire.user.dynamic-content', [
             'currentPage' => $this->currentPage,
             'index'=>$this->index,
         ]);

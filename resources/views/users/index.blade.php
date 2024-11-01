@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-@livewire('dynamic-content')
+@livewire('user.dynamic-content')
 @endsection
 @section('custom-js')
     <script src="{{ asset('js/customers.js') }}"></script>

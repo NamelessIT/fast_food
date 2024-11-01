@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\User;
 
 use Livewire\Component;
 
@@ -25,6 +25,6 @@ class DeleteAccount extends Component
 
     public function render()
     {
-        return view('livewire.delete-account');
+        return view('livewire.user.delete-account');
     }
 }

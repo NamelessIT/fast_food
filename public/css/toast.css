@@ -46,9 +46,9 @@
     opacity: 0.8;
   }
   
-  .btn + .btn {
+  /* .btn + .btn {
     margin-left: 16px;
-  }
+  } */
   
   .btn--success {
     background-color: #71be34;
