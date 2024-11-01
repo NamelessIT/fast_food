@@ -25,8 +25,7 @@
     <link href="{{ asset('css/root.css') }}" rel="stylesheet">
     <link href="{{ asset('css/header.css') }}" rel="stylesheet">
     <link href="{{ asset('css/footer.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/slideshow.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/category.css') }}" rel="stylesheet">
+   
 
     <!-- Section for individual page CSS -->
     @yield('custom-css')
