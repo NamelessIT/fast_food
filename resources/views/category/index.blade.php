@@ -26,10 +26,17 @@
 
 @section('content')
     @livewire('category.category', ['categoryName' => $title])
-    @livewire('category.list-product', [
-        'categoryName' => $title,
-        'itemQuantity' => 6,
-    ])
+    <div class="shopSection">
+        <div class="d-flex main-wrapper ">
+            @livewire('category.SideBarSearching')
+            @livewire('category.list-product', [
+                'categoryName' => $title,
+                'itemQuantity' => 6,
+                'typeDisplay' => 'slide',
+            ])
+        </div>
+    </div>
+    @livewire('category.Paging')
 @endsection
 
 @section('custom-js')

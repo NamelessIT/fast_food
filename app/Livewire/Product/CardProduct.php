@@ -24,6 +24,7 @@ class CardProduct extends Component
     {
 
         return view('livewire.product.card-product', [
+            'id' =>$this->id,
             'product_name' => $this->product_name,
             'imageShow' => $this->imageShow,
             "price" =>   $this->price

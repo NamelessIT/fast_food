@@ -1,3 +1,8 @@
+.categoryWrapper {
+    display: flex;
+    justify-content: center;
+    
+}
 .categoryItem {
 
     a {
@@ -5,7 +10,7 @@
     }
 
     img {
-        width: 200px;
+        width: 150px;
         height: auto;
         object-fit: contain;
         object-position: center;

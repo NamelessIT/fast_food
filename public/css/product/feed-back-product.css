@@ -4,7 +4,7 @@
     .figure-feed-back {
         background-color: #fffbf8;
         padding: 10px 5px;
-        border: 1px solid #e74c3c;
+        border: 1px solid var(--sandyBrown);
 
         .star {
             color: #e74c3c;
