@@ -5,8 +5,8 @@
 @endsection
 
 @section('custom-css')
-    <link rel="stylesheet" href="{{ asset('css/category/navbar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/category/listProduct/litstProduct.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/product/categoryProduct/navbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/product/categoryProduct/listProduct/litstProduct.css') }}">
 
     {{-- slick --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.css"
@@ -25,18 +25,18 @@
 @endsection
 
 @section('content')
-    @livewire('category.category', ['categoryName' => $title])
+    @livewire('product.category-product.category', ['categoryName' => $title])
     <div class="shopSection">
         <div class="d-flex main-wrapper ">
-            @livewire('category.SideBarSearching')
-            @livewire('category.list-product', [
+            @livewire('product.category-product.SideBarSearching')
+            @livewire('product.category-product.list-product', [
                 'categoryName' => $title,
                 'itemQuantity' => 6,
                 'typeDisplay' => 'slide',
             ])
         </div>
     </div>
-    @livewire('category.Paging')
+    @livewire('product.category-product.Paging')
 @endsection
 
 @section('custom-js')

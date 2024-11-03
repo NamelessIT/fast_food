@@ -12,7 +12,7 @@ class CategoryController
         // $products = $category->products;
 
         // dd ($products);
-        return view ('category.index', [
+        return view ('products.index', [
             "title" => $categoryName
         ]);
     }

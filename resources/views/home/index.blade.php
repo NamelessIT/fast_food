@@ -13,5 +13,5 @@
 @section('custom-css')
     <link href="{{ asset('css/home/slideshow.css') }}" rel="stylesheet">
     <link href="{{ asset('css/home/category.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/category/listProduct/litstProduct.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/product/categoryProduct/listProduct/litstProduct.css') }}" rel="stylesheet">
 @endsection

@@ -1,0 +1,70 @@
+.total-container {
+    .address {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+        .title {
+            color: #727070;
+        }
+
+        .detail-address {
+            .content {
+                flex: 4;
+                margin: 0;
+                border-bottom: 2px dashed #333;
+            }
+
+            .edit {
+                flex: 1;
+                text-align: center;
+                font-size: 18px;
+                color: #ff5b6a;
+                cursor: pointer;
+            }
+        }
+
+        .break-line {
+            border-bottom: 1px solid #ccc;
+        }
+    }
+
+    .voucher {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        color: #727070;
+
+        .voucher-use {
+            text-align: center;
+            font-size: 18px;
+            text-transform: capitalize;
+        }
+
+        .add-voucher {
+            border: none;
+            outline: none;
+            color: white;
+            background-color: #ff5b6a;
+            padding: 5px 10px;
+        }
+    }
+
+    .total {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        padding-top: 10px;
+        padding-bottom: 0 !important;
+
+        .temporary-calculation,
+        .price-total {
+            width: 90%;
+            border-bottom: #ff5b6a 1px dashed;
+        }
+
+        .price-total {
+            border-bottom: none;
+        }
+
+        .btn-payment {
+            color: white;
+            background-color: #ff5b6a;
+            cursor: pointer;
+        }
+    }
+}

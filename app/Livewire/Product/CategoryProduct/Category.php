@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Category;
+namespace App\Livewire\Product\CategoryProduct;
 
 use Livewire\Component;
 
@@ -13,9 +13,8 @@ class Category extends Component
         $this->categories = \App\Models\Category::all();
         $this->categoryName = $categoryName;
     }
-
     public function render()
     {
-        return view('livewire.category.category');
+        return view('livewire.product.category-product.category');
     }
 }

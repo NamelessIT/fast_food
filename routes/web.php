@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Account\AccountController;
+use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Product\CategoryController;
 use App\Http\Middleware\Auth\CheckUserLogin;
 use App\Models\account;
@@ -46,7 +47,7 @@ Route::group(['prefix' => '/product'], function () {
 });
 
 Route::group(['prefix' => '/order'], function () {
-    Route::get('/list-order');
+    Route::get('/list-order', [OrderController::class, 'index'])->name('order.index');
 });
 
 Route::group(['prefix' => '/user'], function () {

@@ -41,7 +41,7 @@
                 </div>
 
                 {{-- button cart --}}
-                <a href="#" id="cart" class=" btn border rounded-circle p-2 me-lg-5 me-3 bg-white  position-relative  ">
+                <a href="{{ route ('order.index') }}" id="cart" class=" btn border rounded-circle p-2 me-lg-5 me-3 bg-white  position-relative  ">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span class="notify_quantity ">0</span>
                 </a>
