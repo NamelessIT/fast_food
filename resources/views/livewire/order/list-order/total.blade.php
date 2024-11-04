@@ -17,7 +17,10 @@
         <div class="voucher-use">
             <p>Hiện không có voucher được sử dụng</p>
         </div>
-        <button class="add-voucher w-100 rounded">Thêm voucher</button>
+        <div>
+        @livewire('order.list-order.voucher.voucher-popup')
+        </div>
+        <button class="add-voucher w-100 rounded" wire:click="$dispatch('showVoucherPopup')">Thêm voucher</button>
     </div>
 
     <div class="total mt-2 rounded-4 d-flex flex-column justify-content-center align-items-center">

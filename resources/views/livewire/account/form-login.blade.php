@@ -29,6 +29,8 @@
     </div>
 
     <button class="btn-submit btn my-2 rounded-pill fw-bold" wire:click.prevent="login">Đăng nhập</button>
+   
+  
 
     <p class="separator mt-3"><span>hoặc</span></p>
 
