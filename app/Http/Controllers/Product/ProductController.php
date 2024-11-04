@@ -7,12 +7,11 @@ use App\Models\Product;
 
 class ProductController
 {
-    public function detail($name, $id)
+    public function detail($slug)
     {
         // dd ($name, $id);
         return view('products.detail-product', [
-            'id' => $id,
-            'name' => $name
+            'slug' => $slug
         ]);
     }
 }

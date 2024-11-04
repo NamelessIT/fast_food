@@ -7,6 +7,7 @@
                     'product_name' => $item->product_name,
                     'imageShow' => $item->image_show,
                     'price' => $item->price,
+                    'slug' => $item->slug
                 ])
             </div>
         @endforeach

@@ -14,7 +14,7 @@
     .product-description {
         .title-description {
             margin: 10px 0;
-            background: rgba(242, 156, 82, .15);
+            background: rgba(242, 156, 82, 0.15);
         }
 
         .extra-food {
@@ -61,8 +61,6 @@
                     }
                 }
 
-
-
                 input {
                     width: 50px;
                     height: 50px;
@@ -71,7 +69,7 @@
                     background: #f2f2f2;
                     text-align: center;
                     border-radius: 5px;
-                    background-color: rgba(242, 156, 82, .15);
+                    background-color: rgba(242, 156, 82, 0.15);
                 }
 
                 input[type="number"]::-webkit-outer-spin-button,
@@ -98,11 +96,21 @@
     }
 }
 
+/* tablet */
+@media only screen and (max-width: 1024px) {
+    .product-detail {
+        .add-to-cart {
+            .add {
+                padding: 10px !important;
+            }
+        }
+    }
+}
+
 /* mobile */
 @media only screen and (max-width: 740px) {
     .product-detail {
         .product-description {
-
             .title-description,
             .extra-food,
             .add-to-cart {

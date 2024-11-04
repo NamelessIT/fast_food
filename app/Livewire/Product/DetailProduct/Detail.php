@@ -7,14 +7,16 @@ use Livewire\Component;
 
 class Detail extends Component
 {
-    public $idProduct;
+    public $slug;
     public $detail;
 
-    public function mount($idProduct)
+    public function mount($slug)
     {
-        $this->idProduct = $idProduct;
-        $this->detail = Product::find($idProduct)->toArray();
-        // dd($this->detail);
+        $this->slug = $slug;
+        $this->detail = Product::where('slug', $slug)->get()->toArray();
+        // dd($this->detail[0]);
+        $this->detail = $this->detail[0];
+        // dd ($this->detail);
     }
     public function render()
     {

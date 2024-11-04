@@ -1,15 +1,15 @@
 <div>
-    <a href="{{ route('product.detail', ['name' => Str::slug($product_name), 'id' => $id]) }}">
+    <a href="{{ route('product.detail', ['slug' => $slug]) }}">
         <img src="{{ 'data:image/png;base64,' . $imageShow }}" alt="sd"class="img-fluid card-img-top">
     </a>
 
     <div class="product-content card-body" style="overflow: hidden">
-        <a href="{{ route('product.detail', ['name' => Str::slug($product_name), 'id' => $id]) }}" class="content">
+        <a href="{{ route('product.detail', ['slug' => $slug]) }}" class="content">
             <h5 class="card-title product-name text-center">{{ $product_name }}</h5>
-            <p class="card-text product-price text-center">{{ $price }}</p>
+            <p class="card-text product-price text-center">{{ number_format($price, 0, ',', '.') }} đ</p>
         </a>
         <div class="addToCart d-flex justify-content-center flex-column align-items-center ">
-            <a href="{{ route('product.detail', ['name' => Str::slug($product_name), 'id' => $id]) }}"
+            <a href="{{ route('product.detail', ['slug' => $slug]) }}"
                 class="btn btnAddToCart rounded-pill my-3" wire:submit.prevent ="handleAddToCart">
                 Add to cart
             </a>

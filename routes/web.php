@@ -4,6 +4,7 @@ use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Product\CategoryController;
 use App\Http\Middleware\Auth\CheckUserLogin;
+use App\Http\Middleware\Auth\CheckUserWithoutLogin;
 use App\Models\account;
 use App\Models\Product;
 use App\Http\Controllers\Home\HomeController;
@@ -40,14 +41,16 @@ Route::group(['prefix' => '/category'], function () {
 
 
 Route::group(['prefix' => '/product'], function () {
-    Route::get('/detail-product/{name}-{id}', [ProductController::class, 'detail'])
-        ->name('product.detail')
-        ->where('id', '[0-9]+')
-        ->where('name', '.*');
+    // Route::get('/detail-product/{name}-{id}', [ProductController::class, 'detail'])
+    //     ->name('product.detail')
+    //     ->where('id', '[0-9]+')
+    //     ->where('name', '.*');
+    Route::get('/detail-product/{slug}', [ProductController::class, 'detail'])
+        ->name('product.detail');
 });
 
-Route::group(['prefix' => '/order'], function () {
-    Route::get('/list-order', [OrderController::class, 'index'])->name('order.index');
+Route::group(['prefix' => '/order', 'middleware' => [CheckUserWithoutLogin::class]], function () {
+    Route::get('/list-order', action: [OrderController::class, 'index'])->name('order.index');
 });
 
 Route::group(['prefix' => '/user'], function () {

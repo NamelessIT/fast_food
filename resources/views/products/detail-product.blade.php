@@ -30,7 +30,7 @@
 
 @section('content')
     {{-- {{dd (Str::slug ('Gà sốt Buldak'))}} --}}
-    @livewire('product.detail-product.index', ['idProduct' => $id])
+    @livewire('product.detail-product.index', ['slug' => $slug])
 @endsection
 
 @section('custom-js')

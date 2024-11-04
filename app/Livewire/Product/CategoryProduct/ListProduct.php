@@ -19,8 +19,11 @@ class ListProduct extends Component
     {
         $this->itemQuantity = $itemQuantity;
         $this->categoryName = $categoryName;
-        $categoryEN = Category::where('valueEn', $categoryName)->firstOrFail();
+        // dd ($this->categoryName);
+        $categoryEN = Category::where('slug', $categoryName)->firstOrFail();
+        // dd ($categoryEN);
         $this->listProductItem = $categoryEN->products;
+        // dd ($this->listProductItem);
         // $this->listProductItem  = Product::all();
     }
     public function render()

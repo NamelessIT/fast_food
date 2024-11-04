@@ -10,13 +10,15 @@ class CardProduct extends Component
     public $product_name;
     public $price;
     public $imageShow;
+    public $slug;
 
-    public function mount($id, $product_name, $imageShow,$price)
+    public function mount($id, $product_name, $imageShow,$price, $slug)
     {
         $this->id = $id;
         $this->product_name = $product_name;
         $this->imageShow = $imageShow;
         $this->price = $price;
+        $this->slug = $slug;
     }
 
 

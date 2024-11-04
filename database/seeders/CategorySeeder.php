@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Str;
 
 class CategorySeeder extends Seeder
 {
@@ -33,36 +34,36 @@ class CategorySeeder extends Seeder
         $imageBlob5 = base64_encode($imageContents);
         DB::table('categories')->insert([
             [
-                'valueVi' => 'Burger',
-                'valueEn' => 'Burger',
+                'category_name' => 'Burger',
+                'slug' => Str::slug('Burger'),
                 'image' => $imageBlob1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'valueVi' => 'Gà rán',
-                'valueEn' => 'Chicken',
+                'category_name' => 'Gà rán',
+                'slug' => Str::slug('Chicken'),
                 'image' => $imageBlob2,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'valueVi' => 'Thức uống',
-                'valueEn' => 'Drinks',
+                'category_name' => 'Thức uống',
+                'slug' => Str::slug('Drinks'),
                 'image' => $imageBlob3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'valueVi' => 'Combo',
-                'valueEn' => 'Combo',
+                'category_name' => 'Combo',
+                'slug' => Str::slug('Combo'),
                 'image' => $imageBlob4,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),  
             ],
             [
-                'valueVi' => 'Bestseller',
-                'valueEn' => 'Bestseller',
+                'category_name' => 'Bestseller',
+                'slug' => Str::slug('Bestseller'),
                 'image' => $imageBlob5,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

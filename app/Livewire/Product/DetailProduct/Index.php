@@ -6,11 +6,11 @@ use Livewire\Component;
 
 class Index extends Component
 {
-    public $idProduct = 0;
+    public $slug = '';
 
-    public function mount($idProduct)
+    public function mount($slug)
     {
-        $this->idProduct = $idProduct;
+        $this->slug = $slug;
     }
 
     public function render()
