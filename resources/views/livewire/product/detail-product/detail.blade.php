@@ -11,26 +11,19 @@
     <div class="product-description col-lg-6 col-md-6 col-xs-12 d-flex flex-column">
         <span class="title-description d-block fw-semibold fs-5 px-3 py-2 w-75">Ngon hơn khi ăn kèm</span>
         <div class="extra-food w-75 px-3">
+            @foreach ($listExtraFood as $item)
+            {{-- {{dd ($item)}} --}}
             <div class="food row d-flex flex-row align-items-center justify-content-between">
                 <span class="quantity col-1">1x</span>
                 <div class="name col-8">
-                    <img src="https://www.lotteria.vn/media/catalog/product/cache/7519c4b08d36a80a7631ac53889db3b4/l/s/ls0023_4.png" alt="Error" class="img-fluid">
-                    <span>Phô mai cay</span>
+                    <img src="{{ 'data:image/png;base64,' . $item['image_show']}}" alt="Error" class="img-fluid">
+                    <span>{{$item['food_name']}}</span>
                 </div>
                 <div class="price col-3">
-                    <span>15.000đ</span>
+                    <span>{{number_format($item['price'], 0, '', '.')}} đ</span>
                 </div>
             </div>
-            <div class="food row d-flex flex-row align-items-center justify-content-between">
-                <span class="quantity col-1">1x</span>
-                <div class="name col-8">
-                    <img src="https://www.lotteria.vn/media/catalog/product/cache/7519c4b08d36a80a7631ac53889db3b4/l/s/ls0023_4.png" alt="Error" class="img-fluid">
-                    <span>Phô mai cay</span>
-                </div>
-                <div class="price col-3">
-                    <span>15.000đ</span>
-                </div>
-            </div>
+            @endforeach
         </div>
 
         {{-- add to cart --}}

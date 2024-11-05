@@ -9,13 +9,18 @@ class Detail extends Component
 {
     public $slug;
     public $detail;
+    public $listExtraFood;
 
     public function mount($slug)
     {
         $this->slug = $slug;
-        $this->detail = Product::where('slug', $slug)->get()->toArray();
-        // dd($this->detail[0]);
-        $this->detail = $this->detail[0];
+        $getProduct = Product::where('slug', $slug);
+        // dd($getProduct);
+        $this->listExtraFood = $getProduct->first()->extraFoods->toArray();
+        // dd ($this->listExtraFood);
+        // $test = Product::where('slug', $slug)->with('extraFoods')->first();
+        // dd($test->extraFoods);
+        $this->detail = $getProduct->get()->toArray()[0];
         // dd ($this->detail);
     }
     public function render()

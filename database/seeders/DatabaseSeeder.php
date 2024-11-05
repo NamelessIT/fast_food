@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductSeeder::class);
         $this->call(SlideSeeder::class);
         $this->call(VoucherSeeder::class);
+        $this->call(ExtraFoodSeeder::class);
+        $this->call(ExtraFoodDetailSeeder::class);
 
 
     }

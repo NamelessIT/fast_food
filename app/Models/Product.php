@@ -15,4 +15,16 @@ class Product extends Model
     public function category () {
         return $this->belongsTo(Category::class);
     }
+
+    public function extraFoods()
+    {
+        return $this->hasManyThrough(
+            ExtraFood::class,
+            ExtraFoodDetail::class,
+            'id_category',
+            'id',
+            'id_category',
+            'id_extra_food'
+        );
+    }
 }
