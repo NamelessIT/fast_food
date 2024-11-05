@@ -37,7 +37,7 @@
 
 <body>
     <header class="sticky-top">
-        @include('../components/layouts.Header')
+       @livewire("home.header")
     </header>
 
     <main >

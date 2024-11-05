@@ -43,7 +43,7 @@
                 {{-- button cart --}}
                 <a href="{{ route ('order.index') }}" id="cart" class=" btn border rounded-circle p-2 me-lg-5 me-3 bg-white  position-relative  ">
                     <i class="fa-solid fa-cart-shopping"></i>
-                    <span class="notify_quantity ">0</span>
+                    <span class="notify_quantity ">{{$notifyQuantity}}</span>
                 </a>
                 <button id="btnOrder" class="border rounded-pill px-4 px-lg-5"> Order now</button>
 

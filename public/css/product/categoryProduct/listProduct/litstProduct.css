@@ -106,6 +106,15 @@
                     cursor: pointer;
                 }
 
+                .btnAddToCartLoading {
+                    background: var(--darkOliveGreen);
+                    color: #fff;
+                    font-weight: 500;
+                    padding: 10px 20px;
+                    width: 160px;
+                    cursor: pointer;
+                }
+
                 .btnAddToCart:hover {
                     background-color: var(--darkOliveGreen);
                 }
@@ -196,6 +205,7 @@
         .listProductContainer {
             .cardItem {
                 margin: 0 auto;
+
                 .product-content {
                     .addToCart {
                         opacity: 1 !important;
@@ -205,6 +215,7 @@
                     }
                 }
             }
+
             .cardItem:hover {
                 .product-name {
                     transform: translate3d(0, 0, 0) !important;
