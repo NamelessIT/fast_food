@@ -29,7 +29,11 @@ class PreviousOrders extends Component
             )->get()->toArray();
     }
     public function fetchBillDetail($billId){
-        $details = BillDetail::where('id_bill', $billId)->get()->toArray();
+        $details = BillDetail::where('id_bill', $billId)
+        ->join('products', 'bill_details.id_product', '=', 'products.id')
+        ->select('*')
+        ->get()
+        ->toArray();
         return $details;
     }
     //Được gọi khi bất kỳ thuộc tính nào của component được cập nhật.
@@ -40,8 +44,12 @@ class PreviousOrders extends Component
     public function hydrate(){
 
     }
-    public function createOrder(){  
+    public function startBill(){
+        return redirect("/");
+    }
+    public function createBill(){  
         $this->cau1 ="hello";
+        // nhảy vào trang giỏ hàng
     }
     public function render()
     {

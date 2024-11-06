@@ -3,25 +3,35 @@
 namespace App\Livewire\User;
 
 use Livewire\Component;
+use App\Models\Account;
+use Illuminate\Support\Facades\Auth;
 
 class DeleteAccount extends Component
 {
+    public $account;
+    public function mount()
+    {
+        $this->getAccount();
+    }
     public function DeleteAccount()
-{
-    // $user = auth()->user();
+    {
+        // Kiểm tra xem tài khoản có tồn tại không
+        if ($this->account) {
+            // Xóa tài khoản khỏi cơ sở dữ liệu
+            $this->account->delete();
 
-    // $hasOrders = Order::where('user_id', $user->id)->exists();
-
-    // if ($hasOrders) {
-    //     Order::where('user_id', $user->id)->update(['status' => 1]);
-    // } else {
-    //     $user->delete();
-    // }
-
-    // auth()->logout();
-
-    return $this->render();
-}
+            // Đăng xuất người dùng
+            // Auth::logout();
+            
+            // Chuyển hướng đến trang đăng nhập hoặc trang chủ
+            return redirect()->route('account.index');
+        }        
+    }
+    public function getAccount(){
+    // Lấy tài khoản của người dùng đang đăng nhập
+    // $this->account = Account::find(Auth::id());
+     $this->account = Account::find(2); // Thay ID 1 bằng ID của người dùng đang đăng nhập
+    }
 
     public function render()
     {

@@ -5,7 +5,7 @@
     <div class="card-body">
         @if(empty($bills))
             <p>Bạn chưa có đơn hàng nào.</p>
-            <button class="btn btn-success mt-3" wire:click="createOrder">Bắt đầu đặt hàng</button>
+            <button class="btn btn-success mt-3" wire:click="startBill">Bắt đầu đặt hàng</button>
         @else
         <div class="custom-scroll">
             <ul class="list-group mb-4">
@@ -25,7 +25,7 @@
                         <tbody>
                             @foreach($this->fetchBillDetail($bill['id']) as $detail)
                                 <tr class="list-group-item-BillDetail">
-                                    <td>{{ $detail['id_product'] }}</td>
+                                    <td>{{ $detail['product_name'] }}</td>
                                     <td>{{ $detail['quantity'] }}</td>
                                     <td>{{ $detail['created_at'] }}</td>
                                     <td>{{ $detail['updated_at'] }}</td>
@@ -36,7 +36,7 @@
                     <li class="list-group-item">
                         Thành tiền: {{ $bill['total'] }} VND
                     </li>
-                    <button class="btn btn-success mt-3" wire:click="createOrder">Mua lại</button>
+                    <button class="btn btn-success mt-3" wire:click="createBill">Mua lại</button>
                     <div class="seperated"></div>
                 @endforeach
             </ul> 

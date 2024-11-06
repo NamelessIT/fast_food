@@ -53,4 +53,10 @@ class account extends Authenticatable
     public function user () {
         return $this->morphTo();
     }
+    // public static function check($CurrentPassword,$AccountPassword){
+    //     if($CurrentPassword===$AccountPassword){
+    //         return true;
+    //     }
+    //     return false;
+    // }
 }
