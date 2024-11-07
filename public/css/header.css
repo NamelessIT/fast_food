@@ -64,11 +64,18 @@ header .headerEventBlock .eventBlock button i {
     font-size: 20px;
 }
 
+header .headerEventBlock .eventBlock #cart {
+    width: 40px;
+    height: 40px;
+}
+
+
 header .headerEventBlock .eventBlock #btnOrder {
     color: white;
     background-color: var(--sandyBrown);
     font-weight: 700;
     font-size: 20px;
+
 }
 
 header .headerEventBlock .eventBlock #btnOrder:hover {
@@ -103,6 +110,7 @@ header .headerEventBlock .eventBlock .notify_quantity {
     font-size: 20px;
     line-height: 60px;
 }
+
 .offcanvas .offcanvas-header .offcanvas-title {
     color: #333;
     font-size: 25px;
@@ -140,6 +148,7 @@ header .headerEventBlock .eventBlock .notify_quantity {
     header .navContainer .navbar-nav .nav-link {
         font-size: 15px;
     }
+
     header .headerEventBlock .eventBlock #btnOrder {
         font-size: 20px;
     }

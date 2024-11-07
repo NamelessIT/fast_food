@@ -11,7 +11,6 @@
 @endsection
 
 @section('custom-header-js')
-
 @endsection
 
 @section('content')
@@ -19,5 +18,5 @@
 @endsection
 
 @section('custom-js')
-
+    <script src="{{ asset('js/product/deleteOrderProduct.js') }}"></script>
 @endsection

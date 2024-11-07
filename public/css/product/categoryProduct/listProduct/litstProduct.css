@@ -4,6 +4,7 @@
     .main-wrapper {
         .sideBarSearching {
             padding-right: 30px;
+            margin-top: 10px;
 
             .formWrapper {
                 position: relative;
@@ -62,7 +63,7 @@
 
         border: none;
         background: #fff;
-        margin: 20px 0;
+        margin-bottom: 20px;
         box-shadow: 0 10px 15px rgba(73, 45, 19, 0.04);
         transition-behavior: normal;
         transition-duration: 0.3s;

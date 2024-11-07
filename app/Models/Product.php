@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -35,5 +36,9 @@ class Product extends Model
             'id_category',
             'id_extra_food'
         );
+    }
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, "order_details", "id_product", "id_order")->withPivot("quantity");
     }
 }
