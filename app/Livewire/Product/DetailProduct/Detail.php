@@ -17,13 +17,13 @@ class Detail extends Component
     public $listChooseExtraFood = [];
     public $totalPrice = 0;
 
-    public $quantity = 1;
+    public $quantity;
 
     public function mount($slug)
     {
         $this->slug = $slug;
         $getProduct = Product::where('slug', $slug);
-
+        $this->quantity =1;
         $this->listExtraFood = $getProduct->first()->extraFoods->toArray();
         // dd ($this->listExtraFood);
         foreach ($this->listExtraFood as $key => $value) {
@@ -50,8 +50,9 @@ class Detail extends Component
             }
         }
     }
-    
-    public function deleteExtraFood ($id) {
+
+    public function deleteExtraFood($id)
+    {
         foreach ($this->listChooseExtraFood as $key => $value) {
             if ($value['id'] === $id) {
                 $this->totalPrice -= $this->listExtraFood[$key]['price'] * $this->listChooseExtraFood[$key]['quantity'] * $this->quantity;
@@ -116,7 +117,7 @@ class Detail extends Component
 
             if ($orderDetail) {
                 $orderDetail->quantity += $this->quantity;
-                $orderDetail->save ();
+                $orderDetail->save();
                 $idOrderDetail = $orderDetail->id;
             } else {
                 $orderDetail = OrderDetail::create([
@@ -137,10 +138,10 @@ class Detail extends Component
                     // dd ()
                     foreach ($orderExtra as $key2 => $value2) {
                         // dd ($value2);
-                        if ($value['id'] === $value2['id_extra_food']){
+                        if ($value['id'] === $value2['id_extra_food']) {
                             if ($value['quantity'] > 0) {
                                 $orderExtra[$key2]->quantity += $value['quantity'];
-                                $orderExtra[$key2]->save ();
+                                $orderExtra[$key2]->save();
                             }
                             $check = true;
                         }
@@ -180,8 +181,12 @@ class Detail extends Component
                     OrderExtraFoodDetail::insert($orderExtraDetails);
                 }
             }
-            
+
             $this->dispatch('order-success');
+        } else {
+            $this->dispatch("addToCartNotLogin", [
+                "url" => route("account.index")
+            ]);
         }
     }
 

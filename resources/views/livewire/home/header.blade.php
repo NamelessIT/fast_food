@@ -34,16 +34,18 @@
 
                 {{-- button login  --}}
                 <div class="accountLogin">
-                    <a href={{ route('user.index') }} id="login"
+                    {{-- <a href={{ route('user.index') }} id="login" --}}
+                    <a href="{{ route('account.index') }}" id="login"
                         class=" border rounded-circle p-2 me-lg-2 me-2 bg-white btn " style="width:40px ;height:40px">
                         <i class="fa-solid fa-user" style="font-size: 20px"></i>
                     </a>
                 </div>
 
                 {{-- button cart --}}
-                <a href="{{ route ('order.index') }}" id="cart" class=" btn border rounded-circle p-2 me-lg-5 me-3 bg-white  position-relative  ">
+                <a href="{{ route('order.index') }}" id="cart"
+                    class=" btn border rounded-circle p-2 me-lg-5 me-3 bg-white  position-relative  ">
                     <i class="fa-solid fa-cart-shopping"></i>
-                    <span class="notify_quantity ">{{$notifyQuantity}}</span>
+                    <span class="notify_quantity ">{{ $notifyQuantity }}</span>
                 </a>
                 <button id="btnOrder" class="border rounded-pill px-4 px-lg-5"> Order now</button>
 

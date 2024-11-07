@@ -24,7 +24,7 @@ class CardProduct extends Component
         $this->product_name = $product_name;
         $this->imageShow = $imageShow;
         $this->price = $price;
-        $this->id_order = Auth::user()->user_id;
+
         $this->slug = $slug;
     }
 
@@ -47,7 +47,7 @@ class CardProduct extends Component
                 "url" => route("account.index")
             ]);
         } else {
-
+            $this->id_order = Auth::user()->user_id;
             $orderDetail = OrderDetail::where("id_product", $this->id)
                 ->where("id_order", $this->id_order)
                 ->first();

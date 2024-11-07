@@ -27,7 +27,8 @@
             </button>
         </div>
         <div class="delete text-center fs-3">
-            <i class="fa-solid fa-trash-can" wire:click="deleteOrder" ></i>
+            <i class="fa-solid fa-trash-can" wire:click="deleteOrder" 
+            ></i>
         </div>
     </div>
 </div>
