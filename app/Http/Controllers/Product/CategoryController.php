@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 
 class CategoryController
 {
-    public function index ($categoryName) {
+    public function index ($categoryName, $page) {
         // $category = Category::where('valueEn', $categoryName)->firstOrFail();
         // $products = $category->products;
 
         // dd ($products);
         return view ('products.index', [
-            "title" => $categoryName
+            "title" => $categoryName,
+            'page' => $page
         ]);
     }
 }

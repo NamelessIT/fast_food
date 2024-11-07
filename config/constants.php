@@ -9,6 +9,9 @@ return [
     'displayType' => [
         'grid' => 'gird',
         'slider' => 'slider',
+    ],
+    'product' => [
+        'product_item_per_page' => 8
     ]
 
 ];

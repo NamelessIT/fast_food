@@ -30,13 +30,17 @@
         <div class="d-flex main-wrapper ">
             @livewire('product.category-product.SideBarSearching')
             @livewire('product.category-product.list-product', [
+                'page' => $page,
                 'categoryName' => $title,
                 'itemQuantity' => 6,
-                'typeDisplay' => 'slide',
+                'typeDisplay' => 'slide'
             ])
         </div>
     </div>
-    @livewire('product.category-product.Paging')
+    @livewire('product.category-product.Paging', [
+        'pageCurrent' => $page,
+        'categoryName' => $title
+    ])
 @endsection
 
 @section('custom-js')

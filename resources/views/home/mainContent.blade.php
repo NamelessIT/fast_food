@@ -6,6 +6,7 @@
         @livewire('product.category-product.list-product', [
             'categoryName' => 'drinks',
             'itemQuantity' => 6,
+            'page' => 1
         ])
     </div>
     <div class="bestSellerProduct">

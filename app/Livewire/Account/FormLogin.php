@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Account;
 
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Request;
 
@@ -13,11 +14,12 @@ class FormLogin extends Component
     public function login()
     {
         $this->validate([
-            'username' => 'required',
+            'username' => 'required|exists:accounts,username',
             'password' => 'required',
         ], [
             'username.required' => 'Vui lòng nhập tên đăng nhập',
             'password.required' => 'Vui lòng nhập mật khẩu',
+            'username.exists' => 'Tài khoản hoặc mật khẩu không chính xác'
         ]);
         
         $credentials = [
@@ -26,6 +28,11 @@ class FormLogin extends Component
         ];
         if (auth()->attempt($credentials)) {
             return redirect('/')->with('success', 'Đăng nhập thành công');
+        }
+        else {
+            throw ValidationException::withMessages([
+                'username' => ['Tài khoản hoặc mật khẩu không chính xác']
+            ]);
         }
     }
 
