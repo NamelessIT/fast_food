@@ -5,8 +5,6 @@ use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Product\CategoryController;
 use App\Http\Middleware\Auth\CheckUserLogin;
 use App\Http\Middleware\Auth\CheckUserWithoutLogin;
-use App\Models\account;
-use App\Models\Product;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Product\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -58,15 +56,9 @@ Route::group(['prefix' => '/user'], function () {
         return redirect('/user/index');
     });
     Route::get('/index', function () {
-        return view('customers.index');
-    });
-    // Sử dụng Livewire cho các trang khác nhau
-    // Route::get('/previous-orders', PreviousOrders::class)->name('user.previous-orders');
-    // Route::get('/favourite-orders', FavouriteOrders::class)->name('user.favourite-orders');
-    // Route::get('/address', Address::class)->name('user.address');
-    // Route::get('/my-account/detail', MyAccountDetail::class)->name('user.my-account.detail');
-    // Route::get('/my-account/reset-password', ResetPassword::class)->name('user.my-account.reset-password');
-    // Route::get('/my-account/delete', DeleteAccount::class)->name('user.my-account.delete');
+        return view('users.index');
+    })->name('user.index');
+
 });
 Route::fallback(function () {
     abort(404);
