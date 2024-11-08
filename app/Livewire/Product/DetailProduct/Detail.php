@@ -23,7 +23,7 @@ class Detail extends Component
     {
         $this->slug = $slug;
         $getProduct = Product::where('slug', $slug);
-        $this->quantity =1;
+        $this->quantity = 1;
         $this->listExtraFood = $getProduct->first()->extraFoods->toArray();
         // dd ($this->listExtraFood);
         foreach ($this->listExtraFood as $key => $value) {
@@ -116,15 +116,32 @@ class Detail extends Component
             $orderDetail = OrderDetail::where('id_order', $idOrder)->where('id_product', $idProduct)->first();
 
             if ($orderDetail) {
+                $checkExtraFood = OrderExtraFoodDetail::where('id_order_detail', $orderDetail->id)->get();
+
+                $quantityExtraChoose = 0;
+                foreach ($this->listChooseExtraFood as $key => $value) {
+                    if ($value['quantity'] >0) {
+                        $quantityExtraChoose ++;
+                    }
+                }
+                // dd (count($checkExtraFood) , $quantityExtraChoose);
+                if (count($checkExtraFood) != $quantityExtraChoose) {
+                    $orderDetail = $this->createOrderDetail($idOrder, $idProduct);
+                    $idOrderDetail = $orderDetail->id;
+
+                    $this->createOrderExtraFoodDetail($idOrderDetail);
+
+                    $this->dispatch('order-success');
+                    $this->dispatch('refresh');
+                    return;
+                }
+
                 $orderDetail->quantity += $this->quantity;
+                $orderDetail->total_price += $this->totalPrice;
                 $orderDetail->save();
                 $idOrderDetail = $orderDetail->id;
             } else {
-                $orderDetail = OrderDetail::create([
-                    'id_order' => $idOrder,
-                    'id_product' => $idProduct,
-                    'quantity' => $this->quantity,
-                ]);
+                $orderDetail = $this->createOrderDetail($idOrder, $idProduct);
                 $idOrderDetail = $orderDetail->id;
             }
 
@@ -163,31 +180,48 @@ class Detail extends Component
                     OrderExtraFoodDetail::insert($orderExtraDetails);
                 }
             } else {
-                $orderExtraDetails = [];
-
-                foreach ($this->listChooseExtraFood as $key => $value) {
-                    if ($value['quantity'] > 0) {
-                        $obj = [
-                            'id_order_detail' => $idOrderDetail,
-                            'id_extra_food' => $value['id'],
-                            'quantity' => $value['quantity'],
-                            'created_at' => Carbon::now(),
-                            'updated_at' => Carbon::now(),
-                        ];
-                        array_push($orderExtraDetails, $obj);
-                    }
-                }
-                if (count($orderExtraDetails) > 0) {
-                    OrderExtraFoodDetail::insert($orderExtraDetails);
-                }
+                $this->createOrderExtraFoodDetail($idOrderDetail);
             }
 
             $this->dispatch('order-success');
-            $this->dispatch("refresh");
+            $this->dispatch('refresh');
         } else {
-            $this->dispatch("addToCartNotLogin", [
-                "url" => route("account.index")
+            $this->dispatch('addToCartNotLogin', [
+                'url' => route('account.index'),
             ]);
+        }
+    }
+
+    public function createOrderDetail($idOrder, $idProduct)
+    {
+        $orderDetail = OrderDetail::create([
+            'id_order' => $idOrder,
+            'id_product' => $idProduct,
+            'quantity' => $this->quantity,
+            'total_price' => $this->totalPrice,
+        ]);
+
+        return $orderDetail;
+    }
+
+    public function createOrderExtraFoodDetail($idOrderDetail)
+    {
+        $orderExtraDetails = [];
+
+        foreach ($this->listChooseExtraFood as $key => $value) {
+            if ($value['quantity'] > 0) {
+                $obj = [
+                    'id_order_detail' => $idOrderDetail,
+                    'id_extra_food' => $value['id'],
+                    'quantity' => $value['quantity'],
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+                array_push($orderExtraDetails, $obj);
+            }
+        }
+        if (count($orderExtraDetails) > 0) {
+            OrderExtraFoodDetail::insert($orderExtraDetails);
         }
     }
 

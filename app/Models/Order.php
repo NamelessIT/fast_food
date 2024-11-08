@@ -22,6 +22,6 @@ class Order extends Model
             Product::class,
             "order_details",
             "id_order",
-            "id_product")->withPivot ("quantity","id");
+            "id_product")->withPivot ("quantity","id","total_price");
     }
 }

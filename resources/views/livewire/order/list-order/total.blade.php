@@ -18,7 +18,7 @@
             <p>Hiện không có voucher được sử dụng</p>
         </div>
         <div>
-        @livewire('order.list-order.voucher.voucher-popup')
+            @livewire('order.list-order.voucher.voucher-popup')
         </div>
         <button class="add-voucher w-100 rounded" wire:click="$dispatch('showVoucherPopup')">Thêm voucher</button>
     </div>
@@ -26,11 +26,11 @@
     <div class="total mt-2 rounded-4 d-flex flex-column justify-content-center align-items-center">
         <div class="temporary-calculation px-2 py-3 d-flex justify-content-between align-items-center">
             <span class="title">Tạm tính</span>
-            <span class="price">87.000đ</span>
+            <span class="price">{{ number_format($totalPrice, 0, '', '.') }}</span>
         </div>
         <div class="price-total px-2 py-3 d-flex justify-content-between align-items-center fw-semibold">
             <span class="title">Tổng cộng</span>
-            <span class="price">87.000đ</span>
+            <span class="price">{{ number_format($totalPrice, 0, '', '.') }}</span>
         </div>
         <div class="btn-payment w-100 text-center px-2 py-3 rounded-bottom-4">
             <span>Thanh toán</span>

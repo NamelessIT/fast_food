@@ -14,7 +14,6 @@
         <span class="title-description d-block fw-semibold fs-5 px-3 py-2 w-75">Ngon hơn khi ăn kèm</span>
         <div class="extra-food w-75 px-3">
             @foreach ($listExtraFood as $key => $item)
-                {{-- {{dd ($item)}} --}}
                 <div class="food row d-flex flex-row align-items-center justify-content-between">
                     <span class="quantity col-1">x{{ $listChooseExtraFood[$key]['quantity'] }}</span>
                     <div class="name col-8" wire:click="addExtraFood ({{ $listChooseExtraFood[$key]['id'] }})">

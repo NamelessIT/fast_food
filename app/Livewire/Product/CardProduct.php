@@ -50,7 +50,7 @@ class CardProduct extends Component
             ]);
         } else {
             $id_user = Auth::user()->user_id;
-            $order = Order::where("id_customer",$id_user)->first();
+            $order = Order::where("id_customer", $id_user)->first();
             $this->id_order = $order->id;
             $orderDetail = OrderDetail::where("id_product", $this->id)
                 ->where("id_order", $this->id_order)
@@ -62,10 +62,12 @@ class CardProduct extends Component
                 OrderDetail::create([
                     "id_order" => $this->id_order,
                     "id_product" => $this->id,
-                    "quantity" => 1
+                    "quantity" => 1,
+                    "total_price" => $this->price,
                 ]);
             }
-
+            $order->total += $this->price;
+            $order->save();
             $this->dispatch("refresh");
         }
     }
