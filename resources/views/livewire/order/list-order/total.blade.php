@@ -2,8 +2,8 @@
     <div class="address px-3 py-4 rounded-4">
         <span class="title mb-4 d-block">Giao hàng đến</span>
         <div class="detail-address d-flex justify-content-center mb-3">
-            <p class="content"></p>
-            <i class="fa-solid fa-pen-to-square edit"></i>
+            <p class="content">{{$detailAddress}}</p>
+            <i class="fa-solid fa-pen-to-square edit" data-bs-toggle="modal" data-bs-target="#choose-address"></i>
         </div>
         <p class="title"><span class="text-capitalize">Cửa hàng: Công nghệ phần mềm nhóm ...</span></p>
         <div class="break-line w-100 my-3"></div>
@@ -26,14 +26,89 @@
     <div class="total mt-2 rounded-4 d-flex flex-column justify-content-center align-items-center">
         <div class="temporary-calculation px-2 py-3 d-flex justify-content-between align-items-center">
             <span class="title">Tạm tính</span>
-            <span class="price">{{ number_format($totalPrice, 0, '', '.') }}</span>
+            {{-- <span class="price">{{ number_format($totalPrice, 0, '', '.') }}</span> --}}
         </div>
         <div class="price-total px-2 py-3 d-flex justify-content-between align-items-center fw-semibold">
             <span class="title">Tổng cộng</span>
-            <span class="price">{{ number_format($totalPrice, 0, '', '.') }}</span>
+            {{-- <span class="price">{{ number_format($totalPrice, 0, '', '.') }}</span> --}}
         </div>
         <div class="btn-payment w-100 text-center px-2 py-3 rounded-bottom-4">
             <span>Thanh toán</span>
+        </div>
+    </div>
+
+    {{-- modal address --}}
+    <div class="modal fade" id="choose-address" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Chọn địa chỉ</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                            @if (count($addressList) == 0)
+                                <option value="">Không có địa chỉ</option>
+                            @endif
+                            @foreach ($addressList as $item)
+                                <option value="{{ $item['id'] }}">
+                                    {{ $item['detailAddress'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <label for="floatingSelect">Chọn địa chỉ hiện có</label>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn btn-info flex-grow-1" data-bs-toggle="modal"
+                        data-bs-target="#choose-address-orther">Chọn địa chỉ khác</button>
+                    <button type="button" class="btn btn-primary flex-grow-1">Chọn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- modal address orther --}}
+    <div class="modal fade" id="choose-address-orther" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+        tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Thêm địa chỉ đặt hàng</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid m-0 row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                            <select id="city" wire:model="idCity">
+                                <option value="" selected>Chọn tỉnh thành</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                            <select id="district" wire:model="idDistrict">
+                                <option value="" selected>Chọn quận huyện</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                            <select id="ward" wire:model="idWard">
+                                <option value="" selected>Chọn phường xã</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <input type="text" id="address" class="form-control" placeholder="Nhập địa chỉ cụ thể" wire:model="address">
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center align-items-center">
+                    <button class="btn btn-primary" wire:click="chooseAddress">Xác nhận</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -15,7 +15,9 @@ class CustomerAddress extends Model
         'id_district',
         'id_ward',
         'address',
-        'status'
+        'status',
+        'created_at',
+        'updated_at'
     ];
 
     public function customer()

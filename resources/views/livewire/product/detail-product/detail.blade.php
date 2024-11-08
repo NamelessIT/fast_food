@@ -36,10 +36,11 @@
             <div class="quantity col-md-6 col-lg-6 col-xs-12 d-flex align-items-center">
                 <button
                     @if ($quantity == 1) class="decrease opacity-50"
-                    @else class="decrease" wire:click="decreaseProduct" @endif>
-                    <i class="fa-solid fa-minus"></i></button>
-                <input type="number" wire:model.number.live="quantity">
-                {{-- <span> {{ $quantity }} </span> --}}
+                @else
+                    class="decrease" wire:click="decreaseProduct" @endif><i
+                        class="fa-solid fa-minus"></i></button>
+                {{-- <input type="number" wire:model.number.live="quantity"> --}}
+                <span> {{ $quantity }} </span>
                 <button
                     @if ($quantity < 50) class="increase" wire:click="increaseProduct"
                 @else
