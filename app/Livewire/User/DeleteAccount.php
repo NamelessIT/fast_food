@@ -23,10 +23,14 @@ class DeleteAccount extends Component
             // Xóa tài khoản khỏi cơ sở dữ liệu
             $this->account->delete();
 
-            // Đăng xuất người dùng
-            // Auth::logout();
-            
-            // Chuyển hướng đến trang đăng nhập hoặc trang chủ
+            Auth::logout();
+            session()->invalidate();
+            session()->regenerateToken();
+        
+            // Xóa session tùy chỉnh của bạn
+            session()->forget(['user_id', 'user_type']);
+        
+            // Điều hướng về trang đăng nhập hoặc trang khác tùy ý
             return redirect()->route('account.index');
         }        
     }

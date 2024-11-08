@@ -69,7 +69,6 @@ class AccountController
                 ]);
 
                 Auth::login($account);
-
                 return redirect()->route('home.index');
 
                 // dd ($name);

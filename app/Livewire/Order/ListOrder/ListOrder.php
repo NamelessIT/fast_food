@@ -11,7 +11,16 @@ class ListOrder extends Component
     public $listOrder = [];
     public function mount()
     {
-        $this->listOrder = Order::find(Auth::user()->user_id)->products;
+        if (Auth::check()) {
+            $order = Order::find(Auth::user()->user_id);
+            if ($order) {
+                $this->listOrder = $order->products->collect(); // Chuyển sang collection
+            } else {
+                $this->listOrder = collect(); // Tạo collection rỗng
+            }
+        } else {
+            $this->listOrder = collect(); // Tạo collection rỗng
+        }
     }
 
     public function render()
