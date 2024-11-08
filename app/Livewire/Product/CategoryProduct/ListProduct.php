@@ -23,9 +23,17 @@ class ListProduct extends Component
         // dd ($this->categoryName);
         $offset = config('constants.product.product_item_per_page') * ($page - 1);
         $limit =  config('constants.product.product_item_per_page') * $page;
-        $categoryEN = Category::where('slug', $categoryName)->firstOrFail();
+        // $categoryEN = Category::where('slug', $categoryName)->firstOrFail();
+        $categoryEN = Category::where('slug', $categoryName)->first();
+
         // dd ($categoryEN);
-        $this->listProductItem = $categoryEN->products->skip($offset)->take($limit);
+        if ($categoryEN) {
+            // Nếu tìm thấy category, lấy danh sách sản phẩm
+            $this->listProductItem = $categoryEN->products->skip($offset)->take($limit);
+        } else {
+            // Nếu không tìm thấy, có thể xử lý logic dự phòng hoặc giữ $this->listProductItem là một mảng rỗng
+            $this->listProductItem = [];
+        }
         // dd ($this->listProductItem);
         // $this->listProductItem  = Product::all();
     }

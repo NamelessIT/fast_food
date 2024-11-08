@@ -3,7 +3,7 @@
         <img src="{{ asset('images/logo.jpg') }}" alt="KFC-LOGO" class="img-fluid rounded mb-4">
         <h2>Xin chào, Nguyễn!</h2>
         <nav class="nav flex-column">
-            <a href="{{ url('/') }}" class=" d-block mb-3 text-decoration-underline nav-link text-light">Đăng xuất</a>
+            <a href="{{ url('/') }}" class=" d-block mb-3 text-decoration-underline nav-link text-light" wire:click="clearSessionData">Đăng xuất</a>
             <a href="javascript:void(0)" class="nav-link text-light {{ $index === 0 ? 'active bg-primary' : '' }}" wire:click="navigate('previous-orders',0)">Đơn hàng đã đặt</a>
             <a href="javascript:void(0)" class="nav-link text-light {{ $index === 2 ? 'active bg-primary' : '' }}" wire:click="navigate('address',2)">Địa chỉ của bạn</a>
             <a href="javascript:void(0)" class="nav-link text-light {{ $index === 3 ? 'active bg-primary' : '' }}" wire:click="navigate('my-account.detail',3)">Chi tiết tài khoản</a>

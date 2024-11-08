@@ -16,6 +16,10 @@ class DynamicContent extends Component
         $this->currentPage = $page;
         $this->index=$index;
     }
+    public function clearSessionData()
+    {
+    session()->forget(['user_id', 'user_type']);
+    }
 
 
     public function render()
