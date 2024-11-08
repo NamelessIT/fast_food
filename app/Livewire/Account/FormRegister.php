@@ -5,7 +5,9 @@ namespace App\Livewire\Account;
 use App\Mail\OtpMail;
 use App\Models\account;
 use App\Models\Customer;
+use App\Models\Order;
 use Cache;
+use Carbon\Carbon;
 use Hash;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -66,6 +68,12 @@ class FormRegister extends Component
         //     'password' => Hash::make($this->password),
         //     'avatar' => $base64
         // ]);
+
+        Order::create([
+            "id_customer" =>$idUser,
+            "created_at" =>Carbon::now(),
+            "updated_at"=> Carbon::now ()
+        ]);
 
         return redirect()->route('account.index')->with('success', 'Đăng kí thành công');
     }

@@ -9,7 +9,7 @@
     <div class="list-order">
         @foreach ($listOrder as $order)
             @livewire('order.list-order.cart', [
-                'id_product' =>$order->id,
+                'id_product' => $order->id,
                 'id_orderDetail' => $order->pivot->id,
                 'product_name' => $order->product_name,
                 'image_show' => $order->image_show,

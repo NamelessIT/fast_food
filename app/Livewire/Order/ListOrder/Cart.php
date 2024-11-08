@@ -16,9 +16,13 @@ class Cart extends Component
     public $product_name = "";
     public $image_show = "";
     public $price;
-    public $pricePerOne = 0;
+    public $pricePerOneProduct = 0;
+    public $order;
     public $quantity = 0;
     public $orderDetail;
+    public $listExtraFood;
+    public $totalPriceExtraFood = 0;
+
     public function mount($id_product, $id_orderDetail, $product_name, $image_show, $quantity, $price)
     {
         $this->id_product = $id_product;
@@ -26,13 +30,25 @@ class Cart extends Component
         $this->product_name = $product_name;
         $this->image_show = $image_show;
         $this->quantity = $quantity;
-        $this->price = $price;
-        $this->pricePerOne = Product::find($this->id_product)->price;
+        $this->pricePerOneProduct = Product::find($this->id_product)->price;
         $this->orderDetail = OrderDetail::find($this->id_orderDetail);
+        $this->listExtraFood =  OrderDetail::find($this->id_orderDetail)->extraFoods;
+        foreach ($this->listExtraFood as $item) {
+            $this->totalPriceExtraFood += $item->price * $item->pivot->quantity;
+        }
+        $this->price = $price + $this->totalPriceExtraFood;
+        $this->order = Order::where("id_customer", Auth::user()->user_id)->first();
     }
     public function render()
     {
-        return view('livewire.order.list-order.cart');
+
+        return view(
+            'livewire.order.list-order.cart',
+            [
+                "orderDetail" => $this->orderDetail,
+            ]
+
+        );
     }
 
 
@@ -47,23 +63,36 @@ class Cart extends Component
     }
     public function decrementQuantity()
     {
+
         if ($this->quantity > 1) {
             $this->quantity--;
             $this->updatedQuantity($this->quantity);
+        }
+    }
+    public function updateTotalBill($total)
+    {
+        if ($this->order != null) {
+            $this->order->total += $total;
+            $this->order->save();
         }
     }
 
     public function updatedQuantity($value)
     {
         $this->dispatch("refresh");
-        $this->orderDetail->quantity = $value;
-        $this->orderDetail->save();
-        $this->price = $this->pricePerOne * $value;
+
         if ($value == 0) {
             $this->dispatch("deleteOrder", [
                 "id" => $this->id_orderDetail
             ]);
             $this->orderDetail->delete();
+            return;
         }
+        $this->orderDetail->quantity = $value;
+        $this->orderDetail->save();
+
+
+        $this->price = $this->pricePerOneProduct * $value + $this->totalPriceExtraFood * $value;
+        $this->updateTotalBill($this->price);
     }
 }

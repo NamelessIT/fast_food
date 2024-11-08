@@ -12,6 +12,14 @@ class OrderDetail extends Model
     protected $fillable = [
         'id_order',
         'id_product',
-        'quantity'
+        'quantity',
     ];
+
+
+    public function extraFoods()
+    {
+
+        return $this->belongsToMany(ExtraFood::class, "order_extra_food_detail", "id_order_detail", "id_extra_food")
+            ->withPivot("quantity");
+    }
 }

@@ -18,6 +18,7 @@ class CardProduct extends Component
     public $id_order;
 
     public $orderDetail;
+    public $totalBill;
     public function mount($id, $product_name, $imageShow, $price, $slug)
     {
         $this->id = $id;
@@ -42,12 +43,15 @@ class CardProduct extends Component
     public function handleAddToCart()
     {
 
+        // check đăng nhập mới được đặt hàng
         if (!Auth::check()) {
             $this->dispatch("addToCartNotLogin", [
                 "url" => route("account.index")
             ]);
         } else {
-            $this->id_order = Auth::user()->user_id;
+            $id_user = Auth::user()->user_id;
+            $order = Order::where("id_customer",$id_user)->first();
+            $this->id_order = $order->id;
             $orderDetail = OrderDetail::where("id_product", $this->id)
                 ->where("id_order", $this->id_order)
                 ->first();

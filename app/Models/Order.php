@@ -14,6 +14,8 @@ class Order extends Model
     protected $fillable = [
         'id_customer',
         'total',
+        'created_at',
+        'updated_at',
     ];
     public function products () {
         return $this->belongsToMany (

@@ -183,6 +183,7 @@ class Detail extends Component
             }
 
             $this->dispatch('order-success');
+            $this->dispatch("refresh");
         } else {
             $this->dispatch("addToCartNotLogin", [
                 "url" => route("account.index")
