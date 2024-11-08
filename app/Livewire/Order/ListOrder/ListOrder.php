@@ -11,7 +11,9 @@ class ListOrder extends Component
     public $listOrder = [];
     public function mount()
     {
-        $this->listOrder = Order::find(Auth::user()->user_id)->products;
+        $order = Order::where('user_id', Auth::user()->user_id)->first();
+
+        $this->listOrder = $order ? $order->products : [];
     }
 
     public function render()

@@ -2,7 +2,8 @@
     <div class="title">
         <p class="text-uppercase fw-semibold fs-4">
             <span>Giỏ hàng của bạn</span>
-            <span class="text-lowercase fw-normal fs-5">({{ $listOrder->sum('pivot.quantity') }})</span>
+            <span class="text-lowercase fw-normal fs-5">({{ collect($listOrder)->sum('pivot.quantity') }})</span>
+
         </p>
     </div>
     <div class="list-order">

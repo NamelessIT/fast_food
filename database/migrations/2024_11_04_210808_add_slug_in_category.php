@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('categories', function (Blueprint $table) {
+            $table->dropUnique('categories_valueen_unique'); 
             $table->dropColumn('valueEn');
-            $table->string("slug");
+            $table->string('slug');
             $table->renameColumn('valueVi', 'category_name');
         });
     }
@@ -24,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->string('valueEn');
+            $table->string('valueEn')->unique(); // Adding unique constraint back if needed
             $table->dropColumn('slug');
             $table->renameColumn('category_name', 'valueVi');
         });

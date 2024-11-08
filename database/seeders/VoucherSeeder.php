@@ -22,8 +22,8 @@ class VoucherSeeder extends Seeder
                 'minium_condition' => 100000,
                 'start_date' => now()->toDateString(),
                 'end_date' => now()->addDays(30)->toDateString(),
-                'created_at' => Carbon::now(), // Set created_at timestamp
-                'updated_at' => Carbon::now(), // Set updated_at timestamp
+                'created_at' => Carbon::now(), 
+                'updated_at' => Carbon::now(), 
             ],
             [
                 'voucher_name' => 'Discount20',

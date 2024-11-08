@@ -13,8 +13,11 @@ class Header extends Component
     public $notifyQuantity;
     public function mount()
     {
-        if (Auth::check())
-            $this->notifyQuantity = Order::find(Auth::user()->user_id)->products->sum("pivot.quantity");
+        if (Auth::check()){        
+            $order = Order::find(Auth::user()->user_id);
+            $this->notifyQuantity = $order ? $order->products->sum("pivot.quantity") : 0;
+        }
+           
     }
     #[On('refresh')]
     public function updateNotifyQuantity()
