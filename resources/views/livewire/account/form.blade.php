@@ -5,7 +5,7 @@
         @livewire('account.form-register')
     @endif
 
-    <div class="loader" wire:loading>
-        <div class="loading"></div>
+    <div wire:loading >
+        <x-loader />
     </div>
 </div>

@@ -26,6 +26,7 @@
         </div>
         <button class="add-voucher w-100 rounded" wire:click="$dispatch('showVoucherPopup')">Thêm voucher</button>
     </div>
+    
 
     <div class="total mt-2 rounded-4 d-flex flex-column justify-content-center align-items-center">
         <div class="temporary-calculation px-2 py-3 d-flex justify-content-between align-items-center">

@@ -77,7 +77,7 @@
 
     <button class="btn-submit btn my-3 rounded-pill fw-bold" wire:click.prevent="register">Tạo tài khoản</button>
 
-    <div class="loader" wire:loading>
-        <div class="loading"></div>
+    <div wire:loading >
+        <x-loader />
     </div>
 </form>

@@ -39,5 +39,8 @@
             @endif
         </div>
     </div>
+    <div wire:loading wire:target="apply">
+        <x-loader />
+    </div>
     @endif
 </div>
