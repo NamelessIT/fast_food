@@ -41,7 +41,7 @@
             Đăng nhập bằng Facebook
         </a>
     </div>
-    <div class="loader" wire:loading>
-        <div class="loading"></div>
+    <div wire:loading >
+        <x-loader />
     </div>
 </form>

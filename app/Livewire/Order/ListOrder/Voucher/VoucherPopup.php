@@ -21,8 +21,13 @@ class VoucherPopup extends Component
     }
     public function mount()
     {
-        // Fetch vouchers 
         $this->vouchers = Voucher::all();
+    }
+    public function apply($id)
+    {
+        $selected = Voucher::find($id);
+        $this->dispatch('voucherApplied', $selected); 
+        $this->isVisible = false;
     }
 
   
@@ -30,4 +35,5 @@ class VoucherPopup extends Component
     {
         return view('livewire.order.list-order.voucher.voucher-popup');
     }
+
 }

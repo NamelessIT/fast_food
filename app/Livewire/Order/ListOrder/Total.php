@@ -17,6 +17,9 @@ class Total extends Component
 
     public $address = '';
     public $detailAddress = '';
+    protected $listeners = ['voucherApplied'];
+
+    public $selectedVoucher = null;
 
     public function mount() {
         $this->addressList = CustomerAddress::where('id_customer', auth()->user()->id)->get();
@@ -83,5 +86,9 @@ class Total extends Component
         return view('livewire.order.list-order.total',[
             // "totalPrice"=> $this->totalPrice,
         ]);
+    }
+    public function voucherApplied($voucher)
+    {
+        $this->selectedVoucher = $voucher; 
     }
 }

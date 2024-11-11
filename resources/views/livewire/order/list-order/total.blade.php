@@ -15,13 +15,18 @@
     <div class="voucher mt-2 px-3 py-4 rounded-4">
         <span class="title mb-4 d-block">Voucher</span>
         <div class="voucher-use">
-            <p>Hiện không có voucher được sử dụng</p>
+        @if($selectedVoucher)
+        <p>Voucher đang dùng: {{ $selectedVoucher['description'] }} - {{ $selectedVoucher['discount_percent'] }}% off</p>
+    @else
+        <p>Hiện không có voucher được sử dụng</p>
+    @endif
         </div>
         <div>
             @livewire('order.list-order.voucher.voucher-popup')
         </div>
         <button class="add-voucher w-100 rounded" wire:click="$dispatch('showVoucherPopup')">Thêm voucher</button>
     </div>
+    
 
     <div class="total mt-2 rounded-4 d-flex flex-column justify-content-center align-items-center">
         <div class="temporary-calculation px-2 py-3 d-flex justify-content-between align-items-center">
