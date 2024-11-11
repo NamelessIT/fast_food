@@ -26,7 +26,6 @@ class CardProduct extends Component
         $this->product_name = $product_name;
         $this->imageShow = $imageShow;
         $this->price = $price;
-
         $this->slug = $slug;
     }
 
@@ -68,11 +67,11 @@ class CardProduct extends Component
                 // duyệt theo từng sản phẩm có trong order (order detail)
                 foreach ($orderDetail as $key => $item) {
                     // nếu số lượng extra food của thằng order detail đó là không thì ta sẽ cộng dồn số lượng sản phẩm và đổi giá trị cờ
-                    if (count ($item->extraFoods) == 0) {
+                    if (count($item->extraFoods) == 0) {
                         $flag = true;
 
                         $orderDetail[$key]->quantity++;
-                        $orderDetail[$key]->total_price+=$this->price;
+                        $orderDetail[$key]->total_price += $this->price;
                         $orderDetail[$key]->save();
                     }
                 }
@@ -88,7 +87,7 @@ class CardProduct extends Component
             }
             $order->total += $this->price;
             $order->save();
-            $this->dispatch("refresh");
+            $this->dispatch("refresh", 'header,ListOrder');
         }
     }
 }

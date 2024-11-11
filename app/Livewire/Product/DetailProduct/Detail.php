@@ -157,7 +157,7 @@ class Detail extends Component
                     $this->createOrderExtraFoodDetail($idOrderDetail);
 
                     $this->dispatch('order-success');
-                    $this->dispatch('refresh');
+                    $this->dispatchTo('refresh',);
                     return;
                 }
 
@@ -209,7 +209,7 @@ class Detail extends Component
             }
 
             $this->dispatch('order-success');
-            $this->dispatch('refresh');
+            $this->dispatch("refresh", 'header,ListOrder');
         } else {
             $this->dispatch('addToCartNotLogin', [
                 'url' => route('account.index'),

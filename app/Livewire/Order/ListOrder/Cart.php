@@ -85,17 +85,17 @@ class Cart extends Component
     {
         if ($value == 0) {
             $this->orderDetail->delete();
+            $this->dispatch("refresh");
             $this->updateTotalBill(-$this->totalPrice);
             $this->dispatch("deleteOrder", [
                 "id" => $this->id_orderDetail
             ]);
-
             return;
         }
         // dd ($value);
         $this->totalPrice =  $this->priceExtraFood * $value + $this->pricePerOne * $value;
         $this->orderDetail->total_price =  $this->totalPrice;
-        $this->updateTotalBill(  $this->totalPrice);
+        $this->updateTotalBill($this->totalPrice);
         $this->orderDetail->quantity = $value;
         $this->orderDetail->save();
         $this->dispatch("refresh");

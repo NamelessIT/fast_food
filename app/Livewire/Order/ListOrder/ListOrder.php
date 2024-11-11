@@ -7,10 +7,13 @@ use Barryvdh\Reflection\DocBlock\Type\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
+
 class ListOrder extends Component
 {
 
-    public $listOrder = [];
+
+    public $listOrder;
+
     public function mount()
     {
         if (Auth::check()) {
@@ -21,8 +24,11 @@ class ListOrder extends Component
         }
     }
 
+
     public function render()
     {
-        return view('livewire.order.list-order.list-order');
+        return view(
+            'livewire.order.list-order.list-order'
+        );
     }
 }
