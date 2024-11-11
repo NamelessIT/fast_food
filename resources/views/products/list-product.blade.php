@@ -6,6 +6,7 @@
 
 @section('custom-css')
     <link rel="stylesheet" href="{{ asset('css/product/categoryProduct/listProduct/litstProduct.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/product/listProduct/range-price.css') }}">
     @livewireStyles
 @endsection
 
@@ -34,4 +35,5 @@
 
 @section('custom-js')
     @livewireScripts
+    <script src="{{ asset('js/product/rangePrice.js') }}"></script>
 @endsection

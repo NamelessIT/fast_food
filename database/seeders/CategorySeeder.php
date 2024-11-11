@@ -61,13 +61,13 @@ class CategorySeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),  
             ],
-            [
-                'category_name' => 'Bestseller',
-                'slug' => Str::slug('Bestseller'),
-                'image' => $imageBlob5,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
+            // [
+            //     'category_name' => 'Bestseller',
+            //     'slug' => Str::slug('Bestseller'),
+            //     'image' => $imageBlob5,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ],
         ]);
     }
 }
