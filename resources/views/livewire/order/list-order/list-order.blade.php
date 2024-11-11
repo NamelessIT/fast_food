@@ -14,7 +14,8 @@
                 'product_name' => $order->product_name,
                 'image_show' => $order->image_show,
                 'quantity' => $order->pivot->quantity,
-                'price' => $order->pivot->total_price,
+                'priceProduct' => $order->price,
+                'totalPrice' =>$order->pivot->total_price
             ])
         @endforeach
     </div>

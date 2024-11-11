@@ -20,7 +20,11 @@ class OrderDetail extends Model
     public function extraFoods()
     {
 
-        return $this->belongsToMany(ExtraFood::class, "order_extra_food_detail", "id_order_detail", "id_extra_food")
-            ->withPivot("quantity");
+        return $this->belongsToMany(
+            ExtraFood::class,
+            "order_extra_food_detail",
+            "id_order_detail",
+            "id_extra_food"
+        )->withPivot("quantity","id_order_detail");
     }
 }

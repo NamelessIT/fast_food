@@ -1,6 +1,8 @@
 @php
     $listExtraFood = $orderDetail->extraFoods;
 @endphp
+
+
 <div class="order-item row p-2" data-id={{ $id_orderDetail }}>
     <div class="image col-lg-2 col-md-2 col-sm-2 col-3">
         <img src="{{ 'data:image/png;base64,' . $image_show }}" alt="" class="img-fluid rounded">
@@ -15,7 +17,7 @@
             @endforeach
         </div>
         <div class="total-item">
-            <span>{{ number_format($price, 0, ',', '.') }} đ</span>
+            <span>{{ number_format($totalPrice, 0, ',', '.') }} đ</span>
         </div>
     </div>
 
@@ -24,7 +26,9 @@
             <button class="decrease" wire:click ="decrementQuantity">
                 <i class="fa-solid fa-minus"></i>
             </button>
-            <input type="number" name="quantity" wire:model.number.debounce.250ms.="quantity">
+            {{-- <input type="number" name="quantity" wire:model.number.live="quantity"> --}}
+
+            <span>{{ $quantity }}</span>
             <button class="increase" wire:click ="incrementQuantity">
                 <i class="fa-solid fa-plus"></i>
             </button>

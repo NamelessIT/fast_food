@@ -15,12 +15,15 @@ class Cart extends Component
     public $id_orderDetail;
     public $product_name = "";
     public $image_show = "";
-    public $price;
     public $order;
     public $quantity = 0;
     public $orderDetail;
 
-    public function mount($id_product, $id_orderDetail, $product_name, $image_show, $quantity, $price)
+    public $pricePerOne;
+    public $priceExtraFood;
+    public $totalPrice;
+
+    public function mount($id_product, $id_orderDetail, $product_name, $image_show, $quantity, $priceProduct, $totalPrice)
     {
         $this->id_product = $id_product;
         $this->id_orderDetail = $id_orderDetail;
@@ -28,7 +31,15 @@ class Cart extends Component
         $this->image_show = $image_show;
         $this->quantity = $quantity;
         $this->orderDetail = OrderDetail::find($this->id_orderDetail);
-        $this->price = $price;
+        $this->pricePerOne = $priceProduct;
+        $this->totalPrice = $totalPrice;
+        $listExtrafood = $this->orderDetail->extraFoods;
+        if ($listExtrafood != null) {
+            foreach ($listExtrafood as $extrafood) {
+                $this->priceExtraFood += $extrafood->price * $extrafood->pivot->quantity;
+            }
+        }
+
         $this->order = Order::where("id_customer", Auth::user()->user_id)->first();
     }
     public function render()
@@ -47,11 +58,11 @@ class Cart extends Component
     public function incrementQuantity()
     {
         $this->quantity++;
+
         $this->updatedQuantity($this->quantity);
     }
     public function deleteOrder()
     {
-        dd($this->order->total);
         $this->updatedQuantity(0);
     }
     public function decrementQuantity()
@@ -72,21 +83,21 @@ class Cart extends Component
 
     public function updatedQuantity($value)
     {
-        $this->dispatch("refresh");
-
         if ($value == 0) {
             $this->orderDetail->delete();
-            $this->updateTotalBill(-$this->price);
+            $this->updateTotalBill(-$this->totalPrice);
             $this->dispatch("deleteOrder", [
                 "id" => $this->id_orderDetail
             ]);
 
             return;
         }
-        $this->price = $this->price * $value;
-        $this->orderDetail->total_price = $this->price;
+        // dd ($value);
+        $this->totalPrice =  $this->priceExtraFood * $value + $this->pricePerOne * $value;
+        $this->orderDetail->total_price =  $this->totalPrice;
+        $this->updateTotalBill(  $this->totalPrice);
         $this->orderDetail->quantity = $value;
         $this->orderDetail->save();
-        $this->updateTotalBill($this->price);
+        $this->dispatch("refresh");
     }
 }

@@ -4,6 +4,7 @@ namespace App\Livewire\Product;
 
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\OrderExtraFoodDetail;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Js;
@@ -54,17 +55,36 @@ class CardProduct extends Component
             $this->id_order = $order->id;
             $orderDetail = OrderDetail::where("id_product", $this->id)
                 ->where("id_order", $this->id_order)
-                ->first();
-            if ($orderDetail != null) {
-                $orderDetail->quantity++;
-                $orderDetail->save();
-            } else {
+                ->get();
+            if ($orderDetail == null) {
                 OrderDetail::create([
                     "id_order" => $this->id_order,
                     "id_product" => $this->id,
                     "quantity" => 1,
                     "total_price" => $this->price,
                 ]);
+            } else {
+                $flag = false;
+                // duyệt theo từng sản phẩm có trong order (order detail)
+                foreach ($orderDetail as $key => $item) {
+                    // nếu số lượng extra food của thằng order detail đó là không thì ta sẽ cộng dồn số lượng sản phẩm và đổi giá trị cờ
+                    if (count ($item->extraFoods) == 0) {
+                        $flag = true;
+
+                        $orderDetail[$key]->quantity++;
+                        $orderDetail[$key]->total_price+=$this->price;
+                        $orderDetail[$key]->save();
+                    }
+                }
+                // nếu cờ bằng false nghĩa là số lượng extra food có và ta sẽ tiến hành tạo mới order
+                if ($flag == false) {
+                    OrderDetail::create([
+                        "id_order" => $this->id_order,
+                        "id_product" => $this->id,
+                        "quantity" => 1,
+                        "total_price" => $this->price,
+                    ]);
+                }
             }
             $order->total += $this->price;
             $order->save();

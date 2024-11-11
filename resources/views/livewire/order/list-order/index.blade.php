@@ -6,3 +6,4 @@
         @livewire('order.list-order.total')
     </div>
 </div>
+
