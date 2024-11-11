@@ -39,10 +39,7 @@ Route::group(['prefix' => '/category'], function () {
 
 
 Route::group(['prefix' => '/product'], function () {
-    // Route::get('/detail-product/{name}-{id}', [ProductController::class, 'detail'])
-    //     ->name('product.detail')
-    //     ->where('id', '[0-9]+')
-    //     ->where('name', '.*');
+    Route::get('/list-product', [ProductController::class, 'listProduct'])->name('product.list-product');
     Route::get('/detail-product/{slug}', [ProductController::class, 'detail'])
         ->name('product.detail');
 });

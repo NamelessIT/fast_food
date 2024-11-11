@@ -31,21 +31,23 @@
 @endsection
 
 @section('custom-js')
-
-        <script>
-            document.addEventListener ("DOMContentLoaded", () => {
-                Livewire.on('order-success', () => {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "Thêm thành công",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                })
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            Livewire.on('order-success', () => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Thêm thành công",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             })
-        </script>
+
+            Livewire.on('changeQuantity', (params) => {
+                document.querySelector(`.add-to-cart .quantity input`).value = params[0].value
+            })
+        })
+    </script>
 
     @livewireScripts
-
 @endsection

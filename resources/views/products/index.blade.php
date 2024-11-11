@@ -27,8 +27,8 @@
 @section('content')
     @livewire('product.category-product.category', ['categoryName' => $title])
     <div class="shopSection">
-        <div class="d-flex main-wrapper ">
-            @livewire('product.category-product.SideBarSearching')
+        <div class="d-flex main-wrapper justify-content-center">
+            {{-- @livewire('product.category-product.SideBarSearching') --}}
             @livewire('product.category-product.list-product', [
                 'page' => $page,
                 'categoryName' => $title,

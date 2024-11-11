@@ -7,6 +7,7 @@ use App\Models\OrderDetail;
 use App\Models\OrderExtraFoodDetail;
 use App\Models\Product;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Detail extends Component
@@ -17,7 +18,7 @@ class Detail extends Component
     public $listChooseExtraFood = [];
     public $totalPrice = 0;
 
-    public $quantity;
+    public $quantity = 1;
 
     public function mount($slug)
     {
@@ -61,20 +62,44 @@ class Detail extends Component
         }
     }
 
+    #[On('increaseProduct')]
     public function increaseProduct()
     {
         if ($this->quantity < 50) {
             $this->quantity++;
             $this->updateTotalPrice();
+            $this->dispatch('changeQuantity', [
+                'value' => $this->quantity
+            ]);
         }
     }
 
+    #[On('decreaseProduct')]
     public function decreaseProduct()
     {
         if ($this->quantity > 1) {
             $this->quantity--;
             $this->updateTotalPrice();
+            $this->dispatch('changeQuantity', [
+                'value' => $this->quantity
+            ]);
         }
+    }
+
+    #[On('updatedQuantity')]
+    public function updatedQuantity($value)
+    {
+        if ($value < 1 || $value > 50) {
+            $value = 1;
+            $this->quantity = $value;
+            $this->updateTotalPrice();
+            $this->dispatch('changeQuantity', [
+                'value' => $value
+            ]);
+            return;
+        }
+        $this->quantity = $value;
+        $this->updateTotalPrice();
     }
 
     private function updateTotalPrice()

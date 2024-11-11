@@ -37,16 +37,19 @@
                 <button
                     @if ($quantity == 1) class="decrease opacity-50"
                 @else
-                    class="decrease" wire:click="decreaseProduct" @endif><i
+                    class="decrease" onclick="Livewire.dispatch('decreaseProduct');" @endif><i
                         class="fa-solid fa-minus"></i></button>
-                {{-- <input type="number" wire:model.number.live="quantity"> --}}
-                <span> {{ $quantity }} </span>
+                <input type="number" value="{{ $quantity }}" min="1" max="50"
+                    onchange="Livewire.dispatch('updatedQuantity', {
+                        'value' : this.value
+                    });">
                 <button
-                    @if ($quantity < 50) class="increase" wire:click="increaseProduct"
+                    @if ($quantity < 50) class="increase" onclick="Livewire.dispatch('increaseProduct');"
                 @else
                     class="increase opacity-50" @endif><i
                         class="fa-solid fa-plus"></i>
                 </button>
+
             </div>
             <button class="add col-md-6 col-lg-6 col-xs-12" wire:click="addToCart">Thêm vào giỏ hàng</button>
         </div>

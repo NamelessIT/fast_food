@@ -7,6 +7,9 @@ use App\Models\Product;
 
 class ProductController
 {
+    public function listProduct () {
+        return view('products.list-product');
+    }
     public function detail($slug)
     {
         // dd ($name, $id);

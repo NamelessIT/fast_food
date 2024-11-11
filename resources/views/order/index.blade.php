@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/order/cart.css') }}">
     <link rel="stylesheet" href="{{ asset('css/order/total.css') }}">
     <link rel="stylesheet" href="{{ asset('css/order/voucher/voucher-popup.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/loading.css') }}">
 
     @livewireStyles
 @endsection
@@ -45,11 +46,28 @@
                     keyboard: false
                 });
                 myModal.hide();
-                console.log(document.querySelectorAll ('.modal-backdrop'));
                 document.querySelectorAll ('.modal-backdrop').forEach(element => {
                     element.remove();
                 })
                 fetchApi ();
+            })
+
+            Livewire.on ('selectAddressSuccess', () => {
+                var myModal = new bootstrap.Modal(document.getElementById('choose-address'), {
+                    keyboard: false
+                });
+                myModal.hide();
+                document.querySelectorAll ('.modal-backdrop').forEach(element => {
+                    element.remove();
+                })
+                fetchApi ();
+            })
+
+            Livewire.on ('paymentError', () => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Vui lòng nhập hoặc chọn địa chỉ giao hàng!",
+                });
             })
         })
     </script>

@@ -37,7 +37,7 @@
             <span class="title">Tổng cộng</span>
             {{-- <span class="price">{{ number_format($totalPrice, 0, '', '.') }}</span> --}}
         </div>
-        <div class="btn-payment w-100 text-center px-2 py-3 rounded-bottom-4">
+        <div class="btn-payment w-100 text-center px-2 py-3 rounded-bottom-4" wire:click="payment">
             <span>Thanh toán</span>
         </div>
     </div>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-floating">
-                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                        <select class="form-select" id="floatingSelect" wire:model="idAddress" aria-label="Floating label select example">
                             @if (count($addressList) == 0)
                                 <option value="">Không có địa chỉ</option>
                             @endif
@@ -68,7 +68,7 @@
                 <div class="modal-footer d-flex justify-content-center align-items-center">
                     <button type="button" class="btn btn-info flex-grow-1" data-bs-toggle="modal"
                         data-bs-target="#choose-address-orther">Chọn địa chỉ khác</button>
-                    <button type="button" class="btn btn-primary flex-grow-1">Chọn</button>
+                    <button type="button" class="btn btn-primary flex-grow-1" wire:click="selectAddress">Chọn</button>
                 </div>
             </div>
         </div>
@@ -115,6 +115,11 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    {{-- loading --}}
+    <div class="loader" wire:loading>
+        <div class="loading"></div>
     </div>
 </div>
 

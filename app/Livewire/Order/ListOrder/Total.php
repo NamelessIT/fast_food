@@ -11,6 +11,7 @@ class Total extends Component
 {
     public $addressList = [];
     public $idAddress = 0;
+    public $idAddressChoose = 0;
     public $idCity = 0;
     public $idDistrict = 0;
     public $idWard = 0;
@@ -21,7 +22,8 @@ class Total extends Component
 
     public $selectedVoucher = null;
 
-    public function mount() {
+    public function mount()
+    {
         $this->addressList = CustomerAddress::where('id_customer', auth()->user()->id)->get();
         $this->addressList = $this->addressList->toArray();
         $listTmp = [];
@@ -38,7 +40,7 @@ class Total extends Component
             $detailAddress .= ', ' . json_decode($res->getBody()->getContents())->name . ', ' . $value['address'];
             $obj = [
                 'id' => $value['id'],
-                'detailAddress' => $detailAddress
+                'detailAddress' => $detailAddress,
             ];
             array_push($listTmp, $obj);
         }
@@ -46,23 +48,27 @@ class Total extends Component
         $this->addressList = $listTmp;
     }
 
-    public function chooseAddress() {
+    public function chooseAddress()
+    {
         if ($this->idCity == 0 || $this->idDistrict == 0 || $this->idWard == 0 || $this->address == '') {
-            $this->dispatch("chooseAddressError");
+            $this->dispatch('chooseAddressError');
             return;
         }
 
+        $this->dispatch('chooseAddressSuccess');
+
         $address = CustomerAddress::create([
-           'id_customer' => auth()->user()->id,
-           'id_city' => $this->idCity,
-           'id_district' => $this->idDistrict,
-           'id_ward' => $this->idWard,
-           'address' => $this->address,
-           'created_at' => Carbon::now(),
-           'updated_at' => Carbon::now()
+            'id_customer' => auth()->user()->id,
+            'id_city' => $this->idCity,
+            'id_district' => $this->idDistrict,
+            'id_ward' => $this->idWard,
+            'address' => $this->address,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
 
         $this->idAddress = $address->id;
+        $this->idAddressChoose = $this->idAddress;
 
         $client = new Client();
         $res = $client->request('GET', 'https://provinces.open-api.vn/api/p/' . $this->idCity);
@@ -72,18 +78,57 @@ class Total extends Component
         $res = $client->request('GET', 'https://provinces.open-api.vn/api/w/' . $this->idWard);
         $this->detailAddress .= ', ' . json_decode($res->getBody()->getContents())->name . ', ' . $this->address;
 
+        $this->idCity = 0;
+        $this->idDistrict = 0;
+        $this->idWard = 0;
+
         $obj = [
             'id' => $address->id,
-            'detailAddress' => $this->detailAddress
+            'detailAddress' => $this->detailAddress,
         ];
         array_push($this->addressList, $obj);
 
-        $this->dispatch("chooseAddressSuccess");
+        // $this->dispatch("chooseAddressSuccess");
+    }
+
+    public function selectAddress()
+    {
+        if ($this->idAddress == 0) {
+            $this->idAddress = $this->addressList[0]['id'];
+        }
+        $this->idAddressChoose = $this->idAddress;
+        $address = CustomerAddress::find($this->idAddress);
+
+        $client = new Client();
+
+        $res = $client->request('GET', 'https://provinces.open-api.vn/api/p/' .  $address->id_city);
+        $detailAddress = json_decode($res->getBody()->getContents())->name;
+        $res = $client->request('GET', 'https://provinces.open-api.vn/api/d/' . $address->id_district);
+        $detailAddress .= ', ' . json_decode($res->getBody()->getContents())->name;
+        $res = $client->request('GET', 'https://provinces.open-api.vn/api/w/' . $address->id_ward);
+        $detailAddress .= ', ' . json_decode($res->getBody()->getContents())->name . ', ' . $address->address;
+
+        $this->idCity = 0;
+        $this->idDistrict = 0;
+        $this->idWard = 0;
+        $this->address = '';
+
+        $this->detailAddress = $detailAddress;
+
+        $this->dispatch('selectAddressSuccess');
+    }
+
+    public function payment () {
+        if ($this->idAddressChoose == 0) {
+            $this->dispatch('paymentError');
+            return;
+        }
+        dd ($this->idAddressChoose, $this->idAddress);
     }
 
     public function render()
     {
-        return view('livewire.order.list-order.total',[
+        return view('livewire.order.list-order.total', [
             // "totalPrice"=> $this->totalPrice,
         ]);
     }
