@@ -17,7 +17,7 @@
                                 <th>Description</th>
                                 <th>Discount %</th>
                                 <th>Minimum Order (đ)</th>
-                                <th>Action</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,7 +28,7 @@
                                     <td>{{ $voucher->discount_percent }}%</td>
                                     <td>{{ number_format($voucher->minium_condition) }}</td>
                                     <td>
-                                       <button wire:click="apply({{$voucher->id}})">Sử dụng</button>
+                                       <button id="btnAction" class="border rounded-pill px-4 px-lg-5" wire:click="apply({{$voucher->id}})">Sử dụng</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -43,4 +43,4 @@
         <x-loader />
     </div>
     @endif
-</div>
+</div>  

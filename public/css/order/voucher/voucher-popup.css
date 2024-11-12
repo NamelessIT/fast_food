@@ -18,13 +18,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
     width: 80%;
-    /* Width is now 80% of the screen */
     max-width: 600px;
-    /* Maximum width of 600px to prevent it from becoming too large */
     max-height: 80vh;
-    /* Limits height to 80% of the viewport height */
     overflow-y: auto;
-    /* Adds scrolling if content exceeds popup height */
 }
 
 .close-btn {
@@ -83,7 +79,7 @@
 
 .action-link {
     font-weight: 500;
-    color: #007bff;
+    color: var(--sandyBrown);
     text-decoration: none;
 }
 
@@ -95,4 +91,12 @@
     text-align: center;
     font-size: 1.5em;
     margin-bottom: 20px;
+}
+
+#btnAction {
+    background-color: var(--sandyBrown);
+}
+
+#btnAction:hover {
+    background-color: var(--darkOliveGreen);
 }

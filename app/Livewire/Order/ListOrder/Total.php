@@ -6,9 +6,13 @@ use App\Models\CustomerAddress;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Livewire\Component;
+use Livewire\Attributes\On;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class Total extends Component
 {
+    public $totalPrice =  0;
     public $addressList = [];
     public $idAddress = 0;
     public $idAddressChoose = 0;
@@ -18,10 +22,12 @@ class Total extends Component
 
     public $address = '';
     public $detailAddress = '';
-    protected $listeners = ['voucherApplied'];
+    protected $listeners = ['voucherApplied', 'removeVoucher' , 'totalPriceUpdated' => 'updateTotalPrice'];
+    
 
     public $selectedVoucher = null;
 
+   
     public function mount()
     {
         $this->addressList = CustomerAddress::where('id_customer', auth()->user()->id)->get();
@@ -46,6 +52,16 @@ class Total extends Component
         }
 
         $this->addressList = $listTmp;
+      
+        
+         $order = Order::where("id_customer", Auth::user()->user_id)->first();
+         $this->totalPrice = $order->products->sum(function($product) {
+                    return $product->pivot->total_price;  
+        });
+           
+         
+        
+        
     }
 
     public function chooseAddress()
@@ -87,7 +103,6 @@ class Total extends Component
             'detailAddress' => $this->detailAddress,
         ];
         array_push($this->addressList, $obj);
-
         // $this->dispatch("chooseAddressSuccess");
     }
 
@@ -135,5 +150,15 @@ class Total extends Component
     public function voucherApplied($voucher)
     {
         $this->selectedVoucher = $voucher; 
+    }
+    public function removeVoucher(){
+        $this->selectedVoucher = null;
+    }
+
+    #[On('totalPriceUpdated')]
+    public function updateTotalPrice($price)
+    {
+        dd("abc");
+        $this->totalPrice = $price;
     }
 }
