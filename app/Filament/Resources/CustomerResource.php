@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
-
+    protected static ?string $pluralLabel = 'Khách hàng (Customer)';
     protected static ?string $navigationIcon = 'heroicon-s-identification';
 
     public static function form(Form $form): Form

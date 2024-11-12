@@ -19,18 +19,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
-
+    protected static ?string $pluralLabel = 'Phân Quyền (Role)';
     protected static ?string $navigationIcon = 'heroicon-s-wrench';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('id')
-                ->unique(ignoreRecord: true)
-                ->label('Mã loại nhân viên')
-                ->required(),
-
                 TextInput::make('role_name')
                 ->unique(ignoreRecord: true)
                 ->label('Loại nhân viên')

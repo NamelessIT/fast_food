@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use App\Models\Receipt;
 use App\Models\Ingredient;
 use Filament\Tables\Columns\TextColumn;
+use App\Models\ReceiptDetail;
 class ReceiptDetailsRelationManager extends RelationManager
 {
     protected static string $relationship = 'receiptDetails';// Tên quan hệ trong model Receipt
@@ -45,7 +46,7 @@ class ReceiptDetailsRelationManager extends RelationManager
                     }
                 }),
 
-                TextInput::make('total_price')
+                /*TextInput::make('getIngredient.')
                 ->label('Tổng tiền (vnd)')
                 ->numeric()
                 ->rules('required|numeric|min:1')
@@ -54,7 +55,7 @@ class ReceiptDetailsRelationManager extends RelationManager
                     if ($state === '') {
                         $set('Tổng tiền (vnd)', ''); // Xóa giá trị nếu trường trống
                     }
-                }),
+                }),*/
 
                 TextInput::make('created_at')
                     ->label('Ngày tạo phiếu nhập')
@@ -73,7 +74,14 @@ class ReceiptDetailsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id_ingredient')
             ->columns([
-                TextColumn::make('ingredient.ingredient_name')
+               
+
+
+
+
+
+                
+                TextColumn::make('getIngredient.ingredient_name')
                     ->label('Nguyên liệu')
                     ->sortable()
                     ->searchable()
@@ -83,7 +91,7 @@ class ReceiptDetailsRelationManager extends RelationManager
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
-                TextColumn::make('ingredient.unit')
+                TextColumn::make('getIngredient.unit')
                     ->label('Đơn vị')
                     ->sortable()
                     ->searchable()

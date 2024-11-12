@@ -15,13 +15,14 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use App\Models\Supplier;
+use Filament\Forms\Components\Select;
 class IngredientResource extends Resource
 {
     protected static ?string $model = Ingredient::class;
-
+    protected static ?string $pluralLabel = 'Kho Hàng (Ingredient)';
     protected static ?string $navigationIcon = 'heroicon-s-queue-list';
-
+    protected $table = 'ingredient_suppliers';
     public static function form(Form $form): Form
     {
         return $form
@@ -35,19 +36,12 @@ class IngredientResource extends Resource
                     ->label('Đơn vị')
                     ->required(),
 
-                TextInput::make('remain_quantity')
-                    ->numeric()
-                    ->label('Còn lại')
+                Select::make('ingredients.id')
+                ->label('Nhà cung cấp')
+                ->options(Supplier::pluck('supplier_name', 'id')->toArray())
+                ->required(),
+                
 
-               /*  TextInput::make('created_at')
-                ->label('Ngày tạo phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
-
-                TextInput::make('updated_at')
-                ->label('Ngày cập nhật phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time */
             ]);
     }
 
@@ -63,6 +57,8 @@ class IngredientResource extends Resource
                     ->sortable()
                     ->toggleable()
                     ->label('Tên nguyên liệu'),
+                TextColumn::make('ingredients.supplier_name')
+                    ->label('Nhà cung cấp'),
                 TextColumn::make('remain_quantity')
                     ->sortable()
                     ->toggleable()

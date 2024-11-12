@@ -25,6 +25,7 @@ use function Laravel\Prompts\search;
 class ReceiptResource extends Resource
 {
     protected static ?string $model = Receipt::class;
+    protected static ?string $pluralLabel = 'Phiếu Nhập (Receipt)';
 
     protected static ?string $navigationIcon = 'heroicon-s-document-arrow-down';
 

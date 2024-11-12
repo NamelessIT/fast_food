@@ -31,7 +31,7 @@ use Filament\Tables\Columns\ImageColumn;
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
-
+    protected static ?string $pluralLabel = 'Nhân Viên (Employee)';
     protected static ?string $navigationIcon = 'heroicon-s-identification';
 
     public static function form(Form $form): Form

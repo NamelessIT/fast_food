@@ -20,12 +20,30 @@ class ReceiptDetail extends Model
     
     protected $primaryKey = 'id_ingredient'; // Đặt khóa chính phức hợp
     public $incrementing = false; // Không tự động tăng
-    public function ingredient(){
-        return $this->belongsTo(Ingredient::class,'id_ingredient', 'id');
+
+    
+    public function receipt() {
+        return $this->belongsTo(Receipt::class, 'id_receipt');
     }
+
     public function receiptDetails(){
         return $this->hasMany(ReceiptDetail::class, 'id_receipt', 'id');
     }
+    
+    public function getIngredient(){
+        return $this->belongsTo(Ingredient::class,'id_ingredient', 'id');
+    }
+    // Trong Model ReceiptDetail
+public function getPriceNhapHang()
+{
+    $results = $this->join('ingredient_supplieds', 'ingredient_supplieds.id_ingredient', '=', 'receipt_details.id_ingredient')
+                ->select('ingredient_supplieds.ingredient_price')
+                ->get();
+                return $results;
+}
+
+
+
 
     protected static function booted(){
         static::created(function ($receiptDetail) {
@@ -52,10 +70,6 @@ class ReceiptDetail extends Model
         });
     }
 
-public function receipt()
-{
-    return $this->belongsTo(Receipt::class, 'id_receipt');
-}
 
 
 }

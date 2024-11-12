@@ -34,7 +34,7 @@ use Nette\Utils\Html;
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
-
+    protected static ?string $pluralLabel = 'Sản Phẩm (Product)';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
