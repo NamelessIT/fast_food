@@ -8,22 +8,28 @@ use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\CheckboxColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use League\CommonMark\Input\MarkdownInput;
-use Symfony\Contracts\Service\Attribute\Required;
+use Filament\Forms\Components\View;
+use Filament\Forms\Components\Text;
+use Filament\Tables\Columns\TextInputColumn;
+use Illuminate\Support\HtmlString;
+use Nette\Utils\Html;
 
 class ProductResource extends Resource
 {
@@ -42,15 +48,87 @@ class ProductResource extends Resource
                     ->required()
                     ->options(Category::pluck('category_name', 'id'))
                     ->label('Category'),
-                TextInput::make('cod_price'),
-                TextInput::make('price'),
+                TextInput::make('cod_price')
+                    ->default(0),
+                TextInput::make('price')
+                    ->default(0),
                 TextInput::make('id_promotion')
                     ->default(0),
                 MarkdownEditor::make('description'),
-                FileUpload::make('image_show')
+/*                 FileUpload::make('image_show')
+                -
                     ->disk('public')
                     ->directory('images/product')
-                    ->label('Image'),
+                    ->label('Image'), */
+
+/*                 TextInput::make('image_show')
+                    ->label('Current Image')
+                    ->disabled()  // Không cho phép chỉnh sửa
+                    ->default(function ($record) {
+                        return $record->image_show ?
+                            '<img src="' . $record->image_show . '" width="150" height="150" />' :
+                            'No image';
+                    })
+                    ->helperText('This is the image in base64 format'), */
+
+                    // Trường View để render ảnh Base64
+                // Sử dụng View để hiển thị ảnh Base64
+                View::make('image_show')
+                    ->label('Current Image')
+                    ->view('filament.show-image', [
+                        'imageBase64' => $form->getRecord()->image_show,  // Lấy ảnh Base64 từ bản ghi
+                    ]),
+
+
+/*                 FileUpload::make('image_file')
+                    ->label('Upload/Update Image')
+                    //->image()
+                    ->required()
+                    ->directory('temp') // Tạo thư mục tạm
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        if ($state) {
+                            // Đọc file và chuyển thành Base64
+                            $imageData = file_get_contents($state->getRealPath());
+                            $imageBase64 = base64_encode($imageData);
+
+                            // Lưu Base64 vào cột image_show
+                            $set('image_show', 'data:image/jpeg;base64,' . $imageBase64);
+
+
+                            // Xóa file bằng cách sử dụng unlink
+                            unlink($state->getRealPath());
+                        }
+                    }),
+
+                Hidden::make('image_show'), */ // Cột lưu dữ liệu Base64
+
+                FileUpload::make('image_file')
+                ->label('Upload/Change Image')
+                //->image()  // Giới hạn chỉ tải ảnh
+                //->required()
+                ->directory('images')  // Chỉ định thư mục lưu trữ tạm thời
+                ->afterStateUpdated(function ($state, callable $set) {
+                    if ($state) {
+                        // Đọc file và chuyển thành Base64
+                        $imageData = file_get_contents($state->getRealPath());
+                        $imageBase64 = base64_encode($imageData);
+
+                        // Lưu Base64 vào cột image_show trong cơ sở dữ liệu
+                        $set('image_show', 'data:image/jpeg;base64,' . $imageBase64);
+
+                        // Xóa file tạm sau khi chuyển đổi sang Base64
+                        unlink($state->getRealPath());
+                    }
+                })
+                ,
+
+            Hidden::make('image_show')
+                ->default(function ($record) {
+                    // Lấy ảnh Base64 từ cơ sở dữ liệu và lưu vào trường ẩn image_show
+                    return $record->image_show;
+                }),
+
+
                 Checkbox::make('status')
                     ->default(true),
 
@@ -61,8 +139,10 @@ class ProductResource extends Resource
                             ->relationship('ingredient', 'ingredient_name')
                             ->label('Ingredient')
                             ->required()
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                             ->reactive() // Để lắng nghe thay đổi
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            ->afterStateUpdated(fn ($state, Set $set) => $set('unit',Ingredient::find($state)?->unit ?? null))
+                            /* ->afterStateUpdated(function ($state, callable $set) {
                                 // Cập nhật unit khi id_ingredient thay đổi
                                 if ($state) {
                                     $ingredient = Ingredient::find($state);
@@ -72,7 +152,9 @@ class ProductResource extends Resource
                                 } else {
                                     $set('unit', null); // Xóa giá trị nếu không có ingredient
                                 }
-                            }),
+                            }) */
+                            ->preload()
+                            ->searchable(),
                         Forms\Components\TextInput::make('unit')
                             ->label('Unit')
                             ->disabled(), // Chỉ hiển thị, không cho phép chỉnh sửa
@@ -104,6 +186,7 @@ class ProductResource extends Resource
             ]);
     }
 
+
     public static function table(Table $table): Table
     {
         return $table
@@ -124,9 +207,15 @@ class ProductResource extends Resource
                 TextColumn::make('id_promotion')
                     ->toggleable(isToggledHiddenByDefault:true),
                 TextColumn::make('description'),
-                ImageColumn::make('image_show')
+/*                 ImageColumn::make('image_show')
                     ->toggleable()
-                    ->size(180),
+                    ->size(180), */
+
+                TextColumn::make('image_show')
+                    ->label('Image')
+                    ->formatStateUsing(fn($state) => "<img src='{$state}' style='width: 100px; height: 100px;' />")
+                    ->html(), // Kích hoạt HTML để hiển thị ảnh từ chuỗi Base64
+
                 CheckboxColumn::make('status')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault:true),
