@@ -45,6 +45,7 @@ class Cart extends Component
     public function render()
     {
 
+
         return view(
             'livewire.order.list-order.cart',
             [
@@ -73,12 +74,15 @@ class Cart extends Component
             $this->updatedQuantity($this->quantity);
         }
     }
-    public function updateTotalBill($total)
+    public function updateTotalBill()
     {
-        if ($this->order != null) {
-            $this->order->total += $total;
-            $this->order->save();
-        }
+        if ($this->orderDetail != null)
+            $this->order->total = $this->order->products->sum("pivot.total_price");
+        // } else {
+        //     $this->order->total = 0;
+        // }
+
+        $this->order->save();
     }
 
     public function updatedQuantity($value)
@@ -86,18 +90,22 @@ class Cart extends Component
         if ($value == 0) {
             $this->orderDetail->delete();
             $this->dispatch("refresh");
-            $this->updateTotalBill(-$this->totalPrice);
             $this->dispatch("deleteOrder", [
                 "id" => $this->id_orderDetail
             ]);
+            $this->updateTotalBill();
             return;
         }
-        // dd ($value);
+        //price of orderItem in .blade
         $this->totalPrice =  $this->priceExtraFood * $value + $this->pricePerOne * $value;
+
+        // total price in database
         $this->orderDetail->total_price =  $this->totalPrice;
-        $this->updateTotalBill($this->totalPrice);
+
+        //quantity producy
         $this->orderDetail->quantity = $value;
         $this->orderDetail->save();
+        $this->updateTotalBill();
         $this->dispatch("refresh");
     }
 }

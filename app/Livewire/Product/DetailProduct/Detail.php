@@ -157,7 +157,7 @@ class Detail extends Component
                     $this->createOrderExtraFoodDetail($idOrderDetail);
 
                     $this->dispatch('order-success');
-                    $this->dispatchTo('refresh',);
+                    $this->dispatch('refresh',);
                     return;
                 }
 

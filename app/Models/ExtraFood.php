@@ -15,4 +15,9 @@ class ExtraFood extends Model
     {
         return $this->belongsToMany(Category::class, 'extra_food_details', 'id_extra_food', 'id_category');
     }
+
+    public function orderdetails () {
+        return $this->belongsToMany(OrderDetail::class , 'order_extra_food_detail', 'id_extra_food','id_order_detail' )->withPivot("quantity");
+    }
+
 }

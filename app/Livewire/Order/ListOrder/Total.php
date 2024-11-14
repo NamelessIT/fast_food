@@ -2,17 +2,20 @@
 
 namespace App\Livewire\Order\ListOrder;
 
+use App\Models\Bill;
+use App\Models\BillDetail;
+use App\Models\BillExtraFoodDetail;
 use App\Models\CustomerAddress;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\On;
-use App\Models\Order;
-use Illuminate\Support\Facades\Auth;
 
 class Total extends Component
 {
-    public $totalPrice =  0;
     public $addressList = [];
     public $idAddress = 0;
     public $idAddressChoose = 0;
@@ -22,12 +25,12 @@ class Total extends Component
 
     public $address = '';
     public $detailAddress = '';
-    protected $listeners = ['voucherApplied', 'removeVoucher' , 'totalPriceUpdated' => 'updateTotalPrice'];
-    
+    protected $listeners = ['voucherApplied'];
 
     public $selectedVoucher = null;
 
-   
+    public $order;
+    public $totalBill;
     public function mount()
     {
         $this->addressList = CustomerAddress::where('id_customer', auth()->user()->id)->get();
@@ -52,16 +55,10 @@ class Total extends Component
         }
 
         $this->addressList = $listTmp;
-      
-        
-         $order = Order::where("id_customer", Auth::user()->user_id)->first();
-         $this->totalPrice = $order->products->sum(function($product) {
-                    return $product->pivot->total_price;  
-        });
-           
-         
-        
-        
+
+        //bill
+        $this->order = Order::where("id_customer", Auth::user()->user_id)->first();
+        $this->totalBill =  $this->order->products->sum("pivot.total_price");
     }
 
     public function chooseAddress()
@@ -103,6 +100,7 @@ class Total extends Component
             'detailAddress' => $this->detailAddress,
         ];
         array_push($this->addressList, $obj);
+
         // $this->dispatch("chooseAddressSuccess");
     }
 
@@ -133,32 +131,100 @@ class Total extends Component
         $this->dispatch('selectAddressSuccess');
     }
 
-    public function payment () {
+    public function createBillDetail($idBill, $id_product, $quantity = 1)
+    {
+        if ($idBill != null && $id_product != null) {
+            $billdetail = BillDetail::create([
+                "id_bill" => $idBill,
+                "id_product" => $id_product,
+                "quantity" => $quantity,
+                "created_at" => Carbon::now(),
+                "updated_at" => Carbon::now()
+            ]);
+            return $billdetail;
+        } else {
+            dd(1);
+        }
+        //else
+    }
+
+    public function createBillExtraFoodDetail($id_bill_detail, $id_extraFoods, $quantity)
+    {
+
+        $query = BillExtraFoodDetail::create([
+            "id_bill_detail" => $id_bill_detail,
+            "id_extra_food" => $id_extraFoods,
+            "quantity" => $quantity,
+            "created_at" => Carbon::now(),
+            "updated_at" => Carbon::now()
+        ]);
+        return $query;
+    }
+    public function payment()
+    {
         if ($this->idAddressChoose == 0) {
             $this->dispatch('paymentError');
             return;
         }
-        dd ($this->idAddressChoose, $this->idAddress);
+        if ($this->selectedVoucher != null) {
+            $this->totalBill -=  $this->totalBill * (float)($this->selectedVoucher->discount_percent / 100);
+        }
+
+        $bill = Bill::create([
+            "id_customer" => Auth::user()->user_id,
+            "id_address" => $this->idAddressChoose,
+            "id_payment" => 1,
+            "id_voucher" => $this->selectedVoucher->id ?? 0,
+            "total" =>  $this->totalBill,
+            "point_receive" => (float) $this->totalBill * 0.1,
+            "status" => 1,
+            "created_at" => Carbon::now(),
+            "updated_at" => Carbon::now()
+        ]);
+
+        if ($bill) {
+            $billDetails = [];
+            $orderDetails = OrderDetail::where("id_order", $this->order->id)->get();
+            foreach ($orderDetails as $billDetail) {
+                $item = $this->createBillDetail($bill->id, $billDetail->id_product, $billDetail->quantity);
+                $listExtrafoods =  $billDetail->extraFoods;
+                //IF HAVE EXTRAFOOD CREATE BILL DETAIL EXTRA FOOD
+                if ($item && $listExtrafoods) {
+                    array_push($billDetails, $item);
+                    foreach ($listExtrafoods as $extrafood) {
+                        $idExtraFood = $extrafood->id;
+                        $quantity = $extrafood->orderdetails->first()->pivot->quantity;
+                        $this->createBillExtraFoodDetail($item->id, $idExtraFood, $quantity);
+                    }
+                }
+                // If success delete order detail row and re-render
+                // if ($bill && $billDetails) {
+                //     $delete = OrderDetail::where("id_order", $this->order->id)->delete();
+                //     if ($delete)
+                //         $this->dispatch('re-render');
+                // }
+            }
+        }
     }
+    // dd($this->idAddressChoose, $this->idAddress);
 
     public function render()
     {
         return view('livewire.order.list-order.total', [
-            // "totalPrice"=> $this->totalPrice,
+            "totalPrice" =>  $this->totalBill,
         ]);
     }
     public function voucherApplied($voucher)
     {
-        $this->selectedVoucher = $voucher; 
-    }
-    public function removeVoucher(){
-        $this->selectedVoucher = null;
+        $this->selectedVoucher = $voucher;
+        dd($this->selectedVoucher);
     }
 
-    #[On('totalPriceUpdated')]
-    public function updateTotalPrice($price)
+
+    // re-render
+    #[On('refresh')]
+    public function re_render()
     {
-        dd("abc");
-        $this->totalPrice = $price;
+        $this->totalBill = $this->order->products->sum("pivot.total_price");
     }
 }

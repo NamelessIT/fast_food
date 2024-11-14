@@ -15,6 +15,8 @@ class BillDetail extends Model
         'id_bill',
         'id_product',
         'quantity',
+        'created_at',
+        'updated_at'
     ];
 
     // Định nghĩa quan hệ với các bảng khác

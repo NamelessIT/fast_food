@@ -25,7 +25,6 @@ return new class extends Migration
             $table->foreign('id_customer')->references('id')->on('customers');
             $table->foreign('id_address')->references('id')->on('customer_addresses');
             $table->foreign('id_payment')->references('id')->on('payments');
-            $table->foreign('id_voucher')->references('id')->on('vouchers');
         });
     }
 

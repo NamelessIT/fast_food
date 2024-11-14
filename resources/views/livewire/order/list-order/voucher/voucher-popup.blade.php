@@ -1,4 +1,4 @@
-<div>
+    <div>
     @if($isVisible)
     <div class="overlay" id="voucherPopup">
         <div class="popup">
