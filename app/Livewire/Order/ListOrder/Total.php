@@ -166,6 +166,9 @@ class Total extends Component
             $this->dispatch('paymentError');
             return;
         }
+        if ($this->totalBill==0){
+            $this->dispatch('empty_order');
+        }
         if ($this->selectedVoucher != null) {
             $this->totalBill -=  $this->totalBill * (float)($this->selectedVoucher->discount_percent / 100);
         }
@@ -198,11 +201,14 @@ class Total extends Component
                     }
                 }
                 // If success delete order detail row and re-render
-                // if ($bill && $billDetails) {
-                //     $delete = OrderDetail::where("id_order", $this->order->id)->delete();
-                //     if ($delete)
-                //         $this->dispatch('re-render');
-                // }
+                if ($bill && $billDetails) {
+                    $delete = OrderDetail::where("id_order", $this->order->id)->delete();
+                    if ($delete) {
+
+                        $this->dispatch('order_success');
+                        $this->dispatch('refresh');
+                    }
+                }
             }
         }
     }

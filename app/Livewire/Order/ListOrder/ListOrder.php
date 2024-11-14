@@ -3,26 +3,25 @@
 namespace App\Livewire\Order\ListOrder;
 
 use App\Models\Order;
-use App\Models\OrderDetail;
 use Barryvdh\Reflection\DocBlock\Type\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-
+use Livewire\Attributes\On;
 
 class ListOrder extends Component
 {
     protected $listeners = [
-        're-render' => '$refresh'
+        'refresh' => '$refresh'
     ];
 
     public $listOrder;
-
+    public $order;
     public function mount()
     {
         if (Auth::check()) {
-            $order = Order::where("id_customer", Auth::user()->user_id)->first();
+            $this->order = Order::where("id_customer", Auth::user()->user_id)->first();
 
-            $this->listOrder = OrderDetail::where("id_order", $order->id)->first() ? $order->products : new Collection();
+            $this->listOrder = $this->order ? $this->order->products : new Collection();
         } else {
             redirect()->route("account.index");
         }
@@ -34,5 +33,11 @@ class ListOrder extends Component
         return view(
             'livewire.order.list-order.list-order'
         );
+    }
+
+    #[On('refresh')]
+    public function updateListOrder()
+    {
+        $this->listOrder = $this->listOrder = $this->order ? $this->order->products : new Collection();;
     }
 }
