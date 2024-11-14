@@ -45,7 +45,7 @@ class DeleteAccount extends Component
                   ->where('user_type', $user_type)
                   ->first();
         
-        if ($this->account && $this->account->user_type === 'App\Models\Customer') {
+        if ($this->account && $this->account->user_type === config('constants.user.customer')) {
             $customer = Customer::find($this->account['user_id']);
 
             if ($customer) {
@@ -63,27 +63,10 @@ class DeleteAccount extends Component
                 $this->numberPhone = $customer->phone;
                 $this->point = $customer->points;
                 $this->createdAt = $customer->created_at->format('Y-m-d');
+                $this->email=$this->account['email'];
             }
         }
-        else if($this->account && $this->account->user_type !== 'App\Models\Customer'){
-            $employee=Employee::find($this->account['user_id']);
-            if($employee){
-                $nameParts = explode(' ', $employee->full_name);
-                if(count($nameParts)>=2){
-                    $this->firstName = array_shift($nameParts);
-                    $this->fullName = implode(' ', $nameParts);
-                }
-                else{
-                    $this->firstName='';
-                    $this->fullName=array_shift($nameParts);
-                }
-                                // Gán các thông tin còn lại
-                $this->numberPhone = $employee->phone;
-                $this->idrole = $employee->id_role;
-                $this->salary=$employee->salary;
-                $this->createdAt = $employee->created_at->format('Y-m-d');
-            }
-        }
+
     }
     public function getSessionData()
     {

@@ -9,17 +9,18 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Account;
 use App\Models\Customer;
 use App\Models\Employee;
-
+use GuzzleHttp\Client;
 class Address extends Component
 {
     public $account;
+    public $city=[];
     public $districts = [];
     public $wards = [];
     public $CustomerAddresses=[];
 
     public $disableForm = "true";
     public $id_city, $id_district, $id_ward, $address;
-    
+    protected $listeners = ['deleteAddress'];
     protected $rules = [
         'id_city' => 'required',
         'id_district' => 'required',
@@ -30,7 +31,7 @@ class Address extends Component
     public function mount(){
         $this->fetchDetailUser();
         $this->fetchAddress();
-        $this->loadDistrictsAndWards();
+        $this->showAllCity();
     }
 
     public function showForm()
@@ -47,7 +48,12 @@ class Address extends Component
     public function saveAddress()
     {
         $this->validate();
+        if ($this->id_city == 0 || $this->id_district == 0 || $this->id_ward == 0 || $this->address == '') {
+            $this->dispatch('saveAddressError');
+            return;
+        }
 
+        $this->dispatch('saveAddressSuccess');
         CustomerAddress::create([
             // 'id_customer' => auth()->user()->id,
             'id_customer' => $this->account['user_id'],
@@ -56,80 +62,79 @@ class Address extends Component
             'id_ward' => $this->id_ward,
             'address' => $this->address,
             'status' => 1,
-            'created_at' => now(),
-            'updated_at' => now()
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
         $this->fetchAddress();
         $this->closeForm();
     }
     public function fetchAddress()
     {
-        // Gọi phương thức để load dữ liệu quận, phường
-        $this->loadDistrictsAndWards();
-    
-        if($this->account!=null){
-            // Truy vấn danh sách địa chỉ
-            $addresses = CustomerAddress::where('id_customer',$this->account['user_id'])
-                        ->select('id', 'id_customer', 'id_city', 'id_district', 'id_ward', 'address')->get();
-        
-            // Biến để chứa danh sách địa chỉ đã được ánh xạ sang tên
-            $this->CustomerAddresses = $addresses->map(function ($address) {
-                $id_district = $address->id_district;
-                $id_ward = $address->id_ward;
-                return [
-                    'id' => $address->id,
-                    'id_customer' => $address->id_customer,
-                    'address' => $address->address,
-                    'district_name' => $this->districts[$id_district]['name'] ?? 'N/A',
-                    'ward_name' => collect($this->districts[$id_district]['wards'] ?? [])
-                    ->firstWhere('ward_id', $id_ward)['ward_name'] ?? 'N/A',
-                    'city_name' => 'Hồ Chí Minh', // Tên thành phố cố định
-                ];
-            })->toArray();
+        $this->CustomerAddresses = CustomerAddress::where('id_customer', auth()->user()->id)->get();
+        $this->CustomerAddresses = $this->CustomerAddresses->toArray();
+        $listTmp = [];
+
+        $client = new Client();
+        foreach ($this->CustomerAddresses as $key => $value) {
+            $res = $client->request('GET', 'https://provinces.open-api.vn/api/p/' . $value['id_city']);
+            $name_city = json_decode($res->getBody()->getContents())->name;
+
+            $res = $client->request('GET', 'https://provinces.open-api.vn/api/d/' . $value['id_district']);
+            $name_district = json_decode($res->getBody()->getContents())->name;
+
+            $res = $client->request('GET', 'https://provinces.open-api.vn/api/w/' . $value['id_ward']);
+            $name_ward = json_decode($res->getBody()->getContents())->name;
+            $obj = [
+                'id' => $value['id'],
+                'city_name'=>$name_city,
+                'district_name'=>$name_district,
+                'ward_name'=>$name_ward,
+                'address'=>$value['address'],
+                'id_customer'=>$value['id_customer'],
+            ];
+            array_push($listTmp, $obj);
         }
+
+        $this->CustomerAddresses = $listTmp;
+    }
+    public function showAllCity()
+    {
+        $client = new Client();
+        $response = $client->request('GET', 'https://provinces.open-api.vn/api/p/');
+        $cities = json_decode($response->getBody()->getContents(), true);
+
+        $this->city = collect($cities)->mapWithKeys(function ($city) {
+            return [$city['code'] => $city['name']];
+        })->toArray();
     }
     
-    public function loadDistrictsAndWards()
+    public function updatedIdCity()
     {
-        
-        $filePath = storage_path('app/public/districts_wards.txt');
-        $lines = file_get_contents($filePath);
-    
-        $districtsData = [];
-        foreach (explode("\n", $lines) as $line) {
-            $lineParts = explode('|', trim($line));
-            if (count($lineParts) >= 4) {
-                $id_district = $lineParts[0];
-                $districtName = $lineParts[1];
-                $wardId = $lineParts[2];
-                $wardName = $lineParts[3];
-                
-                // Tạo danh sách ward theo district
-                if (!isset($districtsData[$id_district])) {
-                    $districtsData[$id_district] = [
-                        'name' => $districtName,
-                        'wards' => [],
-                    ];
-                }
-                $districtsData[$id_district]['wards'][] = [
-                    'ward_id' => $wardId,
-                    'ward_name' => $wardName,
-                ];
-            }
-        }
-        
-        // Cập nhật danh sách district và wards ban đầu
-        $this->districts = $districtsData;
+        $this->id_district = null; // Reset quận/huyện và phường/xã khi chọn thành phố mới
+        $this->id_ward = null;
+        $this->wards = [];
+        $client = new Client();
+        $response = $client->request('GET', 'https://provinces.open-api.vn/api/p/' . $this->id_city . '?depth=2');
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        $this->districts = collect($data['districts'])->mapWithKeys(function ($district) {
+            return [$district['code'] => ['name' => $district['name']]];
+        })->toArray();
     }
     
     public function updatedIdDistrict()
     {
-        // Lấy danh sách wards cho district được chọn
-        if (isset($this->districts[$this->id_district])) {
-            $this->wards = $this->districts[$this->id_district]['wards'];
-        } else {
-            $this->wards = [];
-        }
+        $this->id_ward = null; // Reset phường/xã khi chọn quận/huyện mới
+        $client = new Client();
+        $response = $client->request('GET', 'https://provinces.open-api.vn/api/d/' . $this->id_district . '?depth=2');
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        $this->wards = collect($data['wards'])->map(function ($ward) {
+            return [
+                'ward_id' => $ward['code'],
+                'ward_name' => $ward['name']
+            ];
+        })->toArray();
     }
     public function fetchDetailUser()
     {
@@ -141,7 +146,7 @@ class Address extends Component
                   ->where('user_type', $user_type)
                   ->first();
         
-        if ($this->account && $this->account->user_type === 'App\Models\Customer') {
+        if ($this->account && $this->account->user_type === config('constants.user.customer')) {
             $customer = Customer::find($this->account['user_id']);
 
             if ($customer) {
@@ -161,25 +166,7 @@ class Address extends Component
                 $this->createdAt = $customer->created_at->format('Y-m-d');
             }
         }
-        else if($this->account && $this->account->user_type !== 'App\Models\Customer'){
-            $employee=Employee::find($this->account['user_id']);
-            if($employee){
-                $nameParts = explode(' ', $employee->full_name);
-                if(count($nameParts)>=2){
-                    $this->firstName = array_shift($nameParts);
-                    $this->fullName = implode(' ', $nameParts);
-                }
-                else{
-                    $this->firstName='';
-                    $this->fullName=array_shift($nameParts);
-                }
-                                // Gán các thông tin còn lại
-                $this->numberPhone = $employee->phone;
-                $this->idrole = $employee->id_role;
-                $this->salary=$employee->salary;
-                $this->createdAt = $employee->created_at->format('Y-m-d');
-            }
-        }
+        $this->email=$this->account['email'];
     }
     public function getSessionData()
     {
@@ -195,6 +182,8 @@ class Address extends Component
     {
     session()->forget(['user_id', 'user_type']);
     }
+
+
     public function render()
     {
         return view('livewire.user.address');

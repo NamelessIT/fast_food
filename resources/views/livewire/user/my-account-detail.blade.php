@@ -18,8 +18,15 @@
                     <input type="number" class="form-control" id="NumberPhone" wire:model="numberPhone" disabled required>
                 </div>
                 <div class="mb-3">
+                    <label for="Email" class="form-label">Địa chỉ Email của bạn *</label>
+                    <input type="text" class="form-control" id="Email" wire:model="email" disabled required>
+                </div>
+                <div class="mb-3">
+                    @if(session('user_type')===config('constants.user.customer'))
                     <label for="Point" class="form-label">Số Điểm</label>
-                    <input type="number" class="form-control" id="Point" wire:model="point" disabled>
+                    <input type="number" class="form-control" id="Point" wire:model="point" disabled>                
+                    @endif
+
                 </div>
                 <div class="mb-3">
                     <label for="CreatedAt" class="form-label">Ngày tạo</label>

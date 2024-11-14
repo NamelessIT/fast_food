@@ -58,9 +58,10 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
     <script src="{{ asset('js/allert.js') }}"></script>
+    <script src="{{ asset('js/customers.js') }}"></script>
     <!-- Section for individual page JS -->
-    @yield('custom-js')
     @livewireScripts
+    @yield('custom-js')
 </body>
 
 </html>

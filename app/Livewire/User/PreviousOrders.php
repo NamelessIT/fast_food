@@ -4,7 +4,9 @@ namespace App\Livewire\User;
 
 use Livewire\Component;
 use App\Models\Bill;
+use App\Models\Receipt;
 use App\Models\BillDetail;
+use App\Models\ReceiptDetail;
 use App\Models\Account;
 use App\Models\Customer;
 use App\Models\Employee;
@@ -13,13 +15,18 @@ class PreviousOrders extends Component
 {
     public $account;
     public $bills = [];
-    public $cau1="";
+    public $receipts=[];
 
     //tự động được gọi khi component được khởi động
     public function mount()
     {
         $this->fetchDetailUser();
-        $this->fetchBills();
+        if(session('user_type')===config('constants.user.customer')){
+            $this->fetchBills();
+        }
+        else{
+            $this->fetchReceipts();
+        }
     }
     public function fetchBills(){
         if($this->account!==null){
@@ -43,6 +50,22 @@ class PreviousOrders extends Component
         ->toArray();
         return $details;
     }
+    public function fetchReceipts(){
+        if($this->account!==null){
+            $this->receipts = Receipt::where('id_employee',$this->account['user_id'])
+            ->select(
+                '*'
+            )->get()->toArray();
+        }
+    }
+    public function fetchReceiptsDetail($receiptId){
+        $details = ReceiptDetail::where('id_receipt', $receiptId)
+        ->join('ingredients', 'receipt_details.id_ingredient', '=', 'ingredients.id')
+        ->select('*')
+        ->get()
+        ->toArray();
+        return $details;
+    }
     //Được gọi khi bất kỳ thuộc tính nào của component được cập nhật.
     public function update(){
 
@@ -55,8 +78,7 @@ class PreviousOrders extends Component
         return redirect("/");
     }
     public function createBill(){  
-        $this->cau1 ="hello";
-        // nhảy vào trang giỏ hàng
+        return route('/list-order');
     }
     public function fetchDetailUser()
     {
@@ -67,45 +89,29 @@ class PreviousOrders extends Component
         $this->account = Account::where('user_id', $user_id)
                   ->where('user_type', $user_type)
                   ->first();
-            if ($this->account && $this->account->user_type === 'App\Models\Customer') {
-                $customer = Customer::find($this->account['user_id']);
-    
-                if ($customer) {
-                    $nameParts = explode(' ', $customer->full_name);
-                    if(count($nameParts)>=2){
-                        $this->firstName = array_shift($nameParts);
-                        $this->fullName = implode(' ', $nameParts);
-                    }
-                    else{
-                        $this->firstName='';
-                        $this->fullName=array_shift($nameParts);
-                    }
-    
-                    // Gán các thông tin còn lại
-                    $this->numberPhone = $customer->phone;
-                    $this->point = $customer->points;
-                    $this->createdAt = $customer->created_at->format('Y-m-d');
+        
+        if ($this->account && $this->account->user_type === config('constants.user.customer')) {
+            $customer = Customer::find($this->account['user_id']);
+
+            if ($customer) {
+                $nameParts = explode(' ', $customer->full_name);
+                if(count($nameParts)>=2){
+                    $this->firstName = array_shift($nameParts);
+                    $this->fullName = implode(' ', $nameParts);
                 }
-            }
-            else if($this->account && $this->account->user_type !== 'App\Models\Customer'){
-                $employee=Employee::find($this->account['user_id']);
-                if($employee){
-                    $nameParts = explode(' ', $employee->full_name);
-                    if(count($nameParts)>=2){
-                        $this->firstName = array_shift($nameParts);
-                        $this->fullName = implode(' ', $nameParts);
-                    }
-                    else{
-                        $this->firstName='';
-                        $this->fullName=array_shift($nameParts);
-                    }
-                                    // Gán các thông tin còn lại
-                    $this->numberPhone = $employee->phone;
-                    $this->idrole = $employee->id_role;
-                    $this->salary=$employee->salary;
-                    $this->createdAt = $employee->created_at->format('Y-m-d');
+                else{
+                    $this->firstName='';
+                    $this->fullName=array_shift($nameParts);
                 }
+
+                // Gán các thông tin còn lại
+                $this->numberPhone = $customer->phone;
+                $this->point = $customer->points;
+                $this->createdAt = $customer->created_at->format('Y-m-d');
+                $this->email=$this->account['email'];
             }
+        }
+
     }
     public function getSessionData()
     {

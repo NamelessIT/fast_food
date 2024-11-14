@@ -2,6 +2,7 @@
 
 namespace App\Livewire\User;
 
+use App\Models\Role;
 use Livewire\Component;
 use App\Models\Account;
 use App\Models\Customer;
@@ -13,9 +14,11 @@ class MyAccountDetail extends Component
     public $firstName;
     public $fullName;
     public $numberPhone;
+    public $email;
     public $point;
     public $createdAt;
     public $idrole;
+    public $role;
     public $salary;
 
     public function mount()
@@ -33,7 +36,7 @@ class MyAccountDetail extends Component
                   ->where('user_type', $user_type)
                   ->first();
         
-        if ($this->account && $this->account->user_type === 'App\Models\Customer') {
+        if ($this->account && $this->account->user_type === config('constants.user.customer')) {
             $customer = Customer::find($this->account['user_id']);
 
             if ($customer) {
@@ -50,26 +53,8 @@ class MyAccountDetail extends Component
                 // Gán các thông tin còn lại
                 $this->numberPhone = $customer->phone;
                 $this->point = $customer->points;
+                $this->email=$this->account['email'];
                 $this->createdAt = $customer->created_at->format('Y-m-d');
-            }
-        }
-        else if($this->account && $this->account->user_type !== 'App\Models\Customer'){
-            $employee=Employee::find($this->account['user_id']);
-            if($employee){
-                $nameParts = explode(' ', $employee->full_name);
-                if(count($nameParts)>=2){
-                    $this->firstName = array_shift($nameParts);
-                    $this->fullName = implode(' ', $nameParts);
-                }
-                else{
-                    $this->firstName='';
-                    $this->fullName=array_shift($nameParts);
-                }
-                                // Gán các thông tin còn lại
-                $this->numberPhone = $employee->phone;
-                $this->idrole = $employee->id_role;
-                $this->salary=$employee->salary;
-                $this->createdAt = $employee->created_at->format('Y-m-d');
             }
         }
     }

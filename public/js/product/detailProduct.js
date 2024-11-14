@@ -1,5 +1,5 @@
 const createOdometer = (element, valuePast, valueCurrent) => {
-    const odometer = new Odometer({
+    const odometer = new odometer({
         el: element,
         format: "(.ddd),dd",
         value: valuePast,

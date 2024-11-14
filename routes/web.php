@@ -3,6 +3,7 @@
 use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Product\CategoryController;
+use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\Auth\CheckUserLogin;
 use App\Http\Middleware\Auth\CheckUserWithoutLogin;
 use App\Http\Controllers\Home\HomeController;
@@ -52,11 +53,11 @@ Route::group(['prefix' => '/user'], function () {
     Route::get('/', function () {
         return redirect('/user/index');
     });
-    Route::get('/index', function () {
-        return view('users.index');
-    })->name('user.index');
+    Route::get('/index', [UserController::class,'index'])->name('user.index');
 
 });
+Route::delete('/delete-address/{id}', [UserController::class, 'deleteAddress'])->name('delete.address');
+
 Route::fallback(function () {
     abort(404);
 });

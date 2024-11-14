@@ -55,10 +55,21 @@ class Total extends Component
         }
 
         $this->addressList = $listTmp;
-
-        //bill
-        $this->order = Order::where("id_customer", Auth::user()->user_id)->first();
-        $this->totalBill =  $this->order->products->sum("pivot.total_price");
+      
+        
+         $order = Order::where("id_customer", Auth::user()->user_id)->first();
+         if($order){            
+             $this->totalPrice = $order->products->sum(function($product) {
+                        return $product->pivot->total_price;  
+            });
+         }
+         else{
+            return 0;
+         }
+           
+         
+        
+        
     }
 
     public function chooseAddress()

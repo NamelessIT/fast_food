@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Account;
-
 use App\Models\account;
 use App\Models\Customer;
 use Auth;

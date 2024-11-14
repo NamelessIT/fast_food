@@ -19,11 +19,17 @@ class ListOrder extends Component
     public function mount()
     {
         if (Auth::check()) {
-            $this->order = Order::where("id_customer", Auth::user()->user_id)->first();
-
-            $this->listOrder = $this->order ? $this->order->products : new Collection();
+            $order = Order::find(Auth::user()->user_id);
+            if ($order) {
+                // Nếu tìm thấy order, gán listOrder bằng danh sách sản phẩm của order
+                $this->listOrder = $order->products;
+            } else {
+                // Nếu không tìm thấy order, giữ listOrder là một mảng rỗng
+                $this->listOrder = [];
+            }
         } else {
-            redirect()->route("account.index");
+            // Nếu người dùng chưa đăng nhập, giữ listOrder là một mảng rỗng
+            $this->listOrder = [];
         }
     }
 
