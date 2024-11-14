@@ -1,27 +1,19 @@
-<div class="range-price">
-    <div class="custom-wrapper">
-
-        <div class="price-input-container">
-            <div class="price-input">
-                <div class="price-field">
-                    <span>Minimum Price</span>
-                    <input type="number" class="min-input" value="1000">
-                </div>
-                <div class="price-field">
-                    <span>Maximum Price</span>
-                    <input type="number" class="max-input" value="1000000">
-                </div>
-            </div>
-            <div class="slider-container">
-                <div class="price-slider">
-                </div>
-            </div>
+<div class="range-price container-fluid p-3 mt-4 rounded-3">
+    {{-- {{dd (URL::previous())}} --}}
+    <form wire:submit.prevent="handleFilter()" class="d-flex flex-column justify-content-center align-items-center">
+        <div class="form-group p-0">
+            <input type="number" name="min-price" id="min-price" class="form-control" placeholder="Min Price" wire:model="minPrice">
+            @error('minPrice')
+                <span class="text-danger mt-2 mx-2">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group mt-3 p-0">
+            <input type="number" name="max-price" id="max-price" class="form-control" placeholder="Max Price" wire:model="maxPrice">
+            @error('maxPrice')
+            <span class="text-danger mt-2 mx-2">{{ $message }}</span>
+            @enderror
         </div>
 
-        <!-- Slider -->
-        <div class="range-input">
-            <input type="range" class="min-range" min="0" max="1000" value="1000" step="1">
-            <input type="range" class="max-range" min="0" max="1000000" value="50000" step="1">
-        </div>
-    </div>
+        <button type="submit" class="btn btn-primary mt-3">Tìm kiếm</button>
+    </form>
 </div>

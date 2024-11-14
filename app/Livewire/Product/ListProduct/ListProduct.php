@@ -26,17 +26,33 @@ class ListProduct extends Component
 
         $categories = explode( '-',request()->query('category'));
         $search = request()->query('search');
+        $minPrice = request()->query('minPrice');
+        $maxPrice = request()->query('maxPrice');
         if ($categories && count($categories) > 0 && $categories[0] != '') {
             $category = Category::whereIn('slug', $categories)->pluck('id');
 
-            $this->listProductItem = Product::whereIn('id_category', $category)->skip ($offset)->take ($limit)->get ();
-
+            if ($minPrice && $maxPrice) {
+                $this->listProductItem = Product::whereIn('id_category', $category)->whereBetween('price', [$minPrice, $maxPrice])->skip ($offset)->take ($limit)->get ();
+            }
+            else {
+                $this->listProductItem = Product::whereIn('id_category', $category)->skip ($offset)->take ($limit)->get ();
+            }
         }
         else if ($search) {
-            $this->listProductItem = Product::where('product_name', 'like', '%' . $search . '%')->skip ($offset)->take ($limit)->get ();
+            if ($minPrice && $maxPrice) {
+                $this->listProductItem = Product::where('product_name', 'like', '%' . $search . '%')->whereBetween('price', [$minPrice, $maxPrice])->skip ($offset)->take ($limit)->get ();
+            }
+            else {
+                $this->listProductItem = Product::where('product_name', 'like', '%' . $search . '%')->skip ($offset)->take ($limit)->get ();
+            }
         }
         else {
-            $this->listProductItem = Product::all()->skip ($offset)->take ($limit);
+            if ($minPrice && $maxPrice) {
+                $this->listProductItem = Product::whereBetween('price', [$minPrice, $maxPrice])->skip ($offset)->take ($limit)->get ();
+            }
+            else {
+                $this->listProductItem = Product::all()->skip ($offset)->take ($limit);
+            }
         }
     }
 

@@ -9,7 +9,9 @@
                     href="{{ route('product.list-product', [
                         'category' => request()->query('category'),
                         'page' => $pageCurrent - 1,
-                        'search' => request()->query('search')
+                        'search' => request()->query('search'),
+                        'minPrice' => request()->query('minPrice'),
+                        'maxPrice' => request()->query('maxPrice'),
                     ]) }}"
                     aria-label="Previous" wire:navigate>
                     <span aria-hidden="true">&laquo;</span>
@@ -24,7 +26,9 @@
                         href="{{ route('product.list-product', [
                             'category' => request()->query('category'),
                             'page' => $i,
-                            'search' => request()->query('search')
+                            'search' => request()->query('search'),
+                            'minPrice' => request()->query('minPrice'),
+                            'maxPrice' => request()->query('maxPrice'),
                         ]) }}"
                         wire:navigate>{{ $i }}</a>
                 </li>
@@ -37,6 +41,9 @@
                     href="{{ route('product.list-product', [
                         'category' => request()->query('category'),
                         'page' => $pageCurrent + 1,
+                        'search' => request()->query('search'),
+                        'minPrice' => request()->query('minPrice'),
+                        'maxPrice' => request()->query('maxPrice'),
                     ]) }}"
                     aria-label="Next" wire:navigate>
                     <span aria-hidden="true">&raquo;</span>
