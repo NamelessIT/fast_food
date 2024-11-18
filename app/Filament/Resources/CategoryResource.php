@@ -34,24 +34,31 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
+                // Trường 'category_name' và cập nhật 'slug'
                 TextInput::make('category_name')
                     ->unique(ignoreRecord: true)
                     ->required()
                     ->afterStateUpdated(fn (string $state, callable $set) => $set('slug', Str::slug($state))),
+
+                // Trường mô tả
                 TextInput::make('description'),
+
+                // Trường trạng thái
                 Checkbox::make('status')
                     ->default(true),
-                // Sử dụng View để hiển thị ảnh Base64
+
+                // Hiển thị ảnh nếu có bản ghi, tránh lỗi khi không có bản ghi
                 View::make('image')
                     ->label('Current Image')
                     ->view('filament.show-image', [
-                        'imageBase64' => $form->getRecord()->image,  // Lấy ảnh Base64 từ bản ghi
+                        // Sử dụng optional để tránh lỗi khi bản ghi là null
+                        'imageBase64' => optional($form->getRecord())->image, 
                     ]),
+
+                // Trường tải ảnh mới và chuyển sang Base64
                 FileUpload::make('image_file')
                     ->label('Upload/Change Image')
-                    //->image()  // Giới hạn chỉ tải ảnh
-                    //->required()
-                    ->directory('images')  // Chỉ định thư mục lưu trữ tạm thời
+                    ->directory('images')  // Thư mục lưu trữ tạm
                     ->afterStateUpdated(function ($state, callable $set) {
                         if ($state) {
                             // Đọc file và chuyển thành Base64
@@ -65,12 +72,16 @@ class CategoryResource extends Resource
                             unlink($state->getRealPath());
                         }
                     }),
+
+                // Trường ẩn 'image' lưu giá trị Base64 ảnh
                 Hidden::make('image')
                     ->default(function ($record) {
-                        // Lấy ảnh Base64 từ cơ sở dữ liệu và lưu vào trường ẩn image
-                        return $record->image;
+                        // Kiểm tra bản ghi có tồn tại và có ảnh không
+                        return $record && isset($record->image) ? $record->image : null;
                     }),
-                Hidden::make('slug')
+
+                // Trường ẩn 'slug'
+                Hidden::make('slug'),
             ]);
     }
 

@@ -24,6 +24,8 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\View;
 use Filament\Infolists\Components\Fieldset as ComponentsFieldset;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ImageColumn;
@@ -106,9 +108,41 @@ class EmployeeResource extends Resource
                             ->password()
                             ->revealable(),
 
-                        FileUpload::make('avatar')
+/*                         FileUpload::make('avatar')
                             ->disk('public')
-                            ->directory('images/avatar'),
+                            ->directory('images/avatar'), */
+
+                        View::make('account.avatar')
+                            ->label('Current Image')
+                            ->view('filament.show-image', [
+                                'imageBase64' => $form->getRecord() && $form->getRecord()->account ? $form->getRecord()->account->avatar : null,
+                            ]),
+
+                        // Trường tải ảnh mới và chuyển sang Base64
+                        FileUpload::make('avatar_img')
+                            ->label('Upload/Change Image')
+                            ->directory('images')  // Thư mục lưu trữ tạm
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                if ($state) {
+                                    // Đọc file và chuyển thành Base64
+                                    $imageData = file_get_contents($state->getRealPath());
+                                    $imageBase64 = base64_encode($imageData);
+
+                                    // Lưu Base64 vào cột image trong cơ sở dữ liệu
+                                    $set('avatar', 'data:image/jpeg;base64,' . $imageBase64);
+
+                                    // Xóa file tạm sau khi chuyển đổi sang Base64
+                                    unlink($state->getRealPath());
+                                }
+                            }),
+
+                        // Trường ẩn 'image' lưu giá trị Base64 ảnh
+                        Hidden::make('avatar')
+                            ->default(function ($record) {
+                                // Kiểm tra bản ghi có tồn tại và có ảnh không
+                                return $record && isset($record->image) ? $record->image : null;
+                            }),
+
                         TextInput::make('email')
                             ->unique(ignoreRecord: true) // Bỏ qua email hiện tại của bản ghi khi cập nhật
                             ->markAsRequired()
@@ -122,7 +156,6 @@ class EmployeeResource extends Resource
                         Checkbox::make('status')
                             ->default(true),
                     ]),
-
             ]);
     }
 
@@ -135,12 +168,17 @@ class EmployeeResource extends Resource
                     ->label('Họ và tên nhân viên')
                     ->sortable()
                     ->searchable(),
-                ImageColumn::make('account.avatar')
+/*                 ImageColumn::make('account.avatar')
                     ->toggleable(isToggledHiddenByDefault:true)
                     ->label('Avatar')
                     ->circular()
                     ->size(100)
-                    ->sortable(),
+                    ->sortable(), */
+
+                TextColumn::make('account.avatar')
+                    ->label('Avatar')
+                    ->formatStateUsing(fn($state) => "<img src='{$state}' style='width: 100px; height: 100px;' />")
+                    ->html(),
                 TextColumn::make('account.username')
                     ->toggleable(isToggledHiddenByDefault:true)
                     ->label('Username')

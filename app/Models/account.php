@@ -20,7 +20,6 @@ class Account extends Authenticatable implements HasName
      * @var array<int, string>
      */
     protected $fillable = [
-        'id_user',
         'full_name',
         'email',
         'username',

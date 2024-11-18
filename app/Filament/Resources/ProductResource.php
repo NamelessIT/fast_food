@@ -65,13 +65,7 @@ class ProductResource extends Resource
                     })
                     ->helperText('This is the image in base64 format'), */
 
-                    // Trường View để render ảnh Base64
-                // Sử dụng View để hiển thị ảnh Base64
-                View::make('image_show')
-                    ->label('Current Image')
-                    ->view('filament.show-image', [
-                        'imageBase64' => $form->getRecord()->image_show,  // Lấy ảnh Base64 từ bản ghi
-                    ]),
+
 
 
 /*                 FileUpload::make('image_file')
@@ -96,31 +90,36 @@ class ProductResource extends Resource
 
                 Hidden::make('image_show'), */ // Cột lưu dữ liệu Base64
 
+                // Trường View để render ảnh Base64
+                // Sử dụng View để hiển thị ảnh Base64
+                View::make('image_show')
+                    ->label('Current Image')
+                    ->view('filament.show-image', [
+                        'imageBase64' => optional($form->getRecord())->image_show,  // Tránh lỗi khi bản ghi là null
+                    ]),
+
                 FileUpload::make('image_file')
-                ->label('Upload/Change Image')
-                //->image()  // Giới hạn chỉ tải ảnh
-                //->required()
-                ->directory('images')  // Chỉ định thư mục lưu trữ tạm thời
-                ->afterStateUpdated(function ($state, callable $set) {
-                    if ($state) {
-                        // Đọc file và chuyển thành Base64
-                        $imageData = file_get_contents($state->getRealPath());
-                        $imageBase64 = base64_encode($imageData);
+                    ->label('Upload/Change Image')
+                    ->directory('images')  // Chỉ định thư mục lưu trữ tạm thời
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        if ($state) {
+                            // Đọc file và chuyển thành Base64
+                            $imageData = file_get_contents($state->getRealPath());
+                            $imageBase64 = base64_encode($imageData);
 
-                        // Lưu Base64 vào cột image_show trong cơ sở dữ liệu
-                        $set('image_show', 'data:image/jpeg;base64,' . $imageBase64);
+                            // Lưu Base64 vào cột image_show trong cơ sở dữ liệu
+                            $set('image_show', 'data:image/jpeg;base64,' . $imageBase64);
 
-                        // Xóa file tạm sau khi chuyển đổi sang Base64
-                        unlink($state->getRealPath());
-                    }
-                })
-                ,
+                            // Xóa file tạm sau khi chuyển đổi sang Base64
+                            unlink($state->getRealPath());
+                        }
+                    }),
 
-            Hidden::make('image_show')
-                ->default(function ($record) {
-                    // Lấy ảnh Base64 từ cơ sở dữ liệu và lưu vào trường ẩn image_show
-                    return $record->image_show;
-                }),
+                Hidden::make('image_show')
+                    ->default(function ($record) {
+                        // Kiểm tra bản ghi có tồn tại và có ảnh không
+                        return optional($record)->image_show; // Tránh lỗi khi bản ghi là null
+                    }),
 
 
                 Checkbox::make('status')
