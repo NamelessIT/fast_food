@@ -3,17 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Product;
 use Filament\Forms;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\MarkdownEditor;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -26,10 +23,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\View;
-use Filament\Forms\Components\Text;
-use Filament\Tables\Columns\TextInputColumn;
-use Illuminate\Support\HtmlString;
-use Nette\Utils\Html;
+
 
 class ProductResource extends Resource
 {
