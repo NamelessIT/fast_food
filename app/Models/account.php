@@ -20,7 +20,8 @@ class Account extends Authenticatable implements HasName
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
+        'id_user',
+        'full_name',
         'email',
         'username',
         'password',
@@ -56,9 +57,4 @@ class Account extends Authenticatable implements HasName
     public function user () {
         return $this->morphTo('user','user_type','id_user');
     }
-
-    public function getFilamentName(): string{
-        return $this->username;
-    }
-
 }

@@ -91,12 +91,41 @@ body {
     margin-left: 20px;
 }
 .list-group-item{
-    cursor: pointer;
+    cursor: text;
     margin: 5px 0;
     /* border: var(--bs-list-group-border-width) 1px solid black; */
     border: 1px solid black;
     border-top-width: 1px !important;
+    border-radius: 10px;
 }
-.list-group-item:hover{
-    box-shadow: 2px 2px 2px #aaa;
+/* .list-group-item-BillDetail{
+
+} */
+.list-group-item-BillDetail:hover{
+    /* box-shadow: 2px 2px 2px #aaa; */
+    cursor: pointer;
 }
+.address-form {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-20%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 400px;
+        z-index: 1050;
+    }
+
+    .custom-scroll {
+        max-height: 560px; /* Đặt chiều cao tối đa */
+        overflow-y: auto;  /* Cho phép cuộn dọc */
+    }
+    .seperated{
+        border: 4px solid #ccc;
+        margin: 10px 0;
+    }
+    .itemAddress{
+        cursor: pointer;
+    }

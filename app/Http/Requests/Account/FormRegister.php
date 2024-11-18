@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Account;
 
+use Cache;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -20,15 +21,18 @@ class FormRegister extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules($email): array
     {
+        $cachedOtp = Cache::get('otp_' . $email);
+        // dd ($cachedOtp);
         return [
             'email' => ['required', 'email', 'unique:accounts,email'],
             'fullname' => ['required', 'regex:/^[a-zA-ZÀ-ỹ\s]*$/', 'min:3'],
             'phoneNumber' => ['required', 'numeric', 'digits:10', Rule::unique('customers', 'phone'), Rule::unique('employees', 'phone')],
             'username' => 'required|unique:accounts,username',
             'password' => 'required|min:6',
-            'avatar' => 'image|max:3072'
+            'avatar' => 'image|max:3072',
+            'otp' => ['required', Rule::in([$cachedOtp])],
         ];
     }
 
@@ -54,7 +58,10 @@ class FormRegister extends FormRequest
             'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự',
 
             'avatar.image' => 'Ảnh đại diện phải là hình ảnh',
-            'avatar.max' => 'Ảnh đại diện phải nhỏ hơn 3MB'            
+            'avatar.max' => 'Ảnh đại diện phải nhỏ hơn 3MB',
+
+            'otp.required' => 'Mã OTP là bắt buộc email',
+            'otp.in' => 'Mã OTP không đúng',
         ];
     }
 }

@@ -1,0 +1,27 @@
+    .slideShowWrapper {
+        .carousel-item {
+            img {
+                object-position: center;
+                overflow: hidden;
+                height: 700px;
+                max-height: 700px;
+            }
+
+        }
+
+        .carousel-indicators {
+            display: flex;
+            flex-direction: column;
+            inset: 0% 0% 0% auto;
+            button {
+                width: 10px;
+                height: 10px;
+                opacity: 1;
+                background-color: #fff !important;
+                &.active {
+                    background-color: var(--sandyBrown) !important;
+                }
+            }
+
+        }
+    }

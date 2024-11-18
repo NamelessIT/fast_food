@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Str;
 
 class ProductSeeder extends Seeder
 {
@@ -38,16 +39,13 @@ class ProductSeeder extends Seeder
         $image15 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/c/o/combo_l-chicken__1.png'));
         $image16 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/c/o/combo_beef_1.png'));
 
-        DB::table('products')->insert([
-            // burger
+        $products = [
             [
                 'id_category' => 1,
                 'product_name' => 'Burger Gà Sốt Buldak',
                 'cod_price' => 40000,
                 'price' => 52000,
                 'image_show' => $image1,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 1,
@@ -55,8 +53,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 35000,
                 'price' => 49000,
                 'image_show' => $image2,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 1,
@@ -64,8 +60,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 35000,
                 'price' => 49000,
                 'image_show' => $image3,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 1,
@@ -73,8 +67,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 45000,
                 'price' => 52000,
                 'image_show' => $image4,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
 
                 // gà rán
@@ -84,8 +76,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 30000,
                 'price' => 41000,
                 'image_show' => $image5,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 2,
@@ -93,8 +83,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 30000,
                 'price' => 41000,
                 'image_show' => $image6,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 2,
@@ -102,8 +90,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 90000,
                 'price' => 117000,
                 'image_show' => $image7,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 2,
@@ -111,8 +97,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 28000,
                 'price' => 36000,
                 'image_show' => $image8,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
 
             // đồ uống
@@ -122,8 +106,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 17000,
                 'price' => 22000,
                 'image_show' => $image9,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 3,
@@ -131,8 +113,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 23000,
                 'price' => 30000,
                 'image_show' => $image10,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 3,
@@ -140,8 +120,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 21000,
                 'price' => 30000,
                 'image_show' => $image11,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 3,
@@ -149,8 +127,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 10000,
                 'price' => 14000,
                 'image_show' => $image12,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
 
             // combo
@@ -160,8 +136,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 65000,
                 'price' => 72000,
                 'image_show' => $image13,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 4,
@@ -169,8 +143,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 92000,
                 'price' => 102000,
                 'image_show' => $image14,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 4,
@@ -178,8 +150,6 @@ class ProductSeeder extends Seeder
                 'cod_price' => 70000,
                 'price' => 84000,
                 'image_show' => $image15,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'id_category' => 4,
@@ -187,9 +157,18 @@ class ProductSeeder extends Seeder
                 'cod_price' => 49000,
                 'price' => 57000,
                 'image_show' => $image16,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
-        ]);
+        ];
+
+        foreach ($products as $productData) {
+            $productData['created_at'] = Carbon::now();
+            $productData['updated_at'] = Carbon::now();
+            
+            $product = DB::table('products')->insertGetId($productData);
+            
+            $slug = Str::slug($productData['product_name'] . '-' . $product);
+        
+            DB::table('products')->where('id', $product)->update(['slug' => $slug]);
+        }
     }
 }

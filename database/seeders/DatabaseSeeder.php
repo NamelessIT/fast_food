@@ -21,6 +21,15 @@ class DatabaseSeeder extends Seeder
         ]);*/
         $this->call(CategorySeeder::class);
         $this->call(ProductSeeder::class);
+        $this->call(SlideSeeder::class);
+        $this->call(VoucherSeeder::class);
+        $this->call(ExtraFoodSeeder::class);
+        $this->call(ExtraFoodDetailSeeder::class);
+        // $this->call(CustomerSeeder::class);
+        // $this->call(AccountSeeder::class);
+        // $this->call(OrderSeeder::class);
+        // $this->call(OrderDetailSeeder::class);
+
 
     }
 }

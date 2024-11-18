@@ -1,10 +1,14 @@
 @extends('../components/layouts.main')
 
 @section('title')
-    Tài khoản
+    @if (Route::currentRouteName() == 'account.index')
+        Đăng nhập
+    @elseif (Route::currentRouteName() == 'account.register')
+        Đăng ký
+    @endif
 @endsection
 
-@section('js-header')
+@section('custom-header-js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 
@@ -27,11 +31,27 @@
         </script>
     @endif
 
-    @livewire('account.form', [
-        'form' => 'login',
-    ])
+    @livewire('account.form')
+
+    @if (Route::currentRouteName() == 'account.index')
+        <div class="signup mb-2 text-center">
+            Bạn chưa có tài khoản?
+            <a href="{{ route('account.register') }}" wire:navigate style="cursor: pointer"
+                class="fw-bold text-black">
+                Đăng ký
+            </a>
+        </div>
+    @elseif (Route::currentRouteName() == 'account.register')
+        <div class="login mb-2 text-center">
+            Bạn đã có tài khoản?
+            <a href="{{ route('account.index') }}" wire:navigate style="cursor: pointer"
+            class="fw-bold text-black">
+                Đăng nhập
+            </a>
+        </div>
+    @endif
 @endsection
 
 @section('custom-js')
-    {{-- @livewireScriptConfig --}}
+    @livewireScripts
 @endSection
