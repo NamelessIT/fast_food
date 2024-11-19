@@ -13,6 +13,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\On;
+use App\Models\Payment;
 
 class Total extends Component
 {
@@ -25,10 +26,10 @@ class Total extends Component
 
     public $address = '';
     public $detailAddress = '';
-    protected $listeners = ['voucherApplied'];
+    protected $listeners = ['voucherApplied','removeVoucher'];
 
     public $selectedVoucher = null;
-
+    public $tempTotalPrice ;
     public $order;
     public $totalBill;
     public function mount()
@@ -57,11 +58,12 @@ class Total extends Component
         $this->addressList = $listTmp;
       
         
-         $order = Order::where("id_customer", Auth::user()->user_id)->first();
-         if($order){            
-             $this->totalPrice = $order->products->sum(function($product) {
+         $this->order = Order::where("id_customer", Auth::user()->user_id)->first();
+         if($this->order){            
+             $this->tempTotalPrice = $this->order->products->sum(function($product) {
                         return $product->pivot->total_price;  
             });
+            $this->totalBill = $this->tempTotalPrice;
          }
          else{
             return 0;
@@ -171,25 +173,44 @@ class Total extends Component
         ]);
         return $query;
     }
-    public function payment()
+
+    public function createPayment()
     {
+        
         if ($this->idAddressChoose == 0) {
             $this->dispatch('paymentError');
-            return;
+            return null;
         }
-        if ($this->totalBill==0){
+
+        if ($this->totalBill == 0) {
             $this->dispatch('empty_order');
+            return null;
         }
-        if ($this->selectedVoucher != null) {
-            $this->totalBill -=  $this->totalBill * (float)($this->selectedVoucher->discount_percent / 100);
+
+    
+        $payment = Payment::create([
+            "payment_name" => \Illuminate\Support\Str::random(20),
+            "created_at" => Carbon::now(),
+            "updated_at" => Carbon::now()
+        ]);
+        
+        
+        return $payment;
+    }
+    public function payment()
+    {
+        $payment = $this->createPayment();
+        if (!$payment) {
+            return; 
         }
+    
 
         $bill = Bill::create([
             "id_customer" => Auth::user()->user_id,
             "id_address" => $this->idAddressChoose,
-            "id_payment" => 1,
-            "id_voucher" => $this->selectedVoucher->id ?? 0,
-            "total" =>  $this->totalBill,
+            "id_payment" => $payment->id,
+            "id_voucher" => $this->selectedVoucher['id'] ?? null,
+            "total" =>  $this->tempTotalPrice,
             "point_receive" => (float) $this->totalBill * 0.1,
             "status" => 1,
             "created_at" => Carbon::now(),
@@ -214,6 +235,7 @@ class Total extends Component
                 // If success delete order detail row and re-render
                 if ($bill && $billDetails) {
                     $delete = OrderDetail::where("id_order", $this->order->id)->delete();
+                    
                     if ($delete) {
 
                         $this->dispatch('order_success');
@@ -228,13 +250,22 @@ class Total extends Component
     public function render()
     {
         return view('livewire.order.list-order.total', [
-            "totalPrice" =>  $this->totalBill,
+            "totalPrice" =>  $this->tempTotalPrice,
         ]);
     }
     public function voucherApplied($voucher)
     {
         $this->selectedVoucher = $voucher;
-        dd($this->selectedVoucher);
+        $this->totalBill = $this->tempTotalPrice -  $this->tempTotalPrice* (float)($voucher['discount_percent'] / 100);
+
+        
+    }
+    public function removeVoucher()
+    {
+        $this->selectedVoucher = null;
+        $this->totalBill = $this->tempTotalPrice;
+
+        
     }
 
 
@@ -242,6 +273,12 @@ class Total extends Component
     #[On('refresh')]
     public function re_render()
     {
-        $this->totalBill = $this->order->products->sum("pivot.total_price");
+        if ($this->order) {
+            $this->tempTotalPrice = $this->order->products->sum("pivot.total_price");
+            $this->selectedVoucher !== null ? $this->voucherApplied($this->selectedVoucher) : $this->totalBill=$this->tempTotalPrice;
+
+        } else {
+            $this->tempTotalPrice = 0; 
+        }
     }
 }

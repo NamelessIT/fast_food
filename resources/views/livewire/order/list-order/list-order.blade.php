@@ -17,7 +17,8 @@
                     'quantity' => $order->pivot->quantity,
                     'priceProduct' => $order->price,
                     'totalPrice' => $order->pivot->total_price,
-                ])
+                ],
+                key('order-' . $order->pivot->id))
             @endforeach
         @endif
 
