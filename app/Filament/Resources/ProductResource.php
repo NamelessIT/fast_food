@@ -125,10 +125,10 @@ class ProductResource extends Resource
                 Checkbox::make('status')
                     ->default(true),
 
-                    Forms\Components\Repeater::make('recipes')
+                Forms\Components\Repeater::make('recipes')
                     ->relationship('recipes')
                     ->schema([
-                        Forms\Components\Select::make('id_ingredient')
+                        Select::make('id_ingredient')
                             ->relationship('ingredient', 'ingredient_name')
                             ->label('Ingredient')
                             ->required()
@@ -148,10 +148,10 @@ class ProductResource extends Resource
                             }) */
                             ->preload()
                             ->searchable(),
-                        Forms\Components\TextInput::make('unit')
+                        TextInput::make('unit')
                             ->label('Unit')
                             ->disabled(), // Chỉ hiển thị, không cho phép chỉnh sửa
-                        Forms\Components\TextInput::make('quantity')
+                        TextInput::make('quantity')
                             ->numeric()
                             ->required(),
                     ])

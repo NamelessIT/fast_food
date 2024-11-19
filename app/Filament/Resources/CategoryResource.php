@@ -52,7 +52,7 @@ class CategoryResource extends Resource
                     ->label('Current Image')
                     ->view('filament.show-image', [
                         // Sử dụng optional để tránh lỗi khi bản ghi là null
-                        'imageBase64' => optional($form->getRecord())->image, 
+                        'imageBase64' => optional($form->getRecord())->image,
                     ]),
 
                 // Trường tải ảnh mới và chuyển sang Base64
@@ -82,6 +82,17 @@ class CategoryResource extends Resource
 
                 // Trường ẩn 'slug'
                 Hidden::make('slug'),
+
+                Forms\Components\Repeater::make('extra_food')
+                    ->relationship('extraFoodDetails')
+                    ->label('Món gọi thêm')
+                    ->addActionLabel('Thêm món gọi thêm')
+                    ->columnSpanFull()
+                    ->grid(2)
+                    ->defaultItems(0)
+                    ->schema([
+
+                    ])
             ]);
     }
 
