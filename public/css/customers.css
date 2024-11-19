@@ -128,4 +128,5 @@ body {
     }
     .itemAddress{
         cursor: pointer;
+        user-select: none;
     }
