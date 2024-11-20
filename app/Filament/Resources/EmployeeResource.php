@@ -29,6 +29,7 @@ use Filament\Forms\Components\View;
 use Filament\Infolists\Components\Fieldset as ComponentsFieldset;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\SelectColumn;
 
 class EmployeeResource extends Resource
 {
@@ -70,14 +71,14 @@ class EmployeeResource extends Resource
                     }) */,
 
                 Select::make('id_role')
+                    ->markAsRequired()
                     ->label('Phân loại nhân viên')
                     ->options(Role::pluck('role_name', 'id'))
                     ->placeholder('Chọn loại nhân viên')
                     ->rules(['required'])
                     ->validationMessages([
                         'required' => 'Hãy chọn loại nhân viên',
-                    ])
-                    ->markAsRequired(),
+                    ]),
 
                 TextInput::make('salary')
                     ->label('Lương (vnd)')
@@ -153,6 +154,20 @@ class EmployeeResource extends Resource
                                 'unique' => 'email đã tồn tại',
                             ]),
 
+                        Select::make('status')
+                            ->label('Trạng thái')
+                            ->options([
+                                1 => 'Hoạt động',
+                                2 => 'Khóa',
+                            ])
+                            ->default(1) // Mặc định là "Hoạt động"
+                            ->afterStateUpdated(function ($state, $record) {
+                                // Cập nhật lại trạng thái vào cơ sở dữ liệu
+                                $record->status = $state;
+                                $record->save();
+                            })
+                            ->helperText('Chọn trạng thái tài khoản'),
+
                     ]),
             ]);
     }
@@ -188,13 +203,24 @@ class EmployeeResource extends Resource
                     ->sortable(),
                 TextColumn::make('salary')
                     ->sortable()
+                    ->money('VND')
                     ->label('Lương (vnd)'),
                 TextColumn::make('account.email')
                     ->label("Email"),
-                CheckboxColumn::make('account.status')
-                    ->label("Status")
-                    ->toggleable(isToggledHiddenByDefault:true)
-                    ->disabled(),
+
+                SelectColumn::make('account.status') // Cột chọn trạng thái
+                    ->label('Trạng thái')
+                    ->sortable()
+                    ->options([
+                        1 => 'Hoạt động',
+                        2 => 'Khóa',
+                    ])
+                    ->afterStateUpdated(function ($state, $record) {
+                        $record->account->status = $state; // Cập nhật trạng thái trong cơ sở dữ liệu
+                        $record->account->save(); // Lưu thay đổi vào cơ sở dữ liệu
+                    })
+                    ,
+
                 TextColumn::make('created_at')
                     ->toggleable(isToggledHiddenByDefault:true)
                     ->label('Ngày tạo')
@@ -207,12 +233,12 @@ class EmployeeResource extends Resource
             ])
             ->filters([
                 //
-                Tables\Filters\TrashedFilter::make(),
+                //Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\Filter::make('trashed')
                     ->label('Hiển thị nhân viên đã xóa')
                     ->form([
                         Checkbox::make('trashed')  // Tạo một checkbox để chọn lọc
-                            ->label('Nhân viên đã đã xóa')
+                            ->label('Nhân viên đã xóa')
                             ->default(false),  // Mặc định là chưa chọn
                     ])
                     ->query(function ($query, $data) {
@@ -224,7 +250,7 @@ class EmployeeResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                //Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 //Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),

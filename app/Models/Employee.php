@@ -30,20 +30,20 @@ class Employee extends Model
     }
 
     protected static function booted()
-{
-    // Khi xóa mềm
-    static::deleted(function ($model) {
-        // Truy vấn trực tiếp để cập nhật bảng khác
-        DB::table('accounts')
-            ->where('user_id', $model->id)
-            ->update(['status' => 0]);
-    });
+    {
+        // Khi xóa mềm
+        static::deleted(function ($model) {
+            // Truy vấn trực tiếp để cập nhật bảng khác
+            DB::table('accounts')
+                ->where('user_id', $model->id)
+                ->update(['status' => 0]);
+        });
 
-    // Khi khôi phục
-    static::restored(function ($model) {
-        DB::table('accounts')
-            ->where('user_id', $model->id)
-            ->update(['status' => 1]);
-    });
-}
+        // Khi khôi phục
+        static::restored(function ($model) {
+            DB::table('accounts')
+                ->where('user_id', $model->id)
+                ->update(['status' => 1]);
+        });
+    }
 }
