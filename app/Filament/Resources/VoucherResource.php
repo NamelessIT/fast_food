@@ -6,12 +6,14 @@ use App\Filament\Resources\VoucherResource\Pages;
 use App\Filament\Resources\VoucherResource\RelationManagers;
 use App\Models\Voucher;
 use Filament\Forms;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,7 +21,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class VoucherResource extends Resource
 {
     protected static ?string $model = Voucher::class;
-
+    //protected static ?string $label = "Khuyến mãi";
+    protected static ?string $pluralLabel = 'Khuyến mãi';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -109,9 +112,20 @@ class VoucherResource extends Resource
                 ])
             ->filters([
                 //Tables\Filters\TrashedFilter::make(),
-                Tables\Filters\Filter::make('custom_trashed')
-                    ->label('Voucher đã xóa')  // Thay đổi nhãn
-                    ->query(fn ($query) => $query->whereNull('deleted_at')),  // Kiểm tra xem trường 'deleted_at' có giá trị hay không
+                Filter::make('trashed')
+                    ->label('Hiển thị món đã xóa')
+                    ->form([
+                        Checkbox::make('trashed')  // Tạo một checkbox để chọn lọc
+                            ->label('Voucher đã xóa')
+                            ->default(false),  // Mặc định là chưa chọn
+                    ])
+                    ->query(function ($query, $data) {
+                        if ($data['trashed']) {
+                            return $query->onlyTrashed();  // Hiển thị món đã xóa
+                        }
+
+                        return $query->whereNull('deleted_at');  // Hiển thị món chưa xóa
+                    }),
                 Tables\Filters\Filter::make('active')
                     ->default(true)
                     ->label('Voucher đang hoạt động')  // Nhãn bộ lọc
