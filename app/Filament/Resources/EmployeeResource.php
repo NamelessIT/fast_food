@@ -129,7 +129,7 @@ class EmployeeResource extends Resource
                                     $imageBase64 = base64_encode($imageData);
 
                                     // Lưu Base64 vào cột image trong cơ sở dữ liệu
-                                    $set('avatar' . $imageBase64);
+                                    $set('avatar','' . $imageBase64);
 
                                     // Xóa file tạm sau khi chuyển đổi sang Base64
                                     unlink($state->getRealPath());
@@ -153,8 +153,6 @@ class EmployeeResource extends Resource
                                 'unique' => 'email đã tồn tại',
                             ]),
 
-                        Checkbox::make('status')
-                            ->default(true),
                     ]),
             ]);
     }
@@ -210,17 +208,31 @@ class EmployeeResource extends Resource
             ->filters([
                 //
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\Filter::make('trashed')
+                    ->label('Hiển thị nhân viên đã xóa')
+                    ->form([
+                        Checkbox::make('trashed')  // Tạo một checkbox để chọn lọc
+                            ->label('Nhân viên đã đã xóa')
+                            ->default(false),  // Mặc định là chưa chọn
+                    ])
+                    ->query(function ($query, $data) {
+                        if ($data['trashed']) {
+                            return $query->onlyTrashed();  // Hiển thị món đã xóa
+                        }
+
+                        return $query->whereNull('deleted_at');  // Hiển thị món chưa xóa
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
+                //Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    //Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
