@@ -58,7 +58,6 @@ class FormRegister extends Component
             'password' => Hash::make($this->password),
             'avatar' => $base64,
         ]);
-
         $customer->account()->save($account);
 
         Order::create([

@@ -2,6 +2,8 @@
 
 namespace App\Livewire\User;
 
+use App\Models\BillExtraFoodDetail;
+use App\Models\ExtraFoodDetail;
 use Livewire\Component;
 use App\Models\Bill;
 use App\Models\Receipt;
@@ -16,6 +18,7 @@ class PreviousOrders extends Component
     public $account;
     public $bills = [];
     public $receipts=[];
+    public $searchTerm;
 
     //tự động được gọi khi component được khởi động
     public function mount()
@@ -42,30 +45,75 @@ class PreviousOrders extends Component
             )->get()->toArray();
         }
     }
-    public function fetchBillDetail($billId){
+    public function fetchBillDetail($billId)
+    {
         $details = BillDetail::where('id_bill', $billId)
-        ->join('products', 'bill_details.id_product', '=', 'products.id')
-        ->select('*')
-        ->get()
-        ->toArray();
+            ->join('products', 'bill_details.id_product', '=', 'products.id')
+            ->select(
+                'bill_details.id as detail_id',
+                'slug',
+                'products.product_name',
+                'bill_details.quantity',
+                'bill_details.created_at as bill_created_at',
+                'bill_details.updated_at as bill_updated_at'
+            )
+            ->get()
+            ->map(function ($detail) {
+                // Format lại thời gian
+                $detail->bill_created_at = \Carbon\Carbon::parse($detail->bill_created_at)->format('d/m/Y');
+                $detail->bill_updated_at = \Carbon\Carbon::parse($detail->bill_updated_at)->format('d/m/Y');
+                return $detail;
+            })
+            ->toArray();
+    
         return $details;
     }
-    public function fetchReceipts(){
-        if($this->account!==null){
-            $this->receipts = Receipt::where('id_employee',$this->account['user_id'])
-            ->select(
-                '*'
-            )->get()->toArray();
+    public function fetchExtraFood($billDetail){
+        $details = BillExtraFoodDetail::where('id_bill_detail', $billDetail)
+        ->join('extra_food', 'extra_food.id', '=', 'bill_extra_food_detail.id_extra_food')
+        ->select(
+            'extra_food.food_name',
+            'extra_food.price',
+            'bill_extra_food_detail.quantity'
+        )
+        ->get()
+        ->map(function ($detail) {
+            // Format lại thời gian
+            $detail->bill_created_at = \Carbon\Carbon::parse($detail->bill_created_at)->format('d/m/Y');
+            $detail->bill_updated_at = \Carbon\Carbon::parse($detail->bill_updated_at)->format('d/m/Y');
+            return $detail;
+        })
+        ->toArray();
+
+    return $details;
+    }
+
+    public function searchBills()
+    {
+        // Kiểm tra nếu searchTerm là số, tìm kiếm theo total
+        if (is_numeric($this->searchTerm)) {
+            $this->bills = Bill::where('id_customer', $this->account['user_id'])
+                ->where('total', 'like', '%' . $this->searchTerm . '%')
+                ->get()
+                ->toArray();
+        } elseif ($this->searchTerm !== null) {
+            // Tìm các id_bill trong BillDetail có product_name giống với searchTerm
+            $billIds = BillDetail::join('products', 'bill_details.id_product', '=', 'products.id')
+                ->where('products.product_name', 'like', '%' . $this->searchTerm . '%')
+                ->pluck('bill_details.id_bill')
+                ->toArray();
+    
+            // Tìm các Bill với id trong danh sách billIds và id_customer là user hiện tại
+            $this->bills = Bill::where('id_customer', $this->account['user_id'])
+                ->whereIn('id', $billIds)
+                ->get()
+                ->toArray();
+        } else {
+            // Nếu không có điều kiện tìm kiếm, fetch tất cả các bill
+            $this->fetchBills();
         }
     }
-    public function fetchReceiptsDetail($receiptId){
-        $details = ReceiptDetail::where('id_receipt', $receiptId)
-        ->join('ingredients', 'receipt_details.id_ingredient', '=', 'ingredients.id')
-        ->select('*')
-        ->get()
-        ->toArray();
-        return $details;
-    }
+    
     //Được gọi khi bất kỳ thuộc tính nào của component được cập nhật.
     public function update(){
 
@@ -78,7 +126,7 @@ class PreviousOrders extends Component
         return redirect("/");
     }
     public function createBill(){  
-        return route('/list-order');
+        return redirect()->route('order.index');
     }
     public function fetchDetailUser()
     {
@@ -113,6 +161,13 @@ class PreviousOrders extends Component
         }
 
     }
+    public function chooseProduct($slug)
+    {
+        if($slug){
+            return redirect('product/detail-product/' . $slug);
+        }
+    }
+    
     public function getSessionData()
     {
     $userId = session('user_id');
@@ -129,6 +184,7 @@ class PreviousOrders extends Component
     }
     public function render()
     {
+        $this->searchBills();
         return view('livewire.user.previous-orders');
     }
 }

@@ -98,13 +98,27 @@ body {
     border-top-width: 1px !important;
     border-radius: 10px;
 }
-/* .list-group-item-BillDetail{
-
-} */
 .list-group-item-BillDetail:hover{
     /* box-shadow: 2px 2px 2px #aaa; */
     cursor: pointer;
 }
+.list-group-item.extra-info {
+    background-color: #f9f9f9; /* Nền nhạt hơn để làm nổi bật $detail */
+    font-size: 0.9em; /* Thu nhỏ font */
+    padding-left: 2rem; /* Đẩy nội dung sang phải */
+}
+
+.list-group-item-BillDetail {
+    font-weight: bold; /* Làm nổi bật dòng chính */
+    cursor: pointer; /* Hiệu ứng trỏ chuột */
+    border: 0px solid black;
+}
+
+.extra-info span {
+    color: #6c757d; /* Màu xám nhạt hơn cho thông tin phụ */
+    font-size: 13px;
+}
+
 .address-form {
         position: fixed;
         top: 50%;
@@ -119,7 +133,7 @@ body {
     }
 
     .custom-scroll {
-        max-height: 560px; /* Đặt chiều cao tối đa */
+        max-height: 510px; /* Đặt chiều cao tối đa */
         overflow-y: auto;  /* Cho phép cuộn dọc */
     }
     .seperated{
@@ -128,4 +142,5 @@ body {
     }
     .itemAddress{
         cursor: pointer;
+        user-select: none;
     }

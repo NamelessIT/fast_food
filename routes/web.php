@@ -33,9 +33,6 @@ Route::group(['prefix' => '/auth'], function () {
 Route::group(['prefix' => '/category'], function () {
     Route::get('/{categoryName}/{page}', [CategoryController::class, 'index'])->name('category.index');
 
-    // Route::get ('/detail-product/{id}', function () {
-    //     return view('products.detail-product');
-    // })->name('product.detail-product');
 });
 
 

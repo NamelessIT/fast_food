@@ -18,6 +18,6 @@ class Customer extends Model
     ];
 
     public function account () {
-        return $this->morphOne(Account::class, 'user', 'user_type', 'user_id');
+        return $this->morphOne(Account::class, 'user', 'user_type','user_id');
     }
 }
