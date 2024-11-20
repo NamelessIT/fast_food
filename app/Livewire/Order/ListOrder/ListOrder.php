@@ -20,9 +20,9 @@ class ListOrder extends Component
     public function mount()
     {
         if (Auth::check()) {
-            $this->order = Order::where("id_customer", Auth::user()->user_id)->first();
-            // dd(($this->order));
-            
+            // Tìm order dựa trên id_customer
+            $this->order = Order::where('id_customer', Auth::user()->user_id)->first();
+    
             if ($this->order) {
                 // Nếu tìm thấy order, gán listOrder bằng danh sách sản phẩm của order
                 $this->listOrder = $this->order->products;
@@ -35,6 +35,7 @@ class ListOrder extends Component
             $this->listOrder = [];
         }
     }
+    
 
 
     public function render()
