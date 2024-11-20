@@ -2,6 +2,8 @@
 
 namespace App\Livewire\User;
 
+use App\Models\BillExtraFoodDetail;
+use App\Models\ExtraFoodDetail;
 use Livewire\Component;
 use App\Models\Bill;
 use App\Models\Receipt;
@@ -43,13 +45,47 @@ class PreviousOrders extends Component
             )->get()->toArray();
         }
     }
-    public function fetchBillDetail($billId){
+    public function fetchBillDetail($billId)
+    {
         $details = BillDetail::where('id_bill', $billId)
-        ->join('products', 'bill_details.id_product', '=', 'products.id')
-        ->select('*')
-        ->get()
-        ->toArray();
+            ->join('products', 'bill_details.id_product', '=', 'products.id')
+            ->select(
+                'bill_details.id as detail_id',
+                'slug',
+                'products.product_name',
+                'bill_details.quantity',
+                'bill_details.created_at as bill_created_at',
+                'bill_details.updated_at as bill_updated_at'
+            )
+            ->get()
+            ->map(function ($detail) {
+                // Format lại thời gian
+                $detail->bill_created_at = \Carbon\Carbon::parse($detail->bill_created_at)->format('d/m/Y');
+                $detail->bill_updated_at = \Carbon\Carbon::parse($detail->bill_updated_at)->format('d/m/Y');
+                return $detail;
+            })
+            ->toArray();
+    
         return $details;
+    }
+    public function fetchExtraFood($billDetail){
+        $details = BillExtraFoodDetail::where('id_bill_detail', $billDetail)
+        ->join('extra_food', 'extra_food.id', '=', 'bill_extra_food_detail.id_extra_food')
+        ->select(
+            'extra_food.food_name',
+            'extra_food.price',
+            'bill_extra_food_detail.quantity'
+        )
+        ->get()
+        ->map(function ($detail) {
+            // Format lại thời gian
+            $detail->bill_created_at = \Carbon\Carbon::parse($detail->bill_created_at)->format('d/m/Y');
+            $detail->bill_updated_at = \Carbon\Carbon::parse($detail->bill_updated_at)->format('d/m/Y');
+            return $detail;
+        })
+        ->toArray();
+
+    return $details;
     }
 
     public function searchBills()
@@ -125,9 +161,13 @@ class PreviousOrders extends Component
         }
 
     }
-    public function chooseProduct($slug){
-        return route('/detail-product/'+$slug);
+    public function chooseProduct($slug)
+    {
+        if($slug){
+            return redirect('product/detail-product/' . $slug);
+        }
     }
+    
     public function getSessionData()
     {
     $userId = session('user_id');

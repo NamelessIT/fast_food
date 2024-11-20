@@ -26,7 +26,7 @@
                                     </li>
                                     <table class="table table-bordered">
                                         <thead>
-                                            <tr>
+                                            <tr style="border-bottom: 1px solid;">
                                                 <th>Sản phẩm</th>
                                                 <th>Số lượng</th>
                                                 <th>Ngày tạo</th>
@@ -35,21 +35,32 @@
                                         </thead>
                                         <tbody>
                                             @foreach($this->fetchBillDetail($bill['id']) as $detail)
-                                                <tr class="list-group-item-BillDetail" wire:click="chooseProduct({{ $detail['slug'] }})">
+                                                <tr class="list-group-item-BillDetail" wire:click="chooseProduct('{{ $detail['slug'] }}')">
                                                     <td>{{ $detail['product_name'] }}</td>
                                                     <td>{{ $detail['quantity'] }}</td>
-                                                    <td>{{ $detail['created_at'] }}</td>
-                                                    <td>{{ $detail['updated_at'] }}</td>
+                                                    <td>{{ $detail['bill_created_at'] }}</td>
+                                                    <td>{{ $detail['bill_updated_at'] }}</td>
                                                 </tr>
+                                                @foreach($this->fetchExtraFood($detail['detail_id']) as $extra)
+                                                    <tr class="extra-info">
+                                                        <td colspan="2"  class="text-muted ps-4">
+                                                            <span>{{ $extra['food_name'] }} (x{{ $extra['quantity'] }})</span>
+                                                        </td>
+                                                        <td colspan="2" class="text-end text-muted">
+                                                            <span>{{ number_format($extra['price'], 0, ',', '.') }} VNĐ</span>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             @endforeach
                                         </tbody>
+                                                                              
                                     </table>
                                     <li class="list-group-item">
                                         Thành tiền: {{ $bill['total'] }} VND
                                     </li>
-                                    <button class="btn btn-success mt-3" wire:click="createBill">Mua lại</button>
+                                    @endforeach
                                     <div class="seperated"></div>
-                                @endforeach
+                                    <button class="btn btn-success mt-3" wire:click="createBill">Mua Thêm</button>
                             </ul>
                         </div>    
                     @endif  
