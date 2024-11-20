@@ -46,6 +46,7 @@
                     keyboard: false
                 });
                 myModal.hide();
+                document.querySelector ('body').style.overflow = "auto";
                 document.querySelectorAll ('.modal-backdrop').forEach(element => {
                     element.remove();
                 })
@@ -57,6 +58,7 @@
                     keyboard: false
                 });
                 myModal.hide();
+                document.querySelector ('body').style.overflow = "auto";
                 document.querySelectorAll ('.modal-backdrop').forEach(element => {
                     element.remove();
                 })

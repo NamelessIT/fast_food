@@ -34,10 +34,10 @@ class ProductSeeder extends Seeder
         $image12 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/d/r/drink_pepsi_m_l_.png'));
       
         // combo
-        $image13 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/c/o/combo_beef_teriyaki.png'));
-        $image14 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/c/o/combo_d-double.png'));
-        $image15 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/c/o/combo_l-chicken__1.png'));
-        $image16 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/c/o/combo_beef_1.png'));
+        $image13 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/cache/400x400/c/o/combo_update_beef_teriyaki_1.jpg.webp'));
+        $image14 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/cache/400x400/c/o/combo_update_d-double_1_.jpg.webp'));
+        $image15 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/cache/400x400/c/o/combo_update_l-chicken_.jpg.webp'));
+        $image16 = base64_encode(file_get_contents('https://www.lotteria.vn/media/catalog/product/cache/400x400/c/o/combo_update_beef.jpg.webp'));
 
         $products = [
             [

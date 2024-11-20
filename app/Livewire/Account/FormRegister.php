@@ -59,12 +59,6 @@ class FormRegister extends Component
             'avatar' => $base64,
         ]);
         $customer->account()->save($account);
-
-        Order::create([
-            'id_customer' => $idUser,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
         
         // account::create ([
         //     'id_user' => $idUser,

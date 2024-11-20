@@ -14,6 +14,7 @@
     {{-- style --}}
     <link rel="stylesheet" href="{{ asset('css/product/detail-product.css') }}">
     <link rel="stylesheet" href="{{ asset('css/product/feed-back-product.css') }}">
+    <link href="{{ asset('css/product/categoryProduct/listProduct/litstProduct.css') }}" rel="stylesheet">
 
     @livewireStyles
 @endsection
