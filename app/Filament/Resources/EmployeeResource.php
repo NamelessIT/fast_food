@@ -129,7 +129,7 @@ class EmployeeResource extends Resource
                                     $imageBase64 = base64_encode($imageData);
 
                                     // Lưu Base64 vào cột image trong cơ sở dữ liệu
-                                    $set('avatar', 'data:image/jpeg;base64,' . $imageBase64);
+                                    $set('avatar' . $imageBase64);
 
                                     // Xóa file tạm sau khi chuyển đổi sang Base64
                                     unlink($state->getRealPath());
@@ -177,7 +177,7 @@ class EmployeeResource extends Resource
 
                 TextColumn::make('account.avatar')
                     ->label('Avatar')
-                    ->formatStateUsing(fn($state) => "<img src='{$state}' style='width: 100px; height: 100px;' />")
+                    ->formatStateUsing(fn($state) => "<img src='data:image/jpeg;base64,{$state}' style='width: 100px; height: 100px; object-fit: cover;' />")
                     ->html(),
                 TextColumn::make('account.username')
                     ->toggleable(isToggledHiddenByDefault:true)

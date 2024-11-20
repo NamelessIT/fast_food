@@ -108,7 +108,7 @@ class ProductResource extends Resource
                             $imageBase64 = base64_encode($imageData);
 
                             // Lưu Base64 vào cột image_show trong cơ sở dữ liệu
-                            $set('image_show', 'data:image/jpeg;base64,' . $imageBase64);
+                            $set('image_show', '' . $imageBase64);
 
                             // Xóa file tạm sau khi chuyển đổi sang Base64
                             unlink($state->getRealPath());
@@ -206,7 +206,7 @@ class ProductResource extends Resource
 
                 TextColumn::make('image_show')
                     ->label('Image')
-                    ->formatStateUsing(fn($state) => "<img src='{$state}' style='width: 100px; height: 100px;' />")
+                    ->formatStateUsing(fn($state) => "<img src='data:image/jpeg;base64,{$state}' style='width: 100px; height: 100px; object-fit: cover;' />")
                     ->html(), // Kích hoạt HTML để hiển thị ảnh từ chuỗi Base64
 
                 CheckboxColumn::make('status')

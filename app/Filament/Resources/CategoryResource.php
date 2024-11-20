@@ -57,21 +57,24 @@ class CategoryResource extends Resource
 
                 // Trường tải ảnh mới và chuyển sang Base64
                 FileUpload::make('image_file')
-                    ->label('Upload/Change Image')
-                    ->directory('images')  // Thư mục lưu trữ tạm
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        if ($state) {
-                            // Đọc file và chuyển thành Base64
-                            $imageData = file_get_contents($state->getRealPath());
-                            $imageBase64 = base64_encode($imageData);
+                ->label('Upload/Change Image')
+                ->directory('images')  // Thư mục lưu trữ tạm
+                ->afterStateUpdated(function ($state, callable $set) {
+                    if ($state) {
+                        // Đọc file và chuyển thành Base64
+                        $imageData = file_get_contents($state->getRealPath());
+                        $imageBase64 = base64_encode($imageData);
 
-                            // Lưu Base64 vào cột image trong cơ sở dữ liệu
-                            $set('image', 'data:image/jpeg;base64,' . $imageBase64);
+                        // Lưu Base64 vào cột image trong cơ sở dữ liệu
+                        $set('image', $imageBase64);
 
-                            // Xóa file tạm sau khi chuyển đổi sang Base64
-                            unlink($state->getRealPath());
-                        }
-                    }),
+                        // Xóa file tạm sau khi chuyển đổi sang Base64
+                        unlink($state->getRealPath());
+                    }
+                }),
+
+
+
 
                 // Trường ẩn 'image' lưu giá trị Base64 ảnh
                 Hidden::make('image')
@@ -104,7 +107,7 @@ class CategoryResource extends Resource
                 TextColumn::make('category_name'),
                 TextColumn::make('image')
                     ->label('Image')
-                    ->formatStateUsing(fn($state) => "<img src='{$state}' style='width: 100px; height: 100px;' />")
+                    ->formatStateUsing(fn($state) => "<img src='data:image/jpeg;base64,{$state}' style='width: 100px; height: 100px; object-fit: cover;' />")
                     ->html(),
                 TextColumn::make('description'),
                 CheckboxColumn::make('status'),
