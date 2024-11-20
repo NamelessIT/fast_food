@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $fillable = [
         'category_name',
         'description',
@@ -27,6 +30,6 @@ class Category extends Model
 
     public function extraFoods()
     {
-        return $this->belongsToMany(ExtraFood::class, 'extra_food_details', 'id_category', 'id_extra_food');
+        return $this->belongsToMany(ExtraFood::class, 'extra_food_detail', 'id_category', 'id_extra_food');
     }
 }

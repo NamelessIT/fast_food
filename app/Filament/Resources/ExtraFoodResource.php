@@ -7,6 +7,8 @@ use App\Models\ExtraFood;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\View;
 use Filament\Forms\Form;
@@ -112,8 +114,19 @@ class ExtraFoodResource extends Resource
                     ->default(function ($record) {
                         // Kiểm tra bản ghi có tồn tại và có ảnh không
                         return optional($record)->image_show; // Tránh lỗi khi bản ghi là null
-                    }),
-            ]);
+                }),
+
+/*                 Repeater::make('Danh mục')
+                    ->addActionLabel('Thêm danh mục')
+                    ->schema([
+                        Select::make('category_id')
+                        ->label('Danh mục')
+                        ->relationship('categories','category_name') // Chọn danh mục
+                        ->preload() // Nạp trước toàn bộ danh mục
+                        ->searchable(),
+                ]), */
+
+        ]);
     }
 
     public static function table(Table $table): Table

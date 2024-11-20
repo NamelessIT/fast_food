@@ -11,6 +11,11 @@ class ExtraFoodDetail extends Model
 
     protected $table = 'extra_food_detail';
 
+    protected $fillable = [
+        'id_category',
+        'id_extra_food',
+    ];
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'id_category');
