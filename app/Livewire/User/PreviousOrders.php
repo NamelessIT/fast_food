@@ -33,6 +33,7 @@ class PreviousOrders extends Component
     public function fetchBills(){
         if($this->account!==null){
             $this->bills = Bill::where('id_customer',$this->account['user_id'])
+            ->where('status',2)
             ->select('id',
             'id_customer',
             'id_address',

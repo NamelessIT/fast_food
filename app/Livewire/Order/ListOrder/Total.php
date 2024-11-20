@@ -34,7 +34,9 @@ class Total extends Component
     public $totalBill;
     public function mount()
     {
-        $this->addressList = CustomerAddress::where('id_customer', auth()->user()->id)->get();
+        $this->addressList = CustomerAddress::where('id_customer', auth()->user()->id)
+        ->where('status', 1)
+        ->get();
         $this->addressList = $this->addressList->toArray();
         $listTmp = [];
 
