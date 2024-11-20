@@ -34,7 +34,9 @@ class Total extends Component
     public $totalBill;
     public function mount()
     {
-        $this->addressList = CustomerAddress::where('id_customer', auth()->user()->id)->get();
+        $this->addressList = CustomerAddress::where('id_customer', auth()->user()->id)
+        ->where('status', 1)
+        ->get();
         $this->addressList = $this->addressList->toArray();
         $listTmp = [];
 
@@ -220,27 +222,35 @@ class Total extends Component
         if ($bill) {
             $billDetails = [];
             $orderDetails = OrderDetail::where("id_order", $this->order->id)->get();
-            foreach ($orderDetails as $billDetail) {
+            foreach ($orderDetails as $key => $billDetail) {
                 $item = $this->createBillDetail($bill->id, $billDetail->id_product, $billDetail->quantity);
                 $listExtrafoods =  $billDetail->extraFoods;
                 //IF HAVE EXTRAFOOD CREATE BILL DETAIL EXTRA FOOD
-                if ($item && $listExtrafoods) {
-                    array_push($billDetails, $item);
+                array_push($billDetails, $item);
+                if ($item && $listExtrafoods->isNotEmpty()) {
+                    $concac = [];
                     foreach ($listExtrafoods as $extrafood) {
                         $idExtraFood = $extrafood->id;
+                        array_push($concac,$extrafood->orderdetails);
+                        // dd ($extrafood->orderdetails->first(), $extrafood->orderdetails, $key);
                         $quantity = $extrafood->orderdetails->first()->pivot->quantity;
                         $this->createBillExtraFoodDetail($item->id, $idExtraFood, $quantity);
                     }
-                }
-                // If success delete order detail row and re-render
-                if ($bill && $billDetails) {
-                    $delete = OrderDetail::where("id_order", $this->order->id)->delete();
-                    
-                    if ($delete) {
+                    // dd ($concac);
 
-                        $this->dispatch('order_success');
-                        $this->dispatch('refresh');
-                    }
+                }
+                
+                // If success delete order detail row and re-render
+               
+            }
+
+            if ($bill && $billDetails) {
+                $delete = OrderDetail::where("id_order", $this->order->id)->delete();
+                
+                if ($delete) {
+
+                    $this->dispatch('order_success');
+                    $this->dispatch('refresh');
                 }
             }
         }

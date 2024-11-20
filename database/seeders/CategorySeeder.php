@@ -20,7 +20,7 @@ class CategorySeeder extends Seeder
         $imageUrl2 = 'https://www.lotteria.vn/media/catalog/tmp/category/BG-Menu-Chicken-01-01_1.jpg';
         $imageUrl3 = 'https://www.lotteria.vn/media/catalog/tmp/category/MENU_DAT_HANG_THU_C_UO_NG_new_3.jpg';
         $imageUrl4 = 'https://www.lotteria.vn/media/catalog/tmp/category/MENU_DAT_HANG_COMBO_m_i_2.jpg';
-        $imageUrl5 = "https://www.lotteria.vn/media/catalog/tmp/category/MENU_DAT_HANG_BESTSELLER.jpg";
+        // $imageUrl5 = "https://www.lotteria.vn/media/catalog/tmp/category/MENU_DAT_HANG_BESTSELLER.jpg";
 
         $imageContents = file_get_contents($imageUrl1);
         $imageBlob1 = base64_encode($imageContents);
@@ -30,8 +30,8 @@ class CategorySeeder extends Seeder
         $imageBlob3 = base64_encode($imageContents);
         $imageContents = file_get_contents($imageUrl4);
         $imageBlob4 = base64_encode($imageContents);
-        $imageContents = file_get_contents($imageUrl5);
-        $imageBlob5 = base64_encode($imageContents);
+        // $imageContents = file_get_contents($imageUrl5);
+        // $imageBlob5 = base64_encode($imageContents);
         DB::table('categories')->insert([
             [
                 'category_name' => 'Burger',
