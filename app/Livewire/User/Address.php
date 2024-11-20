@@ -70,7 +70,9 @@ class Address extends Component
     }
     public function fetchAddress()
     {
-        $this->CustomerAddresses = CustomerAddress::where('id_customer', auth()->user()->id)->get();
+        $this->CustomerAddresses = CustomerAddress::where('id_customer', auth()->user()->id)
+        ->where('status', 1)                                        
+        ->get();
         $this->CustomerAddresses = $this->CustomerAddresses->toArray();
         $listTmp = [];
 

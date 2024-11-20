@@ -10,7 +10,7 @@
             @else
                         <!-- Tìm kiếm đơn hàng -->
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm hoặc tổng tiền..." wire:model="searchTerm">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm hoặc tổng tiền..." wire:model="searchTerm" wire:keydown.enter="searchBills">
                             <div class="input-group-append">
                                 <span class="input-group-text" wire:click="searchBills"><i class="fas fa-search"></i></span>
                             </div>
@@ -30,16 +30,16 @@
                                                 <th>Sản phẩm</th>
                                                 <th>Số lượng</th>
                                                 <th>Ngày tạo</th>
-                                                <th>Ngày cập nhật</th>
+                                                <th>Địa chỉ</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($this->fetchBillDetail($bill['id']) as $detail)
+                                            @foreach($this->fetchBillDetail($bill) as $detail)
                                                 <tr class="list-group-item-BillDetail" wire:click="chooseProduct('{{ $detail['slug'] }}')">
                                                     <td>{{ $detail['product_name'] }}</td>
                                                     <td>{{ $detail['quantity'] }}</td>
                                                     <td>{{ $detail['bill_created_at'] }}</td>
-                                                    <td>{{ $detail['bill_updated_at'] }}</td>
+                                                    <td class="bill-address">{{ $detail['bill_address'] }}</td>
                                                 </tr>
                                                 @foreach($this->fetchExtraFood($detail['detail_id']) as $extra)
                                                     <tr class="extra-info">
@@ -58,8 +58,8 @@
                                     <li class="list-group-item">
                                         Thành tiền: {{ $bill['total'] }} VND
                                     </li>
-                                    @endforeach
                                     <div class="seperated"></div>
+                                    @endforeach
                                     <button class="btn btn-success mt-3" wire:click="createBill">Mua Thêm</button>
                             </ul>
                         </div>    

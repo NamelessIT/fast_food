@@ -3,15 +3,14 @@
 namespace App\Livewire\User;
 
 use App\Models\BillExtraFoodDetail;
-use App\Models\ExtraFoodDetail;
 use Livewire\Component;
 use App\Models\Bill;
-use App\Models\Receipt;
 use App\Models\BillDetail;
-use App\Models\ReceiptDetail;
 use App\Models\Account;
 use App\Models\Customer;
-use App\Models\Employee;
+use App\Models\CustomerAddress;
+use GuzzleHttp\Client;
+
 
 class PreviousOrders extends Component
 {
@@ -45,13 +44,15 @@ class PreviousOrders extends Component
             )->get()->toArray();
         }
     }
-    public function fetchBillDetail($billId)
+    public function fetchBillDetail($bill)
     {
-        $details = BillDetail::where('id_bill', $billId)
+        $details = BillDetail::where('id_bill', $bill['id'])
             ->join('products', 'bill_details.id_product', '=', 'products.id')
+            ->join('bills', 'bill_details.id_bill', '=', 'bills.id')
             ->select(
                 'bill_details.id as detail_id',
                 'slug',
+                'bills.id_address as bill_address',
                 'products.product_name',
                 'bill_details.quantity',
                 'bill_details.created_at as bill_created_at',
@@ -59,15 +60,40 @@ class PreviousOrders extends Component
             )
             ->get()
             ->map(function ($detail) {
+                // Lấy thông tin từ CustomerAddress
+                $address = CustomerAddress::find($detail->bill_address);
+                if ($address) {
+                    $client = new Client();
+    
+                    // Lấy tên thành phố
+                    $res = $client->request('GET', 'https://provinces.open-api.vn/api/p/' . $address->id_city);
+                    $name_city = json_decode($res->getBody()->getContents())->name;
+    
+                    // Lấy tên quận
+                    $res = $client->request('GET', 'https://provinces.open-api.vn/api/d/' . $address->id_district);
+                    $name_district = json_decode($res->getBody()->getContents())->name;
+    
+                    // Lấy tên phường
+                    $res = $client->request('GET', 'https://provinces.open-api.vn/api/w/' . $address->id_ward);
+                    $name_ward = json_decode($res->getBody()->getContents())->name;
+    
+                    // Format địa chỉ thành chuỗi
+                    $detail->bill_address = "{$address->address}, {$name_ward}, {$name_district}, {$name_city}";
+                } else {
+                    $detail->bill_address = 'Địa chỉ không tồn tại';
+                }
+    
                 // Format lại thời gian
                 $detail->bill_created_at = \Carbon\Carbon::parse($detail->bill_created_at)->format('d/m/Y');
                 $detail->bill_updated_at = \Carbon\Carbon::parse($detail->bill_updated_at)->format('d/m/Y');
+    
                 return $detail;
             })
             ->toArray();
     
         return $details;
     }
+    
     public function fetchExtraFood($billDetail){
         $details = BillExtraFoodDetail::where('id_bill_detail', $billDetail)
         ->join('extra_food', 'extra_food.id', '=', 'bill_extra_food_detail.id_extra_food')
