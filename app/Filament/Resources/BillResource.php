@@ -99,7 +99,8 @@ class BillResource extends Resource
 
                                 // Thêm món ăn kèm cho từng sản phẩm
                         Repeater::make('extraFoods')
-                            ->label('Món ăn kèm')
+                            ->relationship('extraFoods')
+                            ->label('Món ăn thêm')
                             ->schema([
                                 Select::make('id_extra_food')
                                     ->label('Món ăn thêm')
