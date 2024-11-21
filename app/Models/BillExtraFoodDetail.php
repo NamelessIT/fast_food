@@ -20,9 +20,18 @@ class BillExtraFoodDetail extends Model
     ];
 
     // Định nghĩa quan hệ với các bảng khác
-   
 
-  
+    // Mối quan hệ với BillDetail
+    public function billDetail()
+    {
+        return $this->belongsTo(BillDetail::class, 'id_bill_detail');
+    }
 
-   
+    // Mối quan hệ với ExtraFood
+    public function extraFood()
+    {
+        return $this->belongsTo(ExtraFood::class, 'id_extra_food');
+    }
+
+
 }

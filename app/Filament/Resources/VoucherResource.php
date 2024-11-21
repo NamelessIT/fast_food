@@ -130,10 +130,16 @@ class VoucherResource extends Resource
                     ->default(true)
                     ->label('Voucher đang hoạt động')  // Nhãn bộ lọc
                     ->query(fn (Builder $query) => $query->where('start_date', '<=', now())  // Voucher có start_date <= hiện tại
-                                                          ->where('end_date', '>=', now())) // Voucher có end_date >= hiện tại
+                                                          ->where('end_date', '>=', now())), // Voucher có end_date >= hiện tại
+
+                Tables\Filters\Filter::make('non-active')
+                    ->default(false)
+                    ->label('Voucher không có hiệu lực')  // Nhãn bộ lọc
+                    ->query(fn (Builder $query) => $query->where('start_date', '>', now())
+                                                          ->orwhere('end_date', '<', now())),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                //Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
             ])

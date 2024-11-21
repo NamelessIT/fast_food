@@ -103,6 +103,11 @@ class ProductResource extends Resource
                     ->directory('images')  // Chỉ định thư mục lưu trữ tạm thời
                     ->afterStateUpdated(function ($state, callable $set) {
                         if ($state) {
+
+                            // Sử dụng Intervention Image để thay đổi kích thước ảnh
+                            //$image = \Intervention\Image\Facades\Image::make($state->getRealPath());
+                            //$image->resize(800, 600); // Thay đổi kích thước ảnh
+
                             // Đọc file và chuyển thành Base64
                             $imageData = file_get_contents($state->getRealPath());
                             $imageBase64 = base64_encode($imageData);
@@ -204,14 +209,22 @@ class ProductResource extends Resource
                     ->toggleable()
                     ->size(180), */
 
-                TextColumn::make('image_show')
-                    ->label('Image')
-                    ->formatStateUsing(fn($state) => "<img src='data:image/jpeg;base64,{$state}' style='width: 100px; height: 100px; object-fit: cover;' />")
-                    ->html(), // Kích hoạt HTML để hiển thị ảnh từ chuỗi Base64
+                    TextColumn::make('image_show')
+                        ->label('Image')
+                        ->formatStateUsing(fn($state) => "<img src='data:image/jpeg;base64,{$state}' style='max-width: 100%; height: auto; object-fit: contain;'/>")
+                        ->html(),
 
-                CheckboxColumn::make('status')
+/*                     TextColumn::make('image_show')
+                    ->label('Current Image')
+                    ->formatStateUsing(function ($state, $record) {
+                        // Render view và truyền giá trị Base64 cho ảnh
+                        return view('filament.show-image', ['imageBase64' => $state])->render();
+                    })
+                    ->html(), */ // Kích hoạt HTML để hiển thị ảnh từ chuỗi Base64
+
+                /* CheckboxColumn::make('status')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault:true),
+                    ->toggleable(isToggledHiddenByDefault:true), */
                 TextColumn::make('created_at')
                     ->toggleable(isToggledHiddenByDefault:true)
                     ->label('Ngày tạo')
@@ -228,7 +241,7 @@ class ProductResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                //Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 //Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
@@ -236,7 +249,7 @@ class ProductResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    //Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
