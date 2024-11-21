@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BillResource\Pages;
 use App\Filament\Resources\BillResource\RelationManagers;
 use App\Models\Bill;
+use App\Models\ExtraFood;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -103,16 +105,35 @@ class BillResource extends Resource
                             ->label('Món ăn thêm')
                             ->schema([
                                 Select::make('id_extra_food')
-                                    ->label('Món ăn thêm')
+                                    ->columnSpan(6)
+                                    ->label('Tên món ăn thêm')
                                     ->relationship('extraFood', 'food_name')
-                                    ->required(),
+                                    ->afterStateUpdated(function ($state, $set) {
+                                        // Khi món ăn được chọn, lấy giá trị 'price' từ 'extraFood'
+                                        $extraFood = ExtraFood::find($state);
+                                        if ($extraFood) {
+                                            $set('price', $extraFood->price); // Đặt giá trị 'price' từ 'extraFood'
+                                        }
+                                    }),
 
                                 TextInput::make('quantity')
+                                    ->columnSpan(2)
                                     ->label('Số lượng')
                                     ->numeric()
                                     ->required(),
+
+                                TextInput::make('price')
+                                    ->columnSpan(3)
+                                    ->label('Đơn giá')
+                                    ->disabled(),
+
+
+                                TextInput::make('extra_food_total')
+                                    ->columnSpan(3)
+                                    ->default(fn ($record) => ($record?->quantity ?? 0) * ($record?->extraFood?->price ?? 0)) // Tính thành tiền
+                                    ->label('Thành tiền'),
                             ])
-                            ->columns(2)
+                            ->columns(14)
                             ->columnSpanFull(),
                     ])
                     ->columns(14)
