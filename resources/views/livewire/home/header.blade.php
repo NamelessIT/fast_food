@@ -32,11 +32,11 @@
             <div class="eventBlock d-flex">
                 {{-- button login  --}}
                 <div class="accountLogin">
-                    @if(session()->has('user_id') && session()->has('user_type'))
+                    @auth
                         <a href={{ route('user.index') }} id="login" class=" border rounded-circle p-2 me-lg-2 me-2 bg-white btn " style="width:40px ;height:40px">
                     @else
                         <a href={{ route('account.index') }} id="login" class=" border rounded-circle p-2 me-lg-2 me-2 bg-white btn " style="width:40px ;height:40px">
-                    @endif     
+                    @endauth     
                         <i class="fa-solid fa-user" style="font-size: 20px"></i>
                     </a>
                 </div>

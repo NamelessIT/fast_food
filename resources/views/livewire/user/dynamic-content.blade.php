@@ -4,10 +4,10 @@
         <h2>Xin chào, {{ $firstName }} {{ $fullName }}</h2>
         <nav class="nav flex-column">
             <a href="{{ url('/') }}" class=" d-block mb-3 text-decoration-underline nav-link text-light" wire:click="logout">Đăng xuất</a>
-            @if(session('user_type')===config('constants.user.customer'))
+            @if(auth()->user()->user_type === config('constants.user.customer'))
             <a href="javascript:void(0)" class="nav-link text-light {{ $index === 0 ? 'active bg-primary' : '' }}" wire:click="navigate('previous-orders',0)">Đơn hàng đã đặt</a>
             @endif
-            @if(session('user_type')===config('constants.user.customer'))
+            @if(auth()->user()->user_type === config('constants.user.customer'))
             <a href="javascript:void(0)" class="nav-link text-light {{ $index === 2 ? 'active bg-primary' : '' }}" wire:click="navigate('address',2)">Địa chỉ của bạn</a>
             @endif
             <a href="javascript:void(0)" class="nav-link text-light {{ $index === 3 ? 'active bg-primary' : '' }}" wire:click="navigate('my-account.detail',3)">Chi tiết tài khoản</a>

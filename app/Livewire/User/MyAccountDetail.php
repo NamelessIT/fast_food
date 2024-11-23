@@ -28,12 +28,8 @@ class MyAccountDetail extends Component
 
     public function fetchDetailUser()
     {
-        $sessionData = $this->getSessionData();
-        $user_id = $sessionData['user_id'];
-        $user_type=$sessionData['user_type'];
-        // lấy id account đang đăng nhập ở đây và user-type là customers dùng where
-        $this->account = Account::where('user_id', $user_id)
-                  ->where('user_type', $user_type)
+        $this->account = Account::where('user_id', auth()->user()->user_id)
+                  ->where('user_type', auth()->user()->user_type)
                   ->first();
         
         if ($this->account && $this->account->user_type === config('constants.user.customer')) {
@@ -57,20 +53,6 @@ class MyAccountDetail extends Component
                 $this->createdAt = $customer->created_at->format('Y-m-d');
             }
         }
-    }
-    public function getSessionData()
-    {
-    $userId = session('user_id');
-    $userType = session('user_type');
-    
-    return [
-        'user_id' => $userId,
-        'user_type' => $userType,
-    ];
-    }
-    public function clearSessionData()
-    {
-    session()->forget(['user_id', 'user_type']);
     }
 
     public function render()
