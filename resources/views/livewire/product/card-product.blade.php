@@ -23,4 +23,7 @@
             </div>
         </div>
     </div>
+    <div wire:loading wire:target="handleAddToCart">
+        <x-loader />
+    </div>
 </div>

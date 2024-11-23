@@ -15,4 +15,9 @@
             </div>
         @endforeach
     </div>
+    
+    <div wire:loading wire:target="handleAddToCart">
+        <x-loader />
+    </div>
+
 </div>

@@ -211,8 +211,8 @@ class Total extends Component
             "id_customer" => Auth::user()->user_id,
             "id_address" => $this->idAddressChoose,
             "id_payment" => $payment->id,
-            "id_voucher" => $this->selectedVoucher['id'] ?? null,
-            "total" =>  $this->tempTotalPrice,
+            "id_voucher" => (isset($this->selectedVoucher) && $this->totalBill >= $this->selectedVoucher['minium_condition']) ? $this->selectedVoucher['id'] : null,
+            "total" =>  $this->totalBill,
             "point_receive" => (float) $this->totalBill * 0.1,
             "status" => 1,
             "created_at" => Carbon::now(),
@@ -266,8 +266,9 @@ class Total extends Component
     public function voucherApplied($voucher)
     {
         $this->selectedVoucher = $voucher;
-        $this->totalBill = $this->tempTotalPrice -  $this->tempTotalPrice* (float)($voucher['discount_percent'] / 100);
-
+        if ($this->tempTotalPrice >= $voucher['minium_condition']) {
+            $this->totalBill = $this->tempTotalPrice -  $this->tempTotalPrice* (float)($voucher['discount_percent'] / 100);
+        } 
         
     }
     public function removeVoucher()
@@ -288,7 +289,9 @@ class Total extends Component
             $this->selectedVoucher !== null ? $this->voucherApplied($this->selectedVoucher) : $this->totalBill=$this->tempTotalPrice;
 
         } else {
+            
             $this->tempTotalPrice = 0; 
+            $this->totalBill = 0; 
         }
     }
 }
