@@ -22,7 +22,7 @@
                     <input type="text" class="form-control" id="Email" wire:model="email" disabled required>
                 </div>
                 <div class="mb-3">
-                    @if(session('user_type')===config('constants.user.customer'))
+                    @if(auth()->user()->user_type === config('constants.user.customer'))
                     <label for="Point" class="form-label">Số Điểm</label>
                     <input type="number" class="form-control" id="Point" wire:model="point" disabled>                
                     @endif
