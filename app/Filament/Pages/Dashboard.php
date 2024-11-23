@@ -9,6 +9,8 @@ use  Filament\Forms\Form;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
+use Illuminate\Support\Facades\Auth;
+
 // use Filament\Pages\Page;
 
 class Dashboard extends \Filament\Pages\Dashboard
@@ -37,5 +39,17 @@ class Dashboard extends \Filament\Pages\Dashboard
                 // có bật filter không , nếu có thì sẽ chart line (sản phẩm đó bán trong khoảng thời gian đó như thế nào chia ra theo ngày)
             ]);
 
+    }
+
+    public static function canAccess(): bool
+    {
+        // Lấy người dùng đang đăng nhập
+        $user = Auth::user();
+        //$user = auth()->user();
+
+        if ($user->user->id_role==2) //nhân viên bình thường
+            return false;
+        if ($user->user->id_role==1)
+            return true;
     }
 }
