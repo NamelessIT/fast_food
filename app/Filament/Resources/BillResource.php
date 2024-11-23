@@ -229,10 +229,10 @@ class BillResource extends Resource
         // Lấy người dùng đang đăng nhập
         $user = Auth::user();
         //$user = auth()->user();
-        
+
         if ($user->user->id_role==2) //nhân viên bình thường
-            return false;
-        if ($user->user->id_role==1)
             return true;
+        if ($user->user->id_role==1)
+            return false;
     }
 }
