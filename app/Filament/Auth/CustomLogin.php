@@ -56,10 +56,22 @@ class CustomLogin extends Login
     {
         $login_type = filter_var($data['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        return [
+        $credentials = [
             $login_type => $data['login'],
             'password' => $data['password'],
         ];
+
+        // Kiểm tra thêm `status` và `deleted_at`
+        $user = \App\Models\Account::where($login_type, $data['login'])
+            ->where('status', 1) // Status = 1 (active)
+            //->whereNull('deleted_at') // Không bị xóa mềm
+            ->first();
+
+        if (!$user) {
+            $this->throwFailureValidationException();
+        }
+
+        return $credentials;
     }
 
     protected function throwFailureValidationException(): never
