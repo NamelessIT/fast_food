@@ -25,6 +25,7 @@ class AccountSeeder extends Seeder
                 "status" => 1,
                 "created_at" => Carbon::now(),
                 "updated_at" => Carbon::now(),
+                "user_type" => "App\Models\Customer",
             ],
             [
                 "user_id" => 2,
@@ -34,8 +35,19 @@ class AccountSeeder extends Seeder
                 "status" => 1,
                 "created_at" => Carbon::now(),
                 "updated_at" => Carbon::now(),
+                "user_type" => "App\Models\Customer",
 
-            ]
+            ],
+            [
+                "user_id" => 1,
+                "email" => "admin@admin.com",
+                "username" => "admin",
+                "password" => Hash::make("admin"),
+                "status" => 1,
+                "user_type" => "App\Models\Employee",
+                "created_at" => Carbon::now(),
+                "updated_at" => Carbon::now(),
+            ],
         ]);
     }
 }
