@@ -28,9 +28,7 @@ class ProductTable extends BaseWidget
         $top = $this->filters['Range'] ?? null;
         $isDescrease = $this->filters['Descrease'] ?? false;
         $money = $this->filters['Money'] ?? false;
-        ExportProductExporter::getActive_Money($this->filters??[]);
         return $table
-
             ->query(
                 $this->getQuery($active, $start, $end, $top, $isDescrease, $money, $name)
             )
@@ -91,9 +89,9 @@ class ProductTable extends BaseWidget
 
         // Thứ tự sắp xếp
         if ($isDescrease) {
-            $query->orderBy('bill_details.created_at', 'asc');
+            $query->orderBy($money?'total_price':'bill_details.quantity', 'asc');
         } else {
-            $query->orderBy('bill_details.created_at', 'desc');
+            $query->orderBy($money?'total_price':'bill_details.quantity', 'desc');
         }
 
         // Giới hạn số bản ghi nếu có `$top`
@@ -114,6 +112,7 @@ class ProductTable extends BaseWidget
                 'customers.full_name',
                 'bill_details.created_at'
             )
+            ->orderBy('bill_details.quantity','desc')
             ;
         }
     return $query;

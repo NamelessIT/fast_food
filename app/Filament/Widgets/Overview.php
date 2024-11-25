@@ -45,7 +45,8 @@ class Overview extends BaseWidget
                 ->chart([10,15,20,30,40,70])
                 ->color('warning'),
                 Stat::make('Tổng doanh thu',Bill::when($start,fn($query)=>$query->whereDate('created_at','>=',$start))
-                ->when($end,fn($query)=>$query->whereDate('created_at','<=',$end))
+                ->when($end,fn($query)=>$query->whereDate('created_at','<=',$end)
+                ->where("bills.status","=",2))
                 ->sum("bills.total"))
                 ->description('VNĐ')
                 ->descriptionIcon('heroicon-m-banknotes',IconPosition::Before)
@@ -71,7 +72,8 @@ class Overview extends BaseWidget
                 ->descriptionIcon('heroicon-m-shopping-cart',IconPosition::Before)
                 ->chart([10,15,20,30,40,70])
                 ->color('warning'),
-                Stat::make('Tổng doanh thu',Bill::sum("bills.total"))
+                Stat::make('Tổng doanh thu',Bill::where("bills.status","=",2)
+                ->sum("bills.total"))
                 ->description('VNĐ')
                 ->descriptionIcon('heroicon-m-banknotes',IconPosition::Before)
                 ->chart([10,15,20,30,40,70])

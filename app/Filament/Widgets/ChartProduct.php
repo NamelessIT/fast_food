@@ -8,12 +8,11 @@ use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 // composer require flowframe/laravel-trend
-class Chart extends ChartWidget
+class ChartProduct extends ChartWidget
 {
     public $products=[];
     use InteractsWithPageFilters;
     protected static ?string $heading = 'Thống kê sản phẩm được bán ra';
-    protected int | string | array $columnSpan=1;
 
     protected function getData(): array
 {
