@@ -17,7 +17,7 @@ class Chart extends ChartWidget
 
     protected function getData(): array
 {
-    $name=$this->filters['name'];
+    $name=$this->filters['name']??null ;
     $start = $this->filters['startDate'] ?? now()->subMonth()->startOfMonth(); // Mặc định từ đầu tháng trước
     $end = $this->filters['endDate'] ?? now()->endOfMonth(); // Mặc định đến cuối tháng hiện tại
     $top = $this->filters['Range'] ?? null;
@@ -68,13 +68,13 @@ class Chart extends ChartWidget
 
 public function getProductInBillByFilters($start, $end, $top = null, $isDescrease = false, $money = false, $name = null)
 {
-    // Kiểm tra start và end
     if ($start && $end && Carbon::parse($start)->gt(Carbon::parse($end))) {
         throw new \InvalidArgumentException('Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.');
     }
 
     $query = Product::join('bill_details', 'bill_details.id_product', '=', 'products.id')
         ->join('bills', 'bills.id', '=', 'bill_details.id_bill')
+        ->where('bills.status',"=",2)
         ->whereBetween('bills.created_at', [
             $start ? Carbon::parse($start)->startOfDay() : '0000-01-01',
             $end ? Carbon::parse($end)->endOfDay() : now(),
@@ -124,8 +124,10 @@ public function getProductInBillByFilters($start, $end, $top = null, $isDescreas
     {
         $this->products = Product::join('bill_details', 'bill_details.id_product', '=', 'products.id')
             ->join('bills', 'bills.id', '=', 'bill_details.id_bill')
+            ->where("bills.status","=",2)
             ->select('products.product_name', DB::raw('SUM(bill_details.quantity) as quantity')) // Lấy tên sản phẩm và tổng số lượng bán
             ->groupBy('products.product_name') // Nhóm theo sản phẩm
+            ->orderBy('quantity', 'desc')
             ->get();
     }
 

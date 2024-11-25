@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
-    
+
     use HasFiltersForm;
     public function filtersForm(Form $form):Form{
         return $form->schema([
@@ -31,12 +31,12 @@ class Dashboard extends \Filament\Pages\Dashboard
                     10=>10,
                     20=>20,
                 ]),
+                //tìm sản phẩm trong top bán chạy nhất , ế nhất
                 Toggle::make(name: 'Money'),
                 //tìm sản phẩm trong top bán chạy nhất , ế nhất
                 Toggle::make('Descrease'),
                 // có bật tìm sản phẩm bán ế nhất , chạy nhất
-                Toggle::make('active')
-                ,
+                Toggle::make('active'),
             ])->columns(4),
                 // có bật filter không , nếu có thì sẽ chart line (sản phẩm đó bán trong khoảng thời gian đó như thế nào chia ra theo ngày)
             ]);
@@ -47,7 +47,7 @@ class Dashboard extends \Filament\Pages\Dashboard
     {
         // Lấy người dùng đang đăng nhập
         $user = Auth::user();
-        //$user = auth()->user();
+        // $user = auth()->user();
 
         if ($user->user->id_role==2) //nhân viên bình thường
             return false;
