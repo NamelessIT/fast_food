@@ -32,7 +32,7 @@ class FormRegister extends FormRequest
             'username' => 'required|unique:accounts,username',
             'password' => 'required|min:6',
             'avatar' => 'image|max:3072',
-            'otp' => ['required', Rule::in([$cachedOtp])],
+            //'otp' => ['required', Rule::in([$cachedOtp])],
         ];
     }
 
@@ -60,8 +60,8 @@ class FormRegister extends FormRequest
             'avatar.image' => 'Ảnh đại diện phải là hình ảnh',
             'avatar.max' => 'Ảnh đại diện phải nhỏ hơn 3MB',
 
-            'otp.required' => 'Mã OTP là bắt buộc email',
-            'otp.in' => 'Mã OTP không đúng',
+            //'otp.required' => 'Mã OTP là bắt buộc email',
+            //'otp.in' => 'Mã OTP không đúng',
         ];
     }
 }
