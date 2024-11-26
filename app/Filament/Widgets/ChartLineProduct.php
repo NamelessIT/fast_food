@@ -11,7 +11,7 @@ use Carbon\Carbon;
 class ChartLineProduct extends ChartWidget
 {
     use InteractsWithPageFilters;
-
+    protected static ?int $sort=2;
     protected static ?string $heading = 'Thống kê sản phẩm theo ngày';
 
     protected function getData(): array

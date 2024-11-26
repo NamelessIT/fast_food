@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
 class ChartCustomer extends ChartWidget
 {
+    protected static ?int $sort=3;
     public $customers=[];
     protected static ?string $heading = 'Thống kê khách hàng';
     use InteractsWithPageFilters;

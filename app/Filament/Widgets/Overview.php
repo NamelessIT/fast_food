@@ -13,6 +13,7 @@ use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class Overview extends BaseWidget
 {
+    protected static ?int $sort=1;
     use InteractsWithPageFilters;
     protected function getStats(): array
     {

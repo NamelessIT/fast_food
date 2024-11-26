@@ -9,6 +9,7 @@ use Carbon\Carbon;
 
 class billChart extends ChartWidget
 {
+    protected static ?int $sort=3;
     protected static ?string $heading = 'Thống kê trạng thái đơn hàng';
 
     use InteractsWithPageFilters;

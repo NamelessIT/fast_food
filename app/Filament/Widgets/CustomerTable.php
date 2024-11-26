@@ -16,10 +16,13 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 class CustomerTable extends BaseWidget
 {
-    use InteractsWithPageFilters;
+    protected static ?int $sort=4;
 
+    use InteractsWithPageFilters;
+    protected static bool $isLazy = false;
     public function table(Table $table): Table
     {
+
         $active = $this->filters['active'] ?? false;
         $name = $this->filters['name'] ?? null;
         $start = $this->filters['startDate'] ?? now()->subMonth()->startOfMonth(); // Mặc định từ đầu tháng trước
@@ -49,6 +52,7 @@ class CustomerTable extends BaseWidget
         ])
         ;
     }
+
     public function getQuery($active=false,$start, $end, $top = null, $isDescrease = false, $name = null){
         if($active===true){
             $query = Customer::join('bills', 'bills.id_customer', '=', 'customers.id')

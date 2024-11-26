@@ -10,6 +10,7 @@ use Carbon\Carbon;
 // composer require flowframe/laravel-trend
 class ChartProduct extends ChartWidget
 {
+    protected static ?int $sort=2;
     public $products=[];
     use InteractsWithPageFilters;
     protected static ?string $heading = 'Thống kê sản phẩm được bán ra';

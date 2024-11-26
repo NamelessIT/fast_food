@@ -14,13 +14,18 @@ use Carbon\Carbon;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
+use Livewire\Features\SupportTesting\InitialRender;
 
 // php artisan make::filament-exporter name_file
 class ProductTable extends BaseWidget
 {
+    protected static ?int $sort=4;
     use InteractsWithPageFilters;
+    protected static bool $isLazy = false;
+
     public function table(Table $table): Table
     {
+
         $active = $this->filters['active'] ?? false;
         $name = $this->filters['name'] ?? null;
         $start = $this->filters['startDate'] ?? now()->subMonth()->startOfMonth(); // Mặc định từ đầu tháng trước
@@ -59,6 +64,7 @@ class ProductTable extends BaseWidget
             ])
             ;
     }
+
     public function getQuery($active=false,$start, $end, $top = null, $isDescrease = false, $money = false, $name = null){
         if($active===true){
             $query = Product::join('bill_details', 'bill_details.id_product', '=', 'products.id')
