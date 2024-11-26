@@ -20,6 +20,8 @@ use App\Models\Employee;
 use Illuminate\Database\Eloquent\Factories\Relationship;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Filament\Resources\ReceiptDetailRelationManagerResource\RelationManagers\ReceiptDetailsRelationManager;
+use Illuminate\Support\Facades\Auth;
+
 use function Laravel\Prompts\search;
 
 class ReceiptResource extends Resource
@@ -38,7 +40,7 @@ class ReceiptResource extends Resource
                 ->required()
                 ->options(Employee::pluck('full_name', 'id')->toArray())
                 ->placeholder('Chọn nhân viên thực hiện'),
-                
+
                 TextInput::make('created_at')
                 ->label('Ngày tạo phiếu nhập')
                 ->default(Carbon::now()->format('Y-m-d H:i:s'))
@@ -48,7 +50,7 @@ class ReceiptResource extends Resource
                 ->label('Ngày cập nhật phiếu nhập')
                 ->default(Carbon::now()->format('Y-m-d H:i:s'))
                 ->readOnlyOn('create'), // Set current date and time
- 
+
             ]);
     }
 
@@ -112,5 +114,17 @@ class ReceiptResource extends Resource
             'create' => Pages\CreateReceipt::route('/create'),
             'edit' => Pages\EditReceipt::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        // Lấy người dùng đang đăng nhập
+        $user = Auth::user();
+        //$user = auth()->user();
+
+        if ($user->user->id_role==2) //nhân viên bình thường
+            return true;
+        if ($user->user->id_role==1)
+            return false;
     }
 }

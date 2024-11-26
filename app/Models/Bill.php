@@ -36,7 +36,7 @@ class Bill extends Model
 
     public function address()
     {
-        return $this->belongsTo(Address::class, 'id_address');
+        return $this->belongsTo(CustomerAddress::class, 'id_address');
     }
 
     public function payment()
@@ -49,5 +49,9 @@ class Bill extends Model
         return $this->belongsTo(Voucher::class, 'id_voucher');
     }
 
-   
+    public function billDetails()
+    {
+        return $this->hasMany(BillDetail::class, 'id_bill');
+    }
+
 }

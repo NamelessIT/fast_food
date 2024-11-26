@@ -23,7 +23,7 @@ class ExtraFood extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'extra_food_details', 'id_extra_food', 'id_category');
+        return $this->belongsToMany(Category::class, 'extra_food_detail', 'id_extra_food', 'id_category');
     }
 
     public function orderdetails () {

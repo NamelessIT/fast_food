@@ -21,6 +21,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CategoryResource extends Resource
 {
@@ -37,15 +42,16 @@ class CategoryResource extends Resource
                 // Trường 'category_name' và cập nhật 'slug'
                 TextInput::make('category_name')
                     ->unique(ignoreRecord: true)
-                    ->required()
+                    ->rules([
+                        'required',
+                    ])
+                    ->validationMessages([
+                        'required'  => 'hãy nhập tên danh mục',
+                    ])
                     ->afterStateUpdated(fn (string $state, callable $set) => $set('slug', Str::slug($state))),
 
                 // Trường mô tả
                 TextInput::make('description'),
-
-                // Trường trạng thái
-                Checkbox::make('status')
-                    ->default(true),
 
                 // Hiển thị ảnh nếu có bản ghi, tránh lỗi khi không có bản ghi
                 View::make('image')
@@ -66,7 +72,7 @@ class CategoryResource extends Resource
                             $imageBase64 = base64_encode($imageData);
 
                             // Lưu Base64 vào cột image trong cơ sở dữ liệu
-                            $set('image', 'data:image/jpeg;base64,' . $imageBase64);
+                            $set('image', $imageBase64);
 
                             // Xóa file tạm sau khi chuyển đổi sang Base64
                             unlink($state->getRealPath());
@@ -83,16 +89,26 @@ class CategoryResource extends Resource
                 // Trường ẩn 'slug'
                 Hidden::make('slug'),
 
-                Forms\Components\Repeater::make('extra_food')
+                Repeater::make('extraFoodDetails')
+                    ->label('Món ăn thêm')
                     ->relationship('extraFoodDetails')
-                    ->label('Món gọi thêm')
-                    ->addActionLabel('Thêm món gọi thêm')
+                    ->addActionLabel('Thêm món ăn thêm')
                     ->columnSpanFull()
                     ->grid(2)
                     ->defaultItems(0)
                     ->schema([
+                        Select::make('id_extra_food')
+                            ->label('Món thêm')
+                            ->relationship('extraFood', 'food_name')
+                            ->preload()
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                            ->searchable(),
+                        ]),
 
-                    ])
+                // Trường trạng thái
+                Checkbox::make('status')
+                    ->hidden()
+                    ->default(true),
             ]);
     }
 
@@ -104,16 +120,39 @@ class CategoryResource extends Resource
                 TextColumn::make('category_name'),
                 TextColumn::make('image')
                     ->label('Image')
-                    ->formatStateUsing(fn($state) => "<img src='{$state}' style='width: 100px; height: 100px;' />")
+                    ->formatStateUsing(fn($state) => "<img src='data:image/jpeg;base64,{$state}' style='width: 100px; height: 100px; object-fit: cover;' />")
                     ->html(),
                 TextColumn::make('description'),
-                CheckboxColumn::make('status'),
+                //CheckboxColumn::make('status'),
+
             ])
             ->filters([
                 //
+                //Tables\Filters\TrashedFilter::make(),
+
+                Filter::make('trash')
+                    ->label('Hiển thị danh mục đã xóa')
+                    ->form([
+                        Checkbox::make('trashed')
+                            ->label('Danh mục đã xóa')
+                            ->default(false), // Mặc định là chưa chọn
+                    ])
+                    ->query(function ($query, $data) {
+                        if ($data['trashed']) {
+                            //$trashedCategories = Category::onlyTrashed()->get();
+                            //dd($trashedCategories);
+                            // Hiển thị các mục đã xóa (soft deleted)
+                            return $query->onlyTrashed();
+                        }
+                        //dd($query->toSql(), $query->getBindings());  // Xem truy vấn SQL
+                        // Hiển thị các mục chưa xóa (whereNull cho trường deleted_at)
+                        return $query->whereNull('deleted_at');
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -136,5 +175,24 @@ class CategoryResource extends Resource
             'create' => Pages\CreateCategory::route('/create'),
             'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
+    }
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+
+    public static function canViewAny(): bool
+    {
+        // Lấy người dùng đang đăng nhập
+        $user = Auth::user();
+        //$user = auth()->user();
+
+        if ($user->user->id_role==2) //nhân viên bình thường
+            return true;
+        if ($user->user->id_role==1)
+            return false;
     }
 }

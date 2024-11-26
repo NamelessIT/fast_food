@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Supplier;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Auth;
+
 class IngredientResource extends Resource
 {
     protected static ?string $model = Ingredient::class;
@@ -36,11 +38,11 @@ class IngredientResource extends Resource
                     ->label('Đơn vị')
                     ->required(),
 
-                Select::make('ingredients.id')
+/*                 Select::make('ingredients.id')
                 ->label('Nhà cung cấp')
                 ->options(Supplier::pluck('supplier_name', 'id')->toArray())
-                ->required(),
-                
+                ->required(), */
+
 
             ]);
     }
@@ -57,8 +59,8 @@ class IngredientResource extends Resource
                     ->sortable()
                     ->toggleable()
                     ->label('Tên nguyên liệu'),
-                TextColumn::make('ingredients.supplier_name')
-                    ->label('Nhà cung cấp'),
+/*                 TextColumn::make('ingredients.supplier_name')
+                    ->label('Nhà cung cấp'), */
                 TextColumn::make('remain_quantity')
                     ->sortable()
                     ->toggleable()
@@ -103,5 +105,17 @@ class IngredientResource extends Resource
             'create' => Pages\CreateIngredient::route('/create'),
             'edit' => Pages\EditIngredient::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        // Lấy người dùng đang đăng nhập
+        $user = Auth::user();
+        //$user = auth()->user();
+
+        if ($user->user->id_role==2) //nhân viên bình thường
+            return true;
+        if ($user->user->id_role==1)
+            return false;
     }
 }

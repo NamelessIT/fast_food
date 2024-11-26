@@ -17,6 +17,8 @@ use App\Models\Ingredient;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Illuminate\Support\Facades\Auth;
+
 class IngredientSuppliedResource extends Resource
 {
     protected static ?string $model = IngredientSupplied::class;
@@ -31,7 +33,7 @@ class IngredientSuppliedResource extends Resource
                     ->label('Nhà cung cấp')
                     ->options(Supplier::pluck('supplier_name', 'id')->toArray())
                     ->required(),
-               
+
                 Select::make('id_ingredient')
                     ->label('Nguyên liệu')
                     ->options(Ingredient::pluck('ingredient_name', 'id')->toArray())
@@ -65,7 +67,7 @@ class IngredientSuppliedResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
-            
+
 
                 TextColumn::make('ingredient_price')
                     ->searchable()
@@ -109,5 +111,17 @@ class IngredientSuppliedResource extends Resource
             'create' => Pages\CreateIngredientSupplied::route('/create'),
             'edit' => Pages\EditIngredientSupplied::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        // Lấy người dùng đang đăng nhập
+        $user = Auth::user();
+        //$user = auth()->user();
+
+        if ($user->user->id_role==2) //nhân viên bình thường
+            return true;
+        if ($user->user->id_role==1)
+            return false;
     }
 }

@@ -27,14 +27,9 @@ class FormLogin extends Component
             'username' => $this->username,
             'password' => $this->password
         ];
-        if (auth()->attempt($credentials)) {
+        if (auth()->attempt($credentials) && auth()->user()->user_type === config('constants.user.customer')) {
             $account = $this->getLoggedInAccount();
-            if ($account) {
-                session([
-                    'user_id' => $account->user_id,
-                    'user_type' => $account->user_type,
-                ]);
-            }
+
             return redirect('/')->with('success', 'Đăng nhập thành công');
         }
         else {

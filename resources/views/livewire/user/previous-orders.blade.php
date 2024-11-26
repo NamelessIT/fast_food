@@ -1,5 +1,5 @@
 <div class="card container mt-5">
-    @if(session('user_type') === config('constants.user.customer'))
+    @if(auth()->user()->user_type === config('constants.user.customer'))
         <div class="card-header bg-primary text-white">
             <h1 class="mb-0">Các đơn hàng đã đặt</h1>
         </div>

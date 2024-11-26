@@ -6,14 +6,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "filament/filament": "^3.2.0",
+        "flowframe/laravel-trend": "^0.3.0",
         "laravel/framework": "^11.9",
         "laravel/reverb": "^1.0",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
         "symfony/http-client": "^7.1",
-        "symfony/mailgun-mailer": "^7.1",
-        "filament/filament": "^3.2.0"
+        "symfony/mailgun-mailer": "^7.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",

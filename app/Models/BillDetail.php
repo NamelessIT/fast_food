@@ -10,7 +10,8 @@ class BillDetail extends Model
     use HasFactory;
 
     protected $table = 'bill_details';
-    
+    protected $appends = ['product_price','total_price'];
+
     protected $fillable = [
         'id_bill',
         'id_product',
@@ -29,6 +30,21 @@ class BillDetail extends Model
     {
         return $this->belongsTo(Product::class, 'id_product');
     }
+    public function extraFoods()
+    {
+        return $this->hasMany(BillExtraFoodDetail::class, 'id_bill_detail');
+    }
+
+    public function getProductPriceAttribute()
+    {
+        return $this->product?->price ?? 0;
+    }
+    public function getTotalPriceAttribute()
+    {
+        return $this->quantity * $this->product_price; // quantity * product price
+    }
+
+
 
     // Thiết lập các thuộc tính trước khi lưu
     public static function boot()
