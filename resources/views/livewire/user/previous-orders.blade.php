@@ -47,7 +47,7 @@
                                                             <span>{{ $extra['food_name'] }} (x{{ $extra['quantity'] }})</span>
                                                         </td>
                                                         <td colspan="2" class="text-end text-muted">
-                                                            <span>{{ number_format($extra['price'], 0, ',', '.') }} VNĐ</span>
+                                                            <span>{{ $extra['cod_price'] }} VNĐ</span>
                                                         </td>
                                                     </tr>
                                                 @endforeach

@@ -32,9 +32,9 @@ class FormRegister extends Component
         $this->validate($request->rules($this->email), $request->messages());
 
         // dd (Cache::get('otp_' . $this->email));
-        if (!$this->verifyOtp()) {
+        /* if (!$this->verifyOtp()) {
             return;
-        }
+        } */
 
 
         $base64 = null;
@@ -59,7 +59,7 @@ class FormRegister extends Component
             'avatar' => $base64,
         ]);
         $customer->account()->save($account);
-        
+
         // account::create ([
         //     'id_user' => $idUser,
         //     'email' => $this->email,
@@ -91,9 +91,9 @@ class FormRegister extends Component
         );
         $otp = rand(100000, 999999);
         Cache::put('otp_' . $this->email, $otp, now()->addSeconds(300));
-        
+
         Mail::to($this->email)->send(new OtpMail($otp));
-        
+
         $this->dispatch('showAlert', [
             'type' => 'success',
             'message' => 'Đã gửi mã OTP đến email của bạn',

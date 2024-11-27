@@ -170,6 +170,9 @@ class BillResource extends Resource
                 SelectColumn::make('status')
                     ->label('Trạng thái')
                     ->sortable()
+                    ->disabled(function ($record) {
+                        return $record->status === 3 || $record->status === 0; // Disable khi trạng thái là "Đã giao" hoặc "Hủy"
+                    })
                     ->options([
                         0 => 'Hủy',
                         1 => 'Đang chờ',
@@ -179,6 +182,11 @@ class BillResource extends Resource
                     ->afterStateUpdated(function ($state, $record) {
                         $record->status = $state; // Cập nhật trạng thái trong cơ sở dữ liệu
                         $record->save(); // Lưu thay đổi vào cơ sở dữ liệu
+                        // Chỉ cộng điểm khi trạng thái là "Đã giao" (3)
+                        if ($state === 3) {
+                            $record->customer->points += $record->point_receive;
+                            $record->customer->save();
+                        }
                     }),
 
                 TextColumn::make('created_at')
@@ -192,7 +200,7 @@ class BillResource extends Resource
                             return $detail->product->product_name . ' (' . $detail->quantity . ')';
                         })->implode(', ');
                     }) */
-            ])
+            ])->poll('10s')
             ->filters([
                 //
             ])
