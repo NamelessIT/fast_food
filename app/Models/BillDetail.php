@@ -30,9 +30,14 @@ class BillDetail extends Model
     {
         return $this->belongsTo(Product::class, 'id_product');
     }
-    public function extraFoods()
+    public function haveExtraFoods()
     {
         return $this->hasMany(BillExtraFoodDetail::class, 'id_bill_detail');
+    }
+    public function extraFoods()
+    {
+        return $this->belongsToMany(ExtraFood::class, 'bill_extra_food_detail', 'id_bill_detail', 'id_extra_food')
+                    ->withPivot('quantity'); // Đảm bảo bạn lấy được quantity từ bảng trung gian
     }
 
     public function getProductPriceAttribute()

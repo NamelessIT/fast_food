@@ -30,4 +30,15 @@ class ExtraFood extends Model
         return $this->belongsToMany(OrderDetail::class , 'order_extra_food_detail', 'id_extra_food','id_order_detail' )->withPivot("quantity");
     }
 
+    public function billDetails()
+    {
+        return $this->belongsToMany(BillDetail::class, 'bill_extra_food_detail', 'id_extra_food', 'id_bill_detail')
+                    ->withPivot('quantity'); // Đảm bảo bạn có thể truy cập quantity ở đây
+    }
+
+    public function bills()
+    {
+        return $this->belongsToMany(Bill::class, 'bill_extra_food_detail', 'id_extra_food', 'id_bill_detail')
+                    ->withPivot('quantity');
+    }
 }

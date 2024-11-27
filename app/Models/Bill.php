@@ -54,4 +54,9 @@ class Bill extends Model
         return $this->hasMany(BillDetail::class, 'id_bill');
     }
 
+    public function extraFoods()
+    {
+        return $this->belongsToMany(ExtraFood::class, 'bill_extra_food_detail', 'id_bill_detail', 'id_extra_food')
+                    ->withPivot('quantity'); // Lấy thêm cột quantity từ bảng trung gian
+    }
 }

@@ -74,7 +74,7 @@ class BillResource extends Resource
                     ->numeric(),
                 Repeater::make('billDetails')
                     ->label('Chi tiết hóa đơn')
-                    ->relationship()
+                    ->relationship('billDetails')
                     ->schema([
                         Select::make('id_product')
                             ->label('Sản phẩm')
@@ -102,10 +102,12 @@ class BillResource extends Resource
 
                                 // Thêm món ăn kèm cho từng sản phẩm
                         Repeater::make('extraFoods')
-                            ->relationship('extraFoods')
+                            ->nullable()
+                            ->relationship('haveExtraFoods')
                             ->label('Món ăn thêm')
                             ->schema([
                                 Select::make('id_extra_food')
+                                    ->nullable()
                                     ->columnSpan(6)
                                     ->label('Tên món ăn thêm')
                                     ->relationship('extraFood', 'food_name')
@@ -181,12 +183,38 @@ class BillResource extends Resource
                     ])
                     ->afterStateUpdated(function ($state, $record) {
                         $record->status = $state; // Cập nhật trạng thái trong cơ sở dữ liệu
-                        $record->save(); // Lưu thay đổi vào cơ sở dữ liệu
+                        //dd('Trạng thái được cập nhật', $state); // Kiểm tra giá trị
                         // Chỉ cộng điểm khi trạng thái là "Đã giao" (3)
-                        if ($state === 3) {
+                        if ($state === "3") {
                             $record->customer->points += $record->point_receive;
+                            //dd($record->point_receive);
                             $record->customer->save();
                         }
+                        if  ($state === "2"){
+                            // 1. Trừ số lượng ExtraFood
+                            foreach ($record->billDetails as $detail) {
+                                foreach ($detail->extraFoods as $extraFood) {
+                                    $extraFoodModel = ExtraFood::find($extraFood->id);
+                                    if ($extraFoodModel && $extraFood->pivot->quantity) {
+                                        $extraFoodModel->quantity -= $extraFood->pivot->quantity;
+                                        $extraFoodModel->save();
+                                    }
+                                }
+                            }
+
+                            // 2. Trừ số lượng Ingredient
+                            foreach ($record->billDetails as $detail) {
+                                $product = $detail->product;
+                                foreach ($product->recipes as $recipe) {
+                                    $ingredient = $recipe->ingredient;
+                                    if ($ingredient && $recipe->quantity) {
+                                        $ingredient->remain_quantity -= $recipe->quantity * $detail->quantity;
+                                        $ingredient->save();
+                                    }
+                                }
+                            }
+                        }
+                        $record->save(); // Lưu thay đổi vào cơ sở dữ liệu
                     }),
 
                 TextColumn::make('created_at')
