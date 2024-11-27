@@ -52,7 +52,7 @@
         @enderror
     </div>
 
-    <div class="form-group send-otp my-3 d-flex justify-content-between align-items-center">
+{{--     <div class="form-group send-otp my-3 d-flex justify-content-between align-items-center">
         <input type="text" id="otp" value="" placeholder=" " wire:model="otp">
         <label for="otp">Nhập OTP<span class="text-danger">*</span></label>
         <span class="underline"></span>
@@ -60,7 +60,7 @@
             <span class="message-error">{{ $message }}</span>
         @enderror
         <button class="btn-send rounded-pill" wire:click.prevent="sendOTP">Gửi OTP</button>
-    </div>
+    </div> --}}
 
     <div class="upload my-1">
         <input type="file" id="avatar" hidden wire:model="avatar" accept="image/png, image/gif, image/jpeg">
