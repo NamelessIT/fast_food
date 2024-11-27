@@ -14,6 +14,7 @@ use GuzzleHttp\Client;
 
 class PreviousOrders extends Component
 {
+    
     public $account;
     public $bills = [];
     public $receipts=[];
@@ -26,9 +27,7 @@ class PreviousOrders extends Component
         if(auth()->user()->user_type===config('constants.user.customer')){
             $this->fetchBills();
         }
-        else{
-            $this->fetchReceipts();
-        }
+
     }
     public function fetchBills(){
         if($this->account!==null){
@@ -95,25 +94,22 @@ class PreviousOrders extends Component
         return $details;
     }
     
-    public function fetchExtraFood($billDetail){
-        $details = BillExtraFoodDetail::where('id_bill_detail', $billDetail)
-        ->join('extra_food', 'extra_food.id', '=', 'bill_extra_food_detail.id_extra_food')
-        ->select(
-            'extra_food.food_name',
-            'extra_food.price',
-            'bill_extra_food_detail.quantity'
-        )
-        ->get()
-        ->map(function ($detail) {
-            // Format lại thời gian
-            $detail->bill_created_at = \Carbon\Carbon::parse($detail->bill_created_at)->format('d/m/Y');
-            $detail->bill_updated_at = \Carbon\Carbon::parse($detail->bill_updated_at)->format('d/m/Y');
-            return $detail;
-        })
-        ->toArray();
-
-    return $details;
-    }
+        public function fetchExtraFood($billDetail)
+        {
+            $details = BillExtraFoodDetail::join('extra_food', 'extra_food.id', '=', 'bill_extra_food_detail.id_extra_food')
+                ->join('bill_details', 'bill_details.id', '=', 'bill_extra_food_detail.id_bill_detail')
+                ->where('bill_details.id', '=', $billDetail) // Sửa thành bill_details.id như trong truy vấn gốc
+                ->select(
+                    'extra_food.food_name',
+                    'extra_food.price as cod_price',
+                    'bill_extra_food_detail.quantity'
+                )
+                ->get()
+                ->toArray();
+        
+            return $details;
+        }
+    
 
     public function searchBills()
     {
