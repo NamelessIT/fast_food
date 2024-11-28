@@ -1,7 +1,10 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #fce4ec;
+    margin: 0;
+    padding: 0;
 }
+
 .navbar {
     background-color: #f8bbd0;
     padding: 10px;
@@ -9,35 +12,68 @@ body {
     justify-content: space-between;
     align-items: center;
 }
+
 .navbar a {
     text-decoration: none;
     color: black;
     font-weight: bold;
     margin: 0 10px;
 }
+
 .order-status {
-    background-color: #fff;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 800px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    padding: 30px;
+    margin: 0px auto 150px auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
+.backToUser:hover{
+    box-shadow: inset 0px 0px 10px 20px grey
+}
+
 .order-step {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
     margin-bottom: 20px;
+    background: #f8f9fa;
 }
-.order-step img {
-    width: 50px;
+
+.order-step .row div {
+    font-size: 1.1rem;
+    font-weight: 600;
 }
+
+.order-step i {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
+
 .order-details {
     background-color: #f8bbd0;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
 }
+
+.order-details .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+}
+
 footer {
     background-color: black;
     color: white;
@@ -47,19 +83,19 @@ footer {
     bottom: 0;
     width: 100%;
 }
-.order-step {
-    background-color: #f8f9fa; /* Màu nền nhẹ */
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+.text-primary {
+    color: #007bff !important;
 }
 
-.order-step .row div {
-    font-size: 1.1rem;
-    font-weight: 500;
+.text-danger {
+    color: #dc3545 !important;
 }
 
-.order-step i {
-    font-size: 1.5rem;
-    color: #6c757d; /* Màu biểu tượng */
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
 }

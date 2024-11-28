@@ -66,7 +66,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach($this->fetchBillDetail($bill) as $detail)
-                                            <tr class="list-group-item-BillDetail" wire:click="chooseProduct('{{ $detail['slug'] }}')">
+                                            <tr class="list-group-item-BillDetail" wire:click="chooseProduct('{{ $detail['slug'] }}','{{ $detail['exit'] }}')">
                                                 <td>{{ $detail['product_name'] }}</td>
                                                 <td>{{ $detail['quantity'] }}</td>
                                                 <td>{{ $detail['bill_created_at'] }}</td>
