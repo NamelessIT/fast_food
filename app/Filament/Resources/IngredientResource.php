@@ -38,12 +38,6 @@ class IngredientResource extends Resource
                     ->label('Đơn vị')
                     ->required(),
 
-/*                 Select::make('ingredients.id')
-                ->label('Nhà cung cấp')
-                ->options(Supplier::pluck('supplier_name', 'id')->toArray())
-                ->required(), */
-
-
             ]);
     }
 
@@ -59,8 +53,6 @@ class IngredientResource extends Resource
                     ->sortable()
                     ->toggleable()
                     ->label('Tên nguyên liệu'),
-/*                 TextColumn::make('ingredients.supplier_name')
-                    ->label('Nhà cung cấp'), */
                 TextColumn::make('remain_quantity')
                     ->sortable()
                     ->toggleable()

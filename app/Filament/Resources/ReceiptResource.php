@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Factories\Relationship;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Filament\Resources\ReceiptDetailRelationManagerResource\RelationManagers\ReceiptDetailsRelationManager;
 use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Components\Hidden;
 
 use function Laravel\Prompts\search;
 
@@ -33,25 +34,19 @@ class ReceiptResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $user = Auth::user();
         return $form
-            ->schema([
-               Select::make('id_employee')
-                ->label('Mã nhân viên')
-                ->required()
-                ->options(Employee::pluck('full_name', 'id')->toArray())
-                ->placeholder('Chọn nhân viên thực hiện'),
+        ->schema([
+            Select::make('id_employee')
+            ->label('Mã nhân viên')
+            ->required()
+            ->options(Employee::pluck('full_name', 'id')->toArray())
+            ->placeholder('Chọn nhân viên thực hiện'),
 
-                TextInput::make('created_at')
-                ->label('Ngày tạo phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
+            Hidden::make('total')
+            ->default(0), 
 
-                TextInput::make('updated_at')
-                ->label('Ngày cập nhật phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'), // Set current date and time
-
-            ]);
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -91,11 +86,11 @@ class ReceiptResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                //Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -115,7 +110,7 @@ class ReceiptResource extends Resource
             'edit' => Pages\EditReceipt::route('/{record}/edit'),
         ];
     }
-
+    
     public static function canViewAny(): bool
     {
         // Lấy người dùng đang đăng nhập

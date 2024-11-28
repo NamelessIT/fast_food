@@ -23,17 +23,15 @@ class Receipt extends Model
     public function receiptDetails() {
         return $this->hasMany(ReceiptDetail::class, 'id_receipt', 'id');
     }
-
-
-
-
-
-    protected static function booted(){
-        static::saved(function ($receipt) {
-            $receipt->total = $receipt->receiptDetails()->sum('total_price');
-            $receipt->saveQuietly(); // Sử dụng saveQuietly để tránh vòng lặp vô hạn
-        });
+    
+    public function updateTotal()
+    {
+        // Tính tổng total_price từ các ReceiptDetail
+        $this->total = $this->receiptDetails()->sum('total_price');
+        $this->saveQuietly(); // Lưu mà không kích hoạt sự kiện saved()
     }
 
-    
+   
+
+
 }
