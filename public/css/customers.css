@@ -133,7 +133,7 @@ body {
     }
 
     .custom-scroll {
-        max-height: 510px; /* Đặt chiều cao tối đa */
+        max-height: 460px; /* Đặt chiều cao tối đa */
         overflow-y: auto;  /* Cho phép cuộn dọc */
     }
     .seperated{

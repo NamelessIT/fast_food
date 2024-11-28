@@ -22,8 +22,8 @@ class BestSellerProduct extends Component
         )
         ->leftJoin('bill_details', 'products.id', '=', 'bill_details.id_product')
         ->where(function ($query) {
-            $query->whereRaw("strftime('%m', bill_details.created_at) = strftime('%m', 'now')")
-                  ->whereRaw("strftime('%Y', bill_details.created_at) = strftime('%Y', 'now')")
+            $query->whereRaw("MONTH(bill_details.created_at) = MONTH(CURRENT_DATE())")
+                  ->whereRaw("YEAR(bill_details.created_at) = YEAR(CURRENT_DATE())")
                   ->orWhereNull('bill_details.created_at');
         })
         ->groupBy(
@@ -36,6 +36,7 @@ class BestSellerProduct extends Component
         ->orderBy('total_quantity_sold', 'DESC')
         ->limit(4)
         ->get();
+    
         
     }
     public function render()

@@ -3,6 +3,7 @@
 namespace App\Livewire\User;
 
 use App\Models\BillExtraFoodDetail;
+use DB;
 use Livewire\Component;
 use App\Models\Bill;
 use App\Models\BillDetail;
@@ -14,7 +15,7 @@ use GuzzleHttp\Client;
 
 class PreviousOrders extends Component
 {
-    
+    public $filterStatus;
     public $account;
     public $bills = [];
     public $receipts=[];
@@ -32,7 +33,7 @@ class PreviousOrders extends Component
     public function fetchBills(){
         if($this->account!==null){
             $this->bills = Bill::where('id_customer',$this->account['user_id'])
-            ->where('status',2)
+            // ->where('status',"=",2)
             ->select('id',
             'id_customer',
             'id_address',
@@ -52,37 +53,22 @@ class PreviousOrders extends Component
             ->select(
                 'bill_details.id as detail_id',
                 'slug',
-                'bills.id_address as bill_address',
                 'products.product_name',
                 'bill_details.quantity',
+                DB::raw('SUM(bill_details.quantity * products.price) as total'),
                 'bill_details.created_at as bill_created_at',
                 'bill_details.updated_at as bill_updated_at'
             )
+            ->groupBy(
+                'bill_details.id',
+                'slug',
+                'products.product_name',
+                'bill_details.quantity',
+                'bill_details.created_at',
+                'bill_details.updated_at'
+            )
             ->get()
             ->map(function ($detail) {
-                // Lấy thông tin từ CustomerAddress
-                $address = CustomerAddress::find($detail->bill_address);
-                if ($address) {
-                    $client = new Client();
-    
-                    // Lấy tên thành phố
-                    $res = $client->request('GET', 'https://provinces.open-api.vn/api/p/' . $address->id_city);
-                    $name_city = json_decode($res->getBody()->getContents())->name;
-    
-                    // Lấy tên quận
-                    $res = $client->request('GET', 'https://provinces.open-api.vn/api/d/' . $address->id_district);
-                    $name_district = json_decode($res->getBody()->getContents())->name;
-    
-                    // Lấy tên phường
-                    $res = $client->request('GET', 'https://provinces.open-api.vn/api/w/' . $address->id_ward);
-                    $name_ward = json_decode($res->getBody()->getContents())->name;
-    
-                    // Format địa chỉ thành chuỗi
-                    $detail->bill_address = "{$address->address}, {$name_ward}, {$name_district}, {$name_city}";
-                } else {
-                    $detail->bill_address = 'Địa chỉ không tồn tại';
-                }
-    
                 // Format lại thời gian
                 $detail->bill_created_at = \Carbon\Carbon::parse($detail->bill_created_at)->format('d/m/Y');
                 $detail->bill_updated_at = \Carbon\Carbon::parse($detail->bill_updated_at)->format('d/m/Y');
@@ -93,6 +79,7 @@ class PreviousOrders extends Component
     
         return $details;
     }
+    
     
         public function fetchExtraFood($billDetail)
         {
@@ -115,10 +102,18 @@ class PreviousOrders extends Component
     {
         // Kiểm tra nếu searchTerm là số, tìm kiếm theo total
         if (is_numeric($this->searchTerm)) {
-            $this->bills = Bill::where('id_customer', $this->account['user_id'])
+            $this->filterStatus===null ||$this->filterStatus==="" ?            
+                $this->bills = Bill::where('id_customer', $this->account['user_id'])
+                    ->where('total', 'like', '%' . $this->searchTerm . '%')
+                    ->get()
+                    ->toArray()
+            :
+                $this->bills = Bill::where('id_customer', $this->account['user_id'])
                 ->where('total', 'like', '%' . $this->searchTerm . '%')
+                ->where("status","=",$this->filterStatus)
                 ->get()
                 ->toArray();
+
         } elseif ($this->searchTerm !== null) {
             // Tìm các id_bill trong BillDetail có product_name giống với searchTerm
             $billIds = BillDetail::join('products', 'bill_details.id_product', '=', 'products.id')
@@ -127,13 +122,33 @@ class PreviousOrders extends Component
                 ->toArray();
     
             // Tìm các Bill với id trong danh sách billIds và id_customer là user hiện tại
+            $this->filterStatus===null ||$this->filterStatus==="" ?
             $this->bills = Bill::where('id_customer', $this->account['user_id'])
                 ->whereIn('id', $billIds)
                 ->get()
-                ->toArray();
-        } else {
-            // Nếu không có điều kiện tìm kiếm, fetch tất cả các bill
-            $this->fetchBills();
+                ->toArray()
+            :
+            $this->bills = Bill::where('id_customer', $this->account['user_id'])
+            ->where("status","=",$this->filterStatus)
+            ->whereIn('id', $billIds)
+            ->get()
+            ->toArray();
+        }
+         else {
+            $this->filterStatus===null ||$this->filterStatus===""  ?
+            $this->fetchBills()
+            :
+            $this->bills = Bill::where('id_customer',$this->account['user_id'])
+            ->where('status',"=",$this->filterStatus)
+            ->select('id',
+            'id_customer',
+            'id_address',
+            'id_payment',
+            'id_voucher',
+            'total',
+            'point_receive',
+            'status',
+            )->get()->toArray();
         }
     }
     
@@ -151,6 +166,10 @@ class PreviousOrders extends Component
     public function createBill(){  
         return redirect()->route('order.index');
     }
+    public function navigatBillDetail($number) {
+        return redirect()->route('order.detail', ['id' => $number]);
+    }
+    
     public function fetchDetailUser()
     {
         $this->account = Account::where('user_id', auth()->user()->user_id)
@@ -185,8 +204,7 @@ class PreviousOrders extends Component
         if($slug){
             return redirect('product/detail-product/' . $slug);
         }
-    }
-    
+    }   
 
     public function render()
     {

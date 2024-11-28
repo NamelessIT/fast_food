@@ -9,18 +9,23 @@ class DynamicContent extends Component
 {
     public $firstName;
     public $fullName;
-    public $index=3;
-    public $currentPage = 'my-account.detail';
+    public $index;
+    public $currentPage;
 
     protected $listeners = ['navigate'];
 
     public function mount(){
+        $this->currentPage = session('currentPage', 'my-account.detail');
+        $this->index=session("index",3);
         $this->fetchDetailUser();
     }
     public function navigate($page,$index)
     {
         $this->currentPage = $page;
         $this->index=$index;
+        session(['currentPage' => $this->currentPage,
+                        'index'=>$this->index
+        ]);
     }
     public function logout()
     {
