@@ -53,6 +53,7 @@ class PreviousOrders extends Component
             ->select(
                 'bill_details.id as detail_id',
                 'slug',
+                'products.status as exit',
                 'products.product_name',
                 'bill_details.quantity',
                 DB::raw('SUM(bill_details.quantity * products.price) as total'),
@@ -62,6 +63,7 @@ class PreviousOrders extends Component
             ->groupBy(
                 'bill_details.id',
                 'slug',
+                'products.status',
                 'products.product_name',
                 'bill_details.quantity',
                 'bill_details.created_at',
@@ -199,9 +201,9 @@ class PreviousOrders extends Component
         }
 
     }
-    public function chooseProduct($slug)
+    public function chooseProduct($slug,$exit)
     {
-        if($slug){
+        if($slug && (int) $exit!==0){
             return redirect('product/detail-product/' . $slug);
         }
     }   

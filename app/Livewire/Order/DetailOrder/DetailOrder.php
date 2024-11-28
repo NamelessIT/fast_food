@@ -34,8 +34,22 @@ class DetailOrder extends Component
             ->get()->toArray();
         }
     }
+    public function navigateUser(){
+        return redirect()->route('user.index');
+    }
+    public function chooseProduct($slug,$exit)
+    {
+;        if($slug && (int) $exit!==0){
+            return redirect('product/detail-product/' . $slug);
+        }
+    }   
     public function cancel_Bill(){
-        dd("có chạy");
+        if($this->bills[0]['status']===3 ||$this->bills[0]['status']===2){
+            dd("Đơn hàng đã được giao không thể huỷ");
+        }
+        else{
+            dd("Đơn hàng đã huỷ thành công");
+        }
     }
     public function getDataUserLogedIn(){
         $this->account = Account::where('user_id', auth()->user()->user_id)
