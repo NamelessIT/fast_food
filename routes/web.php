@@ -44,6 +44,8 @@ Route::group(['prefix' => '/product'], function () {
 
 Route::group(['prefix' => '/order', 'middleware' => [CheckUserWithoutLogin::class]], function () {
     Route::get('/list-order', action: [OrderController::class, 'index'])->name('order.index');
+    Route::get('/detail-order/{id}',action:[OrderController::class,'detail'])
+    ->name('order.detail');
 });
 
 Route::group(['prefix' => '/user'], function () {

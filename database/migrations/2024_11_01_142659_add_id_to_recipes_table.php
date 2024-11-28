@@ -9,22 +9,31 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+        public function up()
     {
-        Schema::table('recipes', function (Blueprint $table) {
-            //
-            $table->id()->first(); // Thêm cột id làm khóa chính
+        Schema::create('recipes_new', function (Blueprint $table) {
+            $table->id(); // Adds an auto-incrementing primary key
+            $table->string('name'); // Add your other columns here
+            $table->timestamps(); // Add timestamps if needed
         });
+
+        // Copy data from old table to new table
+        DB::table('recipes_new')->insert(
+            DB::table('recipes')->select('name', 'created_at', 'updated_at')->get()->toArray()
+        );
+
+        // Drop old table
+        Schema::drop('recipes');
+
+        // Rename new table to old table name
+        Schema::rename('recipes_new', 'recipes');
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::table('recipes', function (Blueprint $table) {
-            //
-            $table->dropColumn('id'); // Xóa cột id nếu rollback
-        });
+        // Revert changes if needed
+        Schema::dropIfExists('recipes');
     }
+
+    
 };

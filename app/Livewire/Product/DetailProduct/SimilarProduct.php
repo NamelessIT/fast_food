@@ -15,16 +15,16 @@ class SimilarProduct extends Component
         $this->listProduct = DB::select(
             'SELECT *
             FROM products
-            WHERE slug != ?
-            AND id_category = ?
-            ORDER BY RAND()
-            LIMIT 4
-            ',
+            WHERE slug != ? 
+            AND id_category = ? 
+            ORDER BY RANDOM()  -- Random() not Rand()
+            LIMIT 4',
             [
                 $slug,
                 Product::where('slug', $slug)->first()->id_category,
             ]
         );
+        
     }
 
     public function render()

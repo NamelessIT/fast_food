@@ -11,29 +11,33 @@ class BestSellerProduct extends Component
 
     public function mount()
     {
-        $this->listProduct = DB::select(
-            'SELECT
-                products.id, 
-                products.product_name,
-                products.image_show,
-                products.price,
-                products.slug,
-                COALESCE(SUM(bill_details.quantity), 0) AS total_quantity_sold
-            FROM
-                products
-            LEFT JOIN
-                bill_details
-            ON
-                products.id = bill_details.id_product
-                WHERE (MONTH(bill_details.created_at) = MONTH(CURRENT_DATE())
-                    AND YEAR(bill_details.created_at) = YEAR(CURRENT_DATE())
-                    OR bill_details.created_at IS NULL)
-            GROUP BY
-                products.id, products.product_name, products.image_show, products.price, products.slug
-            ORDER BY
-                total_quantity_sold DESC
-            LIMIT 4'
-        );
+        $this->listProduct = DB::table('products')
+        ->select(
+            'products.id',
+            'products.product_name',
+            'products.image_show',
+            'products.price',
+            'products.slug',
+            DB::raw('COALESCE(SUM(bill_details.quantity), 0) AS total_quantity_sold')
+        )
+        ->leftJoin('bill_details', 'products.id', '=', 'bill_details.id_product')
+        ->where(function ($query) {
+            $query->whereRaw("MONTH(bill_details.created_at) = MONTH(CURRENT_DATE())")
+                  ->whereRaw("YEAR(bill_details.created_at) = YEAR(CURRENT_DATE())")
+                  ->orWhereNull('bill_details.created_at');
+        })
+        ->groupBy(
+            'products.id',
+            'products.product_name',
+            'products.image_show',
+            'products.price',
+            'products.slug'
+        )
+        ->orderBy('total_quantity_sold', 'DESC')
+        ->limit(4)
+        ->get();
+    
+        
     }
     public function render()
     {
