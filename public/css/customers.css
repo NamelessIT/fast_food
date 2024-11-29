@@ -153,5 +153,6 @@ body {
     .bill-address:hover{
         white-space: wrap;
     }
-    
-    
+    a:hover .bi-door-closed::before{
+        content: "\F308";
+    }

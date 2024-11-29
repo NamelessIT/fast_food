@@ -38,6 +38,9 @@ body {
     margin-bottom: 20px;
     background: #f8f9fa;
 }
+.products_chosen:hover{
+    cursor: pointer;
+}
 
 .order-step .row div {
     font-size: 1.1rem;

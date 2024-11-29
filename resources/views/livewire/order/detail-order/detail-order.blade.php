@@ -1,5 +1,6 @@
 <div class="order-status">
     <i class="bi bi-arrow-left backToUser" style="cursor: pointer"  wire:click="navigateUser"></i>
+    <h2 class="text-center mb-4">Đơn hàng #{{ $bills[0]['id'] }}</h2>
     <h2 class="text-center mb-4">Tình trạng đơn hàng: 
         <span class="{{ $bills[0]['status'] == 0 ? 'text-danger' : ($bills[0]['status'] == 3 ? 'text-success' : 'text-primary') }}">
             @switch($bills[0]['status'])
@@ -45,12 +46,21 @@
                 <div>Huỷ đơn hàng</div>
             </div>
         </div>
+        <h5>
+            <i class="bi bi-signpost-fill"></i>
+            Địa chỉ giao: {{ $address['address'] }},{{ $address['district_name'] }},{{ $address['ward_name'] }},{{ $address['city_name'] }}</h5>
+        <h5>
+            <i class="bi bi-ticket-perforated-fill"></i>
+            Voucher: {{ $nameVoucher['voucher_name'] ?? 'Không có' }} - {{ $nameVoucher['description']}}</h5>
+        <h5 class="text-end fw-bold">
+            <i class="bi bi-cash-coin"></i>
+            Tổng cộng: {{ number_format($bills[0]["total"], 0, ',', '.') }} VND</h5>
     </div>
 
     <!-- Chi tiết đơn hàng -->
     <div class="order-details mt-4 p-4">
         @foreach ($detail_bills as $item)
-            <div class="card mb-3">
+            <div class="card mb-3 products_chosen" wire:click="chooseProduct('{{ $item['slug'] }}','{{ $item['exit'] }}')" >
                 <div class="row g-0">
                     <div class="col-md-4">
                         <img src="{{ 'data:image/png;base64,' . $item['image_show'] }}" alt="Sản phẩm" class="img-fluid rounded-start">
@@ -58,16 +68,17 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">{{ $item['product_name'] }}</h5>
-                            <p class="card-text">Đơn giá: {{ number_format($item['price'], 0, ',', '.') }} VND</p>
-                            <p class="card-text">Số lượng: {{ $item['quantity'] }}</p>
+                            <p class="card-text">
+                                <i class="bi bi-cash"></i>
+                                Đơn giá: {{ number_format($item['price'], 0, ',', '.') }} VND</p>
+                            <p class="card-text">
+                                <i class="bi bi-basket"></i>
+                                Số lượng: {{ $item['quantity'] }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         @endforeach
-        <h5>Địa chỉ giao: {{ $bills[0]['id_address'] }}</h5>
-        <h5>Voucher: {{ $bills[0]['id_voucher'] ?? 'Không có' }}</h5>
-        <h5 class="text-end fw-bold">Tổng cộng: {{ number_format($bills[0]["total"], 0, ',', '.') }} VND</h5>
-        <button class="btn btn-danger mt-3 w-100" wire:click="cancel_Bill">Hủy đơn</button>
+        <button class="btn btn-danger mt-3 w-100" {{ $bills[0]['status'] == 0 || $bills[0]['status'] == 3  ? 'disabled' : '' }} wire:click="cancel_Bill">Hủy đơn</button>
     </div>
 </div>

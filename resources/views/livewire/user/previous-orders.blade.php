@@ -34,20 +34,30 @@
                         <ul class="list-group mb-4">
                             @foreach($bills as $bill)
                                 <li class="list-group-item d-flex justify-content-between align-items-center" style="cursor: pointer" wire:click="navigatBillDetail({{ $bill['id'] }})">
-                                    <span>Đơn hàng #{{ $bill['id'] }}</span>
+                                    <span>
+                                        <i class="bi bi-box-seam-fill"></i>
+                                        Đơn hàng #{{ $bill['id'] }}</span>
                                     <span>Trạng thái:
                                         @switch($bill['status'])
                                             @case(0)
-                                                <span class="text-danger">Huỷ</span>
+                                                <span class="text-danger">Huỷ
+                                                    <i class="bi bi-x-circle me-2"></i>
+                                                </span>
                                                 @break
                                             @case(1)
-                                                <span class="text-primary">Đang chờ</span>
+                                                <span class="text-primary">Đang chờ
+                                                    <i class="bi bi-journal-text me-2"></i>
+                                                </span>
                                                 @break
                                             @case(2)
-                                                <span class="text-warning">Xác nhận</span>
+                                                <span class="text-warning">Đang giao hàng
+                                                    <i class="bi bi-truck me-2"></i>
+                                                </span>
                                                 @break
                                             @case(3)
-                                                <span class="text-success">Đã giao</span>
+                                                <span class="text-success">Hoàn tất
+                                                    <i class="bi bi-check-circle me-2"></i>
+                                                </span>
                                                 @break
                                             @default
                                                 <span>Không xác định</span>
@@ -86,11 +96,15 @@
                                     </tbody>
                                 </table>
                                 <li class="list-group-item">
+                                    <i class="bi bi-cash"></i>
                                     Thành tiền: {{ $bill['total'] }} VND
                                 </li>
                                 <div class="seperated"></div>
                             @endforeach
-                            <button class="btn btn-success mt-3" wire:click="createBill">Mua Thêm</button>
+                            <button class="btn btn-success mt-3" wire:click="createBill">
+                                Mua Thêm
+                                <i class="bi bi-cart-plus"></i>
+                            </button>
                         </ul>
                     </div>    
                 @endif  

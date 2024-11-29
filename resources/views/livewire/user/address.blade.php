@@ -2,7 +2,9 @@
     <div class="card" style="width:100%">
         <!-- Nội dung card chính -->
         <div class="card-header bg-info text-white">
-            <h1 class="mb-0">Địa chỉ giao hàng đã lưu</h1>
+            <h1 class="mb-0">Địa chỉ giao hàng đã lưu 
+                <i class="bi bi-pin-map"></i>
+            </h1>
         </div>
         <div class="card-body">
             @if(empty($CustomerAddresses))
@@ -41,7 +43,9 @@
                     </table>
                 </ul>
             @endif
-            <button  class="btn btn-primary mt-3" wire:click="showForm">Thêm địa chỉ</button>
+            <button  class="btn btn-primary mt-3" wire:click="showForm">
+                <i class="bi bi-geo-alt"></i>
+                Thêm địa chỉ</button>
         </div>
     </div>
 
