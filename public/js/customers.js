@@ -51,3 +51,24 @@ document.querySelectorAll('.swipeable-row').forEach(row => {
     row.addEventListener('mousemove', detectSwipe);
     row.addEventListener('mouseup', endSwipe);
 });
+
+    // document.addEventListener('livewire:load', function () {
+    //     Livewire.on('orderCancelled', () => {
+    //         const toast = document.createElement('div');
+    //         toast.classList.add('toast', 'align-items-center', 'text-white', 'bg-success', 'border-0');
+    //         toast.style.position = 'fixed';
+    //         toast.style.bottom = '20px';
+    //         toast.style.right = '20px';
+    //         toast.innerHTML = `
+    //             <div class="d-flex">
+    //                 <div class="toast-body">
+    //                     Đơn hàng đã được hủy thành công!
+    //                 </div>
+    //                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    //             </div>
+    //         `;
+    //         document.body.appendChild(toast);
+    //         new bootstrap.Toast(toast).show();
+    //     });
+    // });
+

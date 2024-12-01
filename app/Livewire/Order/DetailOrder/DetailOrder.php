@@ -72,6 +72,7 @@ class DetailOrder extends Component
             // Cập nhật trạng thái
             $bill->status = 0;
             $bill->save(); // Lưu vào database
+            // $this->emit('orderCancelled');
         }
     
         // Cập nhật lại biến $this->bills
