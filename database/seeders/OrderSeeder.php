@@ -5,8 +5,8 @@ namespace Database\Seeders;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use DB;
-
+//use DB;
+use Illuminate\Support\Facades\DB;
 class OrderSeeder extends Seeder
 {
     /**
