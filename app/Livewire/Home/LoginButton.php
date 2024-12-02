@@ -18,7 +18,6 @@ class LoginButton extends Component
     }
     #[On('LogOut')]
     public function updateButton(){
-        dd('abdc');
         $this->isAuthenticated = Auth::check();
 
     }
