@@ -19,15 +19,17 @@ class IngredientSupplied extends Model
     protected $primaryKey = 'ingredient_price'; // Đặt khóa chính phức hợp
     public $incrementing = false;
     
-    // Mối quan hệ với Ingredient
     public function ingredient()
     {
-        return $this->belongsTo(Ingredient::class, 'id_ingredient');
+        return $this->belongsTo(Ingredient::class, 'id_ingredient', 'id');
     }
 
     public function supplier()
     {
-        return $this->belongsTo(Supplier::class, 'id_supplier');
+        return $this->belongsTo(Supplier::class, 'id_supplier','id');
+    }
+    public function IngredientSupplied(){
+        return $this->belongsTo(ReceiptDetail::class, 'id_ingredient', 'id_ingredient');
     }
     
 }

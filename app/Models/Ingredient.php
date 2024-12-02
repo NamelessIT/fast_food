@@ -17,5 +17,9 @@ class Ingredient extends Model
         'updated_at',
      ];
 
-
+     public function ingredient()
+     {
+         return $this->belongsTo(Ingredient::class, 'id_ingredient', 'id');
+     }
+     
 }

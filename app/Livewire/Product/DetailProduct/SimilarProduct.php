@@ -18,14 +18,13 @@ class SimilarProduct extends Component
             WHERE slug != ?
             AND id_category = ?
             ORDER BY RAND()
-            LIMIT 4
-            ',
+            LIMIT 4',
             [
                 $slug,
                 Product::where('slug', $slug)->first()->id_category,
             ]
         );
-        
+
     }
 
     public function render()

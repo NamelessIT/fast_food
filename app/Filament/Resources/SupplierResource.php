@@ -53,15 +53,6 @@ class SupplierResource extends Resource
                 ->label('Địa chỉ')
                 ->required(),
 
-                TextInput::make('created_at')
-                ->label('Ngày tạo phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'),
-
-                TextInput::make('updated_at')
-                ->label('Ngày cập nhật phiếu nhập')
-                ->default(Carbon::now()->format('Y-m-d H:i:s'))
-                ->readOnlyOn('create'),
             ]);
     }
 

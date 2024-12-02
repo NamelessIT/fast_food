@@ -56,13 +56,13 @@ class IngredientSuppliedResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id_ingredient')
+                TextColumn::make('ingredient.ingredient_name')
                     ->label('Tên nguyên liệu')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('id_supplier') // Truy xuất tên nhà cung cấp từ bảng Supplier
+                TextColumn::make('supplier.supplier_name') // Truy xuất tên nhà cung cấp từ bảng Supplier
                     ->label('Tên nhà cung cấp')
                     ->searchable()
                     ->sortable()

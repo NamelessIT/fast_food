@@ -16,72 +16,98 @@ use App\Models\Receipt;
 use App\Models\Ingredient;
 use Filament\Tables\Columns\TextColumn;
 use App\Models\ReceiptDetail;
+use App\Models\IngredientSupplied;
+use Illuminate\Support\Facades\Log;
+
 class ReceiptDetailsRelationManager extends RelationManager
 {
     protected static string $relationship = 'receiptDetails';// Tên quan hệ trong model Receipt
 
     protected static ?string $recordTitleAttribute = 'id_receipt';  // Hiển thị cột 'id_receipt' làm tiêu đề nếu cần
 
+    protected static function afterSave($record)
+    {
+        // Nếu Receipt tồn tại, cập nhật tổng giá trị (total)
+        if ($record->receipt) {
+            $record->receipt->updateQuietly(); // Tránh vòng lặp do gọi sự kiện
+        }
+    }
+
+    protected static function afterDelete($record)
+    {
+        if ($record->receipt) {
+            $record->receipt->updateTotal(); // Cập nhật tổng total của Receipt
+        }
+    }
+
     public function form(Form $form): Form
     {
         return $form
-            ->schema([
-
-                Select::make('id_ingredient')
+                ->schema([
+            Select::make('id_ingredient')
                 ->label('Tên nguyên liệu')
                 ->required()
                 ->options(Ingredient::pluck('ingredient_name', 'id')->toArray())
-                ->placeholder('Chọn nguyên liệu'),
+                ->placeholder('Chọn nguyên liệu')
+                ->reactive(),
 
-                TextInput::make('quantity')
+            TextInput::make('quantity')
                 ->required()
-                ->label('Lượng  nhập')
+                ->label('Lượng nhập')
                 ->placeholder('Vui lòng nhập lượng nguyên liệu')
                 ->numeric()
                 ->rules('required|numeric|min:1')
                 ->reactive()
-                ->afterStateUpdated(function ($state, $set) { // Sửa đổi đây
-                    if ($state === '') {
-                        $set('Lượng nhập', ''); // Xóa giá trị nếu trường trống
-                    }
+                ->afterStateUpdated(function ($state, $set, $get) {
+                    $this->updateTotalPrice($set, $get);
                 }),
 
-                /*TextInput::make('getIngredient.')
+            TextInput::make('total_price')
                 ->label('Tổng tiền (vnd)')
+                ->readonly() // Chỉ hiển thị, không chỉnh sửa được
                 ->numeric()
-                ->rules('required|numeric|min:1')
-                ->reactive()
-                ->afterStateUpdated(function ($state, $set) { // Sửa đổi đây
-                    if ($state === '') {
-                        $set('Tổng tiền (vnd)', ''); // Xóa giá trị nếu trường trống
-                    }
-                }),*/
+                ->rules('numeric|min:0'),
 
-                TextInput::make('created_at')
-                    ->label('Ngày tạo phiếu nhập')
-                    ->default(Carbon::now()->format('Y-m-d'))
-                    ->disabled(),
 
-                TextInput::make('updated_at')
-                    ->label('Ngày cập nhật phiếu nhập')
-                    ->default(Carbon::now()->format('Y-m-d'))
-                    ->disabled(),
-            ]);
+                ]);
+        }
+      
+    private function updateTotalPrice($set, $get)
+    {
+        // Lấy mã nguyên liệu từ state
+        $ingredientId = $get('id_ingredient');
+        $ingredientPrice = 0;
+        // Kiểm tra nếu id_ingredient tồn tại, lấy giá nguyên liệu
+        if ($ingredientId) {
+            // Lấy giá nguyên liệu từ bảng ingredient_supplied
+            $ingredientSupplied = IngredientSupplied::where('id_ingredient', $ingredientId)->first();
+            if ($ingredientSupplied) {
+                $ingredientPrice = $ingredientSupplied->ingredient_price ?? 0;
+            } else {
+                dd('IngredientSupplied không tìm thấy');
+            }
+        }
+        // Tính toán tổng giá
+        $quantity = floatval($get('quantity'));
+        $totalPrice = $ingredientPrice * $quantity;
+        //dd($totalPrice);
+        // Set giá trị total_price
+        $set('total_price', $totalPrice);
+        
     }
+
 
     public function table(Table $table): Table
     {
         return $table
             ->recordTitleAttribute('id_ingredient')
             ->columns([
-               
-
-
-
-
-
-                
-                TextColumn::make('getIngredient.ingredient_name')
+                TextColumn::make('IngredientSupplied.ingredient_price')
+                    ->label('Đơn giá')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('ingredient.ingredient_name')
                     ->label('Nguyên liệu')
                     ->sortable()
                     ->searchable()
@@ -91,7 +117,7 @@ class ReceiptDetailsRelationManager extends RelationManager
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
-                TextColumn::make('getIngredient.unit')
+                TextColumn::make('ingredient.unit')
                     ->label('Đơn vị')
                     ->sortable()
                     ->searchable()
@@ -121,11 +147,11 @@ class ReceiptDetailsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                //Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
