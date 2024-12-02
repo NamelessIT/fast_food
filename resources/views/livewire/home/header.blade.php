@@ -31,15 +31,9 @@
         <div class="d-flex headerEventBlock">
             <div class="eventBlock d-flex">
                 {{-- button login  --}}
-                <div class="accountLogin">
-                    @auth
-                        <a href={{ route('user.index') }} id="login" class=" border rounded-circle p-2 me-lg-2 me-2 bg-white btn " style="width:40px ;height:40px">
-                    @else
-                        <a href={{ route('account.index') }} id="login" class=" border rounded-circle p-2 me-lg-2 me-2 bg-white btn " style="width:40px ;height:40px">
-                    @endauth     
-                        <i class="fa-solid fa-user" style="font-size: 20px"></i>
-                    </a>
-                </div>
+                <livewire:home.login-button />
+
+
 
                 {{-- button cart --}}
                 <a href="{{ route('order.index') }}" id="cart"

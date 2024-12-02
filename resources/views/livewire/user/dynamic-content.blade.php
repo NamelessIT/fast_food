@@ -3,7 +3,7 @@
         <img src="{{ asset('images/logo.jpg') }}" alt="KFC-LOGO" class="img-fluid rounded mb-4">
         <h2>Xin chào, {{ $firstName }} {{ $fullName }}</h2>
         <nav class="nav flex-column">
-            <a href="{{ url('/') }}" class=" d-block mb-3 text-decoration-underline nav-link text-light" wire:click="logout" >
+            <a href="#" class=" d-block mb-3 text-decoration-underline nav-link text-light" wire:click="logout" >
                 <i class="bi bi-door-closed"></i>
                 Đăng xuất</a>
             @if(auth()->user()->user_type === config('constants.user.customer'))

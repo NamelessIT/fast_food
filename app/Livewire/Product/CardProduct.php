@@ -51,6 +51,14 @@ class CardProduct extends Component
         } else {
             $id_user = Auth::user()->user_id;
             $order = Order::where("id_customer", $id_user)->first();
+            if (!$order) {
+                // Tao order neu order khong co
+                $order = Order::create([
+                    "id_customer" => $id_user,
+                    "total" => 0, 
+                    
+                ]);
+            }
             $this->id_order = $order->id;
             $orderDetail = OrderDetail::where("id_product", $this->id)
                 ->where("id_order", $this->id_order)

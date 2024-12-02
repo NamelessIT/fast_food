@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\account;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
+
 class DynamicContent extends Component
 {
     public $firstName;
@@ -30,10 +32,13 @@ class DynamicContent extends Component
     public function logout()
     {
         // Hủy đăng nhập và xóa session khỏi bảng sessions
+                    
         Auth::logout();
-    
+        $this->dispatch('LogOut');
+        return redirect()->route('home.index');
+
+
         // Điều hướng về trang đăng nhập hoặc trang khác tùy ý
-        return redirect()->route('account.index');
     }
 
     public function fetchDetailUser()

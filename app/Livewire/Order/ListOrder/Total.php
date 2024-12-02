@@ -266,9 +266,13 @@ class Total extends Component
     public function voucherApplied($voucher)
     {
         $this->selectedVoucher = $voucher;
+
         if ($this->tempTotalPrice >= $voucher['minium_condition']) {
             $this->totalBill = $this->tempTotalPrice -  $this->tempTotalPrice* (float)($voucher['discount_percent'] / 100);
         } 
+        else {
+            $this->totalBill = $this->tempTotalPrice;
+        }
         
     }
     public function removeVoucher()
