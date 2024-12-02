@@ -11,28 +11,19 @@ return new class extends Migration
      */
         public function up()
     {
-        Schema::create('recipes_new', function (Blueprint $table) {
-            $table->id(); // Adds an auto-incrementing primary key
-            $table->string('name'); // Add your other columns here
-            $table->timestamps(); // Add timestamps if needed
+        Schema::table('recipes', function (Blueprint $table) {
+            $table->id()->first(); // Adds the auto-incrementing primary key at the first position
         });
-
-        // Copy data from old table to new table
-        DB::table('recipes_new')->insert(
-            DB::table('recipes')->select('name', 'created_at', 'updated_at')->get()->toArray()
-        );
-
-        // Drop old table
-        Schema::drop('recipes');
-
-        // Rename new table to old table name
-        Schema::rename('recipes_new', 'recipes');
+       
+       
     }
 
     public function down()
     {
         // Revert changes if needed
-        Schema::dropIfExists('recipes');
+        Schema::table('recipes', function (Blueprint $table) {
+            $table->dropColumn('id'); // Remove the 'id' column if needed
+        });
     }
 
     
