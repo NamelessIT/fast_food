@@ -53,9 +53,10 @@
 
 .listProductContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); */
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 16px;
-    justify-items: center;
+    /* justify-items: center; */
     align-items: center;
 
     .cardItem {
@@ -65,11 +66,11 @@
         background: #fff;
         margin-bottom: 20px;
         box-shadow: 0 10px 15px rgba(73, 45, 19, 0.04);
-        transition-behavior: normal;
         transition-duration: 0.3s;
         transition-timing-function: ease;
         transition-delay: 0s;
-
+        /* max-width: 25%;
+        min-width: 250px; */
 
         a {
             text-decoration: none;
@@ -197,8 +198,6 @@
                     width: 100%;
                 }
             }
-
-
         }
     }
 

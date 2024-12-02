@@ -1,5 +1,5 @@
 <div class="details-container-block">
-    <div class="listProductContainer  justify-content-center">
+    <div class="listProductContainer  justify-content-center" style="justify-items: center">
         @foreach ($listProduct as $item)
             <div class="card cardItem">
                 @livewire('product.cardproduct', [
