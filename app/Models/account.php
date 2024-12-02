@@ -80,4 +80,8 @@ class Account extends Authenticatable implements HasName, FilamentUser
 
         return true; // Nếu người dùng có quyền, tiếp tục
     }
+
+    public function customer () {
+        return $this->belongsTo(Customer::class);
+    }
 }
