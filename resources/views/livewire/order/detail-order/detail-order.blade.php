@@ -79,6 +79,6 @@
                 </div>
             </div>
         @endforeach
-        <button class="btn btn-danger mt-3 w-100" {{ $bills[0]['status'] == 0 || $bills[0]['status'] == 3  ? 'disabled' : '' }} wire:click="cancel_Bill">Hủy đơn</button>
+        <button class="btn btn-danger mt-3 w-100" {{ $bills[0]['status'] == 0 || $bills[0]['status'] == 3 ||$bills[0]['status'] == 2  ? 'disabled' : '' }} wire:click="cancel_Bill">Hủy đơn</button>
     </div>
 </div>

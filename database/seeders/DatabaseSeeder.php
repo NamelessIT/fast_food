@@ -27,9 +27,17 @@ class DatabaseSeeder extends Seeder
         $this->call(ExtraFoodDetailSeeder::class);
         $this->call(CustomerSeeder::class);
         $this->call(AccountSeeder::class);
-        // $this->call(OrderSeeder::class);
-        // $this->call(OrderDetailSeeder::class);
+        
+        //$this->call(OrderSeeder::class);
+        //$this->call(OrderDetailSeeder::class);
+
         $this->call(RoleSeeder::class);
         $this->call(EmployeeSeeder::class);
+
+        $this->call( IngredientsSeeder::class);
+        $this->call( SuppliersSeeder::class);
+        $this->call( IngredientSuppliedsSeeder::class);
+        $this->call( ReceiptsSeeder::class);
+        $this->call( ReceiptDetailsSeeder::class);
     }
 }
