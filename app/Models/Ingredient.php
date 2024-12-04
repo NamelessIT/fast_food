@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ingredient extends Model
 {
+    use SoftDeletes;
     use HasFactory;
     protected $fillable = [
         'id',
@@ -21,5 +23,5 @@ class Ingredient extends Model
      {
          return $this->belongsTo(Ingredient::class, 'id_ingredient', 'id');
      }
-     
+
 }

@@ -271,4 +271,8 @@ class BillResource extends Resource
         if ($user->user->id_role==1)
             return false;
     }
+    public static function canCreate(): bool
+    {
+       return false;
+    }
 }

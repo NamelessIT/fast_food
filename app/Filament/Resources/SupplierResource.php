@@ -14,8 +14,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Carbon\Carbon;
+use Filament\Forms\Components\Checkbox;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Support\Facades\Auth;
 
 class SupplierResource extends Resource
@@ -77,9 +79,30 @@ class SupplierResource extends Resource
             ])
             ->filters([
                 //
+                //Tables\Filters\TrashedFilter::make(),
+                Filter::make('trash')
+                ->label('Hiển thị danh mục đã xóa')
+                ->form([
+                    Checkbox::make('trashed')
+                        ->label('Danh mục đã xóa')
+                        ->default(false), // Mặc định là chưa chọn
+                ])
+                ->query(function ($query, $data) {
+                    if ($data['trashed']) {
+                        //$trashedCategories = Category::onlyTrashed()->get();
+                        //dd($trashedCategories);
+                        // Hiển thị các mục đã xóa (soft deleted)
+                        return $query->onlyTrashed();
+                    }
+                    //dd($query->toSql(), $query->getBindings());  // Xem truy vấn SQL
+                    // Hiển thị các mục chưa xóa (whereNull cho trường deleted_at)
+                    return $query->whereNull('deleted_at');
+                }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -103,7 +126,13 @@ class SupplierResource extends Resource
             'edit' => Pages\EditSupplier::route('/{record}/edit'),
         ];
     }
-
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
     public static function canViewAny(): bool
     {
         // Lấy người dùng đang đăng nhập

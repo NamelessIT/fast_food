@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class IngredientSupplied extends Model
 {
+    use SoftDeletes;
     use HasFactory;
     protected $fillable = [
         'id_ingredient',
@@ -18,7 +20,7 @@ class IngredientSupplied extends Model
     protected $table = 'ingredient_supplieds';
     protected $primaryKey = 'ingredient_price'; // Đặt khóa chính phức hợp
     public $incrementing = false;
-    
+
     public function ingredient()
     {
         return $this->belongsTo(Ingredient::class, 'id_ingredient', 'id');
@@ -31,5 +33,5 @@ class IngredientSupplied extends Model
     public function IngredientSupplied(){
         return $this->belongsTo(ReceiptDetail::class, 'id_ingredient', 'id_ingredient');
     }
-    
+
 }
