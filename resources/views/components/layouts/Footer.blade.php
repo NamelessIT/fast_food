@@ -1,3 +1,5 @@
+@if (Route::currentRouteName() != 'account.forgot-password' && Route::currentRouteName() != 'account.reset-password')
+    
 <footer class="bg-dark text-white p-4 mt-auto">
     <div class="container">
         <div class="row">
@@ -46,3 +48,4 @@
         </div>
     </div>
 </footer>
+@endif

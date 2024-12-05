@@ -10,7 +10,6 @@ use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Product\ProductController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::group(['prefix' => '/'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
 });
@@ -27,33 +26,30 @@ Route::group(['prefix' => '/auth'], function () {
     Route::get('/account/register', [AccountController::class, 'index'])
         ->name('account.register')
         ->middleware(CheckUserLogin::class);
+    Route::get('/account/forgot-password', [AccountController::class, 'index'])->name('account.forgot-password');
+    Route::get ('/account/reset-password/{email}', [AccountController::class, 'index'])->name('account.reset-password');
     Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
 });
 
 Route::group(['prefix' => '/category'], function () {
     Route::get('/{categoryName}/{page}', [CategoryController::class, 'index'])->name('category.index');
-
 });
-
 
 Route::group(['prefix' => '/product'], function () {
     Route::get('/list-product', [ProductController::class, 'listProduct'])->name('product.list-product');
-    Route::get('/detail-product/{slug}', [ProductController::class, 'detail'])
-        ->name('product.detail');
+    Route::get('/detail-product/{slug}', [ProductController::class, 'detail'])->name('product.detail');
 });
 
 Route::group(['prefix' => '/order', 'middleware' => [CheckUserWithoutLogin::class]], function () {
     Route::get('/list-order', action: [OrderController::class, 'index'])->name('order.index');
-    Route::get('/detail-order/{id}',action:[OrderController::class,'detail'])
-    ->name('order.detail');
+    Route::get('/detail-order/{id}', action: [OrderController::class, 'detail'])->name('order.detail');
 });
 
 Route::group(['prefix' => '/user'], function () {
     Route::get('/', function () {
         return redirect('/user/index');
     });
-    Route::get('/index', [UserController::class,'index'])->name('user.index');
-
+    Route::get('/index', [UserController::class, 'index'])->name('user.index');
 });
 Route::delete('/delete-address/{id}', [UserController::class, 'deleteAddress'])->name('delete.address');
 

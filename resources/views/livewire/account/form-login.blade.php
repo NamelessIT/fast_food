@@ -25,7 +25,7 @@
     </div>
 
     <div class="options my-2 d-flex justify-content-end align-items-center">
-        <a href="#" class="text-decoration-none">Bạn quên mật khẩu?</a>
+        <a href="{{ route('account.forgot-password') }}" class="text-decoration-none" wire:navigate>Bạn quên mật khẩu?</a>
     </div>
 
     <button class="btn-submit btn my-2 rounded-pill fw-bold" wire:click.prevent="login">Đăng nhập</button>
@@ -34,13 +34,13 @@
 
     <p class="separator mt-3"><span>hoặc</span></p>
 
-    <div class="socials d-flex justify-content-center align-items-center">
+    {{-- <div class="socials d-flex justify-content-center align-items-center">
         <a href="{{ route('account.redirect', 'facebook') }}"
             class="social-facebook text-decoration-none d-flex justify-content-center rounded-pill mb-3 align-items-center">
             <i class="fa-brands fa-facebook"></i>
             Đăng nhập bằng Facebook
         </a>
-    </div>
+    </div> --}}
     <div wire:loading >
         <x-loader />
     </div>

@@ -41,7 +41,7 @@
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span class="notify_quantity ">{{ $notifyQuantity }}</span>
                 </a>
-                <button id="btnOrder" class="border rounded-pill px-4 px-lg-5"> Order now</button>
+                {{-- <button id="btnOrder" class="border rounded-pill px-4 px-lg-5"> Order now</button> --}}
 
             </div>
             <!-- Nút toggle cho thiết bị di động -->
