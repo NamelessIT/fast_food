@@ -37,7 +37,7 @@ class CustomerTable extends BaseWidget
             TextColumn::make('full_name')
                 ->label('Tên khách hàng'),
             TextColumn::make('id')
-            ->label('Hóa đơn'),           
+            ->label('Hóa đơn'),
             TextColumn::make('total')
             ->label('Chi tiêu'),
             TextColumn::make('date')
@@ -46,7 +46,7 @@ class CustomerTable extends BaseWidget
         ])
         ->headerActions([
             ExportAction::make()->exporter(ExportCustomerExporter::class)
-        ]) 
+        ])
         ->bulkActions([
             ExportBulkAction::make()->exporter(ExportCustomerExporter::class),
         ])
@@ -56,11 +56,11 @@ class CustomerTable extends BaseWidget
     public function getQuery($active=false,$start, $end, $top = null, $isDescrease = false, $name = null){
         if($active===true){
             $query = Customer::join('bills', 'bills.id_customer', '=', 'customers.id')
-            ->where("bills.status","=",2)
+            ->where("bills.status","=",3)
             ->select(
                 'customers.id',
                     'bills.id',
-                    'customers.full_name', 
+                    'customers.full_name',
                     'bills.total',
                     'bills.created_at as date',) // Lấy tên sản phẩm và tổng số lượng bán
             ->whereBetween('bills.created_at', [
@@ -71,24 +71,24 @@ class CustomerTable extends BaseWidget
             if ($name) {
                 $query->where('customers.full_name', 'like', '%' . $name . '%');
             }
-        
+
             if ($isDescrease) {
                 $query->orderBy('total' , 'asc');
             } else {
                 $query->orderBy('total' , 'desc');
             }
-        
+
             if ($top) {
                 $query->limit($top);
             }
         }
         else{
             $query = Customer::join('bills', 'bills.id_customer', '=', 'customers.id')
-            ->where("bills.status","=",2)
+            ->where("bills.status","=",3)
             ->select(
                 'customers.id',
                 'bills.id',
-                'customers.full_name', 
+                'customers.full_name',
                 'bills.total',
                 'bills.created_at as date',)
             ->orderBy('total', 'desc');

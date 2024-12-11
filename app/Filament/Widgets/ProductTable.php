@@ -46,8 +46,8 @@ class ProductTable extends BaseWidget
                 ?
                 TextColumn::make('total_price')
                 ->label('Tổng tiền')
-                ->money('VND') // Nếu bạn muốn hiển thị theo định dạng tiền tệ            
-                :                
+                ->money('VND') // Nếu bạn muốn hiển thị theo định dạng tiền tệ
+                :
                 TextColumn::make('quantity')
                 ->label('Số lượng'),
                 TextColumn::make('full_name')
@@ -58,7 +58,7 @@ class ProductTable extends BaseWidget
             ])
             ->headerActions([
                 ExportAction::make()->exporter(ExportProductExporter::class)
-            ]) 
+            ])
             ->bulkActions([
                 ExportBulkAction::make()->exporter(ExportProductExporter::class),
             ])
@@ -69,7 +69,7 @@ class ProductTable extends BaseWidget
         if($active===true){
             $query = Product::join('bill_details', 'bill_details.id_product', '=', 'products.id')
             ->join('bills', 'bills.id', '=', 'bill_details.id_bill')
-            ->where('bills.status',"=",2)
+            ->where('bills.status',"=",3)
             ->join('customers', 'customers.id', '=', 'bills.id_customer')
             ->select(
                 'bill_details.id', // Thêm cột id vào đây
@@ -79,9 +79,9 @@ class ProductTable extends BaseWidget
                 DB::raw('bill_details.quantity * products.price as total_price'),
                 'customers.full_name',
                 'bill_details.created_at',
-                
+
             )
-            
+
             ->whereBetween('bill_details.created_at', [
                 $start ? Carbon::parse($start)->startOfDay() : '0000-01-01',
                 $end ? Carbon::parse($end)->endOfDay() : now(),
@@ -108,7 +108,7 @@ class ProductTable extends BaseWidget
         else{
             $query = Product::join('bill_details', 'bill_details.id_product', '=', 'products.id')
             ->join('bills', 'bills.id', '=', 'bill_details.id_bill')
-            ->where('bills.status',"=",2)
+            ->where('bills.status',"=",3)
             ->join('customers', 'customers.id', '=', 'bills.id_customer')
             ->select(
                 'bill_details.id', // Thêm cột id vào đây

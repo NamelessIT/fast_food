@@ -34,10 +34,10 @@ class billChart extends ChartWidget
                 [
                     'label' => 'Số lượng hóa đơn',
                     'data' => array_values($billData),
-                    'backgroundColor' => ['#FF6384', '#36A2EB', '#4BC0C0'], // Màu cho các phần của biểu đồ
+                    'backgroundColor' => ['#FF6384', '#36A2EB', '#4BC0C0', '#80ED99'], // Màu cho các phần của biểu đồ
                 ],
             ],
-            'labels' => ['Hủy hóa đơn', 'Đang chờ xác nhận', 'Đã hoàn thành'], // Nhãn tương ứng với status
+            'labels' => ['Hủy hóa đơn', 'Đang chờ xác nhận', 'Đã xác nhận','Đã hoàn thành'], // Nhãn tương ứng với status
         ];
     }
 
@@ -47,6 +47,7 @@ class billChart extends ChartWidget
             0 => Bill::where('status', 0)->count(),
             1 => Bill::where('status', 1)->count(),
             2 => Bill::where('status', 2)->count(),
+            3 => Bill::where('status', 3)->count(),
         ];
     }
 
@@ -63,6 +64,9 @@ class billChart extends ChartWidget
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->count(),
             2 => Bill::where('status', 2)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->count(),
+            3 => Bill::where('status', 3)
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->count(),
         ];

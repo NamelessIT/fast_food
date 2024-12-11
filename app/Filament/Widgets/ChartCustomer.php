@@ -30,8 +30,8 @@ class ChartCustomer extends ChartWidget
             $data = [];
             $labels = [];
             foreach ($this->customers as $customer) {
-                $labels[] = $customer->full_name; 
-                $data[] = $customer->total ; 
+                $labels[] = $customer->full_name;
+                $data[] = $customer->total ;
             }
             $backgroundColor = $this->generateColors(count($labels));
             return [
@@ -50,7 +50,7 @@ class ChartCustomer extends ChartWidget
             $labels = [];
             $this->getCustomerInBill();
             foreach ($this->customers as $customer) {
-                $labels[] = $customer->full_name; 
+                $labels[] = $customer->full_name;
                 $data[] = $customer->total;
             }
             $backgroundColor = $this->generateColors(count($labels));
@@ -73,9 +73,9 @@ class ChartCustomer extends ChartWidget
     }
 
     $query = Customer::join('bills', 'bills.id_customer', '=', 'customers.id')
-        ->where("bills.status","=",2)
+        ->where("bills.status","=",3)
         ->select('customers.full_name', DB::raw('SUM(bills.total) as total')) // Lấy tên sản phẩm và tổng số lượng bán
-        ->groupBy('customers.full_name') 
+        ->groupBy('customers.full_name')
         ->orderBy('total', 'desc')
         ->whereBetween('bills.created_at', [
             $start ? Carbon::parse($start)->startOfDay() : '0000-01-01',
@@ -104,16 +104,16 @@ class ChartCustomer extends ChartWidget
 {
     $colors = [];
     for ($i = 0; $i < $count; $i++) {
-        $colors[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF)); 
+        $colors[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
     return $colors;
 }
     public function getCustomerInBill()
     {
         $this->customers = Customer::join('bills', 'bills.id_customer', '=', 'customers.id')
-            ->where("bills.status","=",2)
+            ->where("bills.status","=",3)
             ->select('customers.full_name', DB::raw('SUM(bills.total) as total'))
-            ->groupBy('customers.full_name') 
+            ->groupBy('customers.full_name')
             ->orderBy('total', 'desc')
             ->get();
     }

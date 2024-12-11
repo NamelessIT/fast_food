@@ -17,13 +17,13 @@ class Overview extends BaseWidget
     use InteractsWithPageFilters;
     protected function getStats(): array
     {
-        
+
         $start=$this->filters['startDate'];
         $end=$this->filters['endDate'];
         $active=$this->filters['active'];
         if($active===true){
             return [
-                //               
+                //
                 Stat::make('Tổng số đơn hàng',Bill::when($start,fn($query)=>$query->whereDate('created_at','>=',$start))
                 ->when($end,fn($query)=>$query->whereDate('created_at','<=',$end))
                 ->count())
@@ -47,7 +47,7 @@ class Overview extends BaseWidget
                 ->color('warning'),
                 Stat::make('Tổng doanh thu',Bill::when($start,fn($query)=>$query->whereDate('created_at','>=',$start))
                 ->when($end,fn($query)=>$query->whereDate('created_at','<=',$end)
-                ->where("bills.status","=",2))
+                ->where("bills.status","=",3))
                 ->sum("bills.total"))
                 ->description('VNĐ')
                 ->descriptionIcon('heroicon-m-banknotes',IconPosition::Before)
@@ -57,7 +57,7 @@ class Overview extends BaseWidget
         }
         else{
             return [
-                //               
+                //
                 Stat::make('Tổng số đơn hàng',Bill::count())
                 ->description('hoá đơn')
                 ->descriptionIcon('heroicon-m-receipt-percent',IconPosition::Before)
@@ -73,7 +73,7 @@ class Overview extends BaseWidget
                 ->descriptionIcon('heroicon-m-shopping-cart',IconPosition::Before)
                 ->chart([10,15,20,30,40,70])
                 ->color('warning'),
-                Stat::make('Tổng doanh thu',Bill::where("bills.status","=",2)
+                Stat::make('Tổng doanh thu',Bill::where("bills.status","=",3)
                 ->sum("bills.total"))
                 ->description('VNĐ')
                 ->descriptionIcon('heroicon-m-banknotes',IconPosition::Before)

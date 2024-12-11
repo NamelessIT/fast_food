@@ -48,7 +48,7 @@ class ChartLineProduct extends ChartWidget
         $endDate = now()->endOfMonth(); // Kết thúc vào cuối tháng hiện tại
         $query = Product::join('bill_details', 'bill_details.id_product', '=', 'products.id')
                 ->join('bills', 'bills.id', '=', 'bill_details.id_bill')
-                ->where('bills.status', '=', 2)
+                ->where('bills.status', '=', 3)
                 ->whereBetween('bills.created_at', [
                     $startDate,
                     $endDate,
@@ -78,16 +78,16 @@ class ChartLineProduct extends ChartWidget
     {
             $query = Product::join('bill_details', 'bill_details.id_product', '=', 'products.id')
                 ->join('bills', 'bills.id', '=', 'bill_details.id_bill')
-                ->where('bills.status', '=', 2)
+                ->where('bills.status', '=', 3)
                 ->whereBetween('bills.created_at', [
                     Carbon::parse($start)->startOfDay(),
                     Carbon::parse($end)->endOfDay(),
                 ]);
-    
+
             if ($name ) {
                 $query->where('products.product_name', 'like', '%' . $name . '%');
             }
-    
+
             if ($money) {
                 $query->select(
                     'products.product_name',
@@ -101,7 +101,7 @@ class ChartLineProduct extends ChartWidget
                     DB::raw('SUM(bill_details.quantity) as quantity')
                 );
             }
-    
+
             $query->groupBy('products.product_name', 'date');
 
 
