@@ -39,7 +39,7 @@
     @livewire('account.form')
 
     @if (Route::currentRouteName() == 'account.index')
-        <div class="signup mb-2 text-center">
+        <div class="signup text-center" style="margin-bottom: 62px">
             Bạn chưa có tài khoản?
             <a href="{{ route('account.register') }}" wire:navigate style="cursor: pointer"
                 class="fw-bold text-black">
